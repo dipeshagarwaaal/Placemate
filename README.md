@@ -7,7 +7,6 @@
 - [Project Structure](#project-structure)
 - [User Roles](#user-roles)
 - [Installation](#installation)
-- [Development Steps](#development-steps)
 - [Contributors](#contributors)
 
 ## Introduction
