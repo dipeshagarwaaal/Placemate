@@ -1,0 +1,82 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Logo from "../../assets/CPMS.png";
+import Toast from '../../components/Toast';
+
+function Signup() {
+  const navigate = useNavigate();
+
+  // useState for toast display
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+
+  // useState for from data 
+  const [formData, setFormData] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    password: ''
+  });
+
+  const { first_name, last_name, email, password } = formData;
+
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('http://localhost:4518/student/signup', formData);
+      // console.log(response.data);
+      setToastMessage("User Created Successfully! Now You Can Login.");
+      setShowToast(true);
+      // after 3sec to go login page
+      setTimeout(()=> navigate("../student/login"), 2000);
+    } catch (error) {
+      if (error.response.data.msg) {
+        setToastMessage(error.response.data.msg);
+        setShowToast(true);
+      }
+      console.log("Student Signup.jsx => ", error);
+    }
+  }
+
+  return (
+    <>
+      {/* for any message "toast" */}
+      <Toast
+        show={showToast}
+        onClose={() => setShowToast(false)}
+        message={toastMessage}
+        delay={3000}
+        position="bottom-end"
+      />
+
+      <div className="flex justify-center items-center h-screen bg-gradient-to-r from-red-400 from-10% via-pink-300 via-40% to-purple-300 to-100%  ">
+        <form className="form-signin flex justify-center items-center flex-col gap-3 backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-8 w-1/3 max-lg:w-2/3 max-md:w-3/4 max-[400px]:w-4/5" onSubmit={handleSubmit}>
+          <div className='flex justify-center items-center flex-col'>
+            <img className="mb-4 rounded-xl shadow" src={`${Logo}`} alt="Logo Image" width="150" height="150" />
+            <h1 className="h3 mb-3 font-weight-normal">Sign Up as a Student</h1>
+          </div>
+          <label htmlFor="inputFirstName" className="sr-only">First Name</label>
+          <input type="text" id="inputFirstName" className="form-control" placeholder="First Name" required autoFocus="" fdprocessedid="gwlj3s" autoComplete='Name' name='first_name' value={first_name} onChange={handleChange} />
+          <label htmlFor="inputLastName" className="sr-only">Last Name</label>
+          <input type="text" id="inputLastName" className="form-control" placeholder="Last Name" required autoFocus="" fdprocessedid="gwlj3s" autoComplete='Name' name='last_name' value={last_name} onChange={handleChange} />
+          <label htmlFor="inputEmail" className="sr-only">Email Address</label>
+          <input type="email" id="inputEmail" className="form-control" placeholder="Email Address" required autoFocus="" fdprocessedid="gwlj3s" autoComplete='email' name='email' value={email} onChange={handleChange} />
+          <label htmlFor="inputPassword" className="sr-only">Password</label>
+          <input type="password" id="inputPassword" className="form-control" placeholder="Password" required fdprocessedid="9sysne" autoComplete='current-password' name='password' value={password} onChange={handleChange} />
+          <div className="flex justify-center items-center flex-col">
+            <button className="btn btn-lg btn-primary btn-block" type="submit" fdprocessedid="a45f8">Sign Up</button>
+          </div>
+          <span className='text-center'>Already having account?
+            <span className='text-blue-500 font-bold cursor-pointer px-1' onClick={() => navigate('../student/login')}>Login</span>
+          </span>
+          <p className="text-muted text-center">© College Placement Management System 2024 - 25</p>
+        </form>
+      </div>
+    </>
+  )
+}
+
+export default Signup

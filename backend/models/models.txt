@@ -1,0 +1,1 @@
+Contains the Mongoose schemas and models that define the structure of your MongoDB collections. 
