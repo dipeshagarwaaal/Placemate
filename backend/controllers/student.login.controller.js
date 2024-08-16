@@ -17,6 +17,10 @@ const Login = async (req, res) => {
 
     const payload = { userId: user.id };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    user.token = token;
+    await user.save();
+
     res.json({ token });
   } catch (error) {
     console.log("student.login.controller.js => ", error);

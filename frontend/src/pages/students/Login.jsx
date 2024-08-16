@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Logo from '../../assets/CPMS.png';
 import Toast from '../../components/Toast';
+import isAuthenticated from '../../utility/auth.utility';
 
 function Login() {
   const navigate = useNavigate();
+
+  // if login user visit redirect to home page
+  useEffect(()=>{
+    if (isAuthenticated())  {
+      navigate("../student/home");
+    }
+  }, [navigate]);
 
   // useState for toast display
   const [showToast, setShowToast] = useState(false);
@@ -55,9 +63,9 @@ function Login() {
             <h1 className="h3 mb-3 font-weight-normal">Please Log In</h1>
           </div>
           <label htmlFor="inputEmail" className="sr-only">Email address</label>
-          <input type="email" id="inputEmail" className="form-control" placeholder="Email address" required="" autoFocus="" fdprocessedid="gwlj3s" autoComplete='email' name='email' value={email} onChange={handleChange} />
+          <input type="email" id="inputEmail" className="form-control" placeholder="Email address" required autoFocus="" fdprocessedid="gwlj3s" autoComplete='email' name='email' value={email} onChange={handleChange} />
           <label htmlFor="inputPassword" className="sr-only">Password</label>
-          <input type="password" id="inputPassword" className="form-control" placeholder="Password" required="" fdprocessedid="9sysne" autoComplete='current-password' name='password' value={password} onChange={handleChange} />
+          <input type="password" id="inputPassword" className="form-control" placeholder="Password" required fdprocessedid="9sysne" autoComplete='current-password' name='password' value={password} onChange={handleChange} />
           <div className="flex justify-center items-center flex-col">
             <button className="btn btn-lg btn-primary btn-block" type="submit" fdprocessedid="a45f8">Log in</button>
           </div>

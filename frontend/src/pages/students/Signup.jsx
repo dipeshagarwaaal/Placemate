@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Logo from "../../assets/CPMS.png";
 import Toast from '../../components/Toast';
+import isAuthenticated from '../../utility/auth.utility';
 
 function Signup() {
   const navigate = useNavigate();
+
+  // if login user visit redirect to home page
+  useEffect(() => {
+    if (isAuthenticated()) {
+      navigate("../student/home");
+    }
+  }, [navigate]);
 
   // useState for toast display
   const [showToast, setShowToast] = useState(false);
@@ -31,7 +39,7 @@ function Signup() {
       setToastMessage("User Created Successfully! Now You Can Login.");
       setShowToast(true);
       // after 3sec to go login page
-      setTimeout(()=> navigate("../student/login"), 2000);
+      setTimeout(() => navigate("../student/login"), 2000);
     } catch (error) {
       if (error.response.data.msg) {
         setToastMessage(error.response.data.msg);

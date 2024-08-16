@@ -6,6 +6,7 @@ const StudentUserSchema = new mongoose.Schema({
     last_name: { type: String, },
     email: { type: String, unique: true },
     password: { type: String },
+    token: { type: String },
 });
 
 module.exports = mongoose.model("student users", StudentUserSchema);

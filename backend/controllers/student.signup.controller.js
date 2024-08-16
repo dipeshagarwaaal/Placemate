@@ -14,11 +14,7 @@ const Signup = async (req, res) => {
 
     const newUser = new StudentUser({ first_name, last_name, email, password: hashPassword });
     await newUser.save();
-
-    const payload = { userId: newUser.id };
-    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-    res.json({ token });
+    res.json({ msg: "User Created!" });
   } catch (error) {
     console.log("student.signup.controller.js => ", error);
     return res.status(500).json({ msg: "Internal Server Error!" });

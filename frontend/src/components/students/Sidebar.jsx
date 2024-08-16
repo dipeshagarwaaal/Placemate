@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaBars, FaUser, FaTachometerAlt, FaUserCircle, FaCog, FaSignOutAlt, } from 'react-icons/fa';
 import { IoIosArrowDropdown, IoIosArrowDropupCircle } from "react-icons/io";
+import axios from 'axios';
 
 const Sidebar = () => {
+  const navigate = useNavigate();
+
   const [isOpen, setIsOpen] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -16,7 +19,40 @@ const Sidebar = () => {
 
   const handleMouseOver = () => setIsOpen(true);
 
-  const handleLogout = () => console.log("User logged out");
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('../student/login');
+  };
+
+
+  // useState for load data
+  const [loadData, setLoadData] = useState({
+    name: 'Not Found',
+    email: 'Not Found',
+  });
+
+  // checking for authentication
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    axios.get('http://localhost:4518/student/home', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then(res => {
+        setLoadData({
+          name: res.data.username,
+          email: res.data.email
+        });
+      })
+      .catch(err => {
+        if (err.response && err.response.status === 401)
+          navigate('../student/login');
+        else
+          console.log(err);
+      });
+  }, []);
+
 
   return (
     <div className={`flex flex-col h-screen bg-slate-100/50 ${isOpen ? 'w-64' : 'w-20'} transition-width duration-300`}>
@@ -42,8 +78,8 @@ const Sidebar = () => {
               isOpen && (
                 <div className='w-full flex justify-around items-center transition-all duration-300 ease-in-out'>
                   <div className='flex flex-col gap-0 py-2'>
-                    <h2 className="text-base font-semibold">John Doe</h2>
-                    <p className="text-sm text-gray-400">john.doe@example.com</p>
+                    <h2 className="text-base font-semibold">{loadData.name}</h2>
+                    <p className="text-sm text-gray-400">{loadData.email}</p>
                   </div>
                   {
                     dropdownOpen
