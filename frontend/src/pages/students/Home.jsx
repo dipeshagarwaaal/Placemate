@@ -1,10 +1,9 @@
-import React from 'react'
-import Sidebar from '../../components/students/Sidebar';
+import React from 'react';
 
 function Home() {
   return (
     <>
-      <Sidebar />
+    
     </>
   )
 }

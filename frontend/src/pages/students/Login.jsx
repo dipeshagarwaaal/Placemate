@@ -12,7 +12,7 @@ function Login() {
   // if login user visit redirect to home page
   useEffect(() => {
     if (isAuthenticated()) {
-      navigate("../student/home");
+      navigate("../student/dashboard");
     }
   }, [navigate]);
 
@@ -36,7 +36,7 @@ function Login() {
     try {
       const response = await axios.post('http://localhost:4518/student/login', formData);
       localStorage.setItem('token', response.data.token);
-      navigate('../student/home');
+      navigate('../student/dashboard');
     } catch (error) {
       if (error.response.data.msg) {
         setToastMessage(error.response.data.msg);
@@ -57,6 +57,13 @@ function Login() {
     }
   }, []);
 
+  // toggle eye
+  const [isEyeOpen, setEyeOpen] = useState(false);
+
+  const handleEye = () => {
+    setEyeOpen(!isEyeOpen);
+  }
+
   return (
     <>
       {/* for any message "toast" */}
@@ -75,9 +82,14 @@ function Login() {
             <h1 className="h3 mb-3 font-weight-normal">Please Log In</h1>
           </div>
           <label htmlFor="inputEmail" className="sr-only">Email address</label>
-          <input type="email" id="inputEmail" className="form-control" placeholder="Email address" required autoFocus="" fdprocessedid="gwlj3s" autoComplete='email' name='email' value={email} onChange={handleChange} />
-          <label htmlFor="inputPassword" className="sr-only">Password</label>
-          <input type="password" id="inputPassword" className="form-control" placeholder="Password" required fdprocessedid="9sysne" autoComplete='current-password' name='password' value={password} onChange={handleChange} />
+          <input type="email" id="inputEmail" className="form-control ml-1" placeholder="Email address" required autoFocus="" fdprocessedid="gwlj3s" autoComplete='email' name='email' value={email} onChange={handleChange} />
+
+          <div className="flex justify-center items-center w-full">
+            <label htmlFor="inputPassword" className="sr-only">Password</label>
+            <input type={`${isEyeOpen ? "text" : "password"}`} id="inputPassword" className="form-control" placeholder="Password" required fdprocessedid="9sysne" autoComplete='current-password' name='password' value={password} onChange={handleChange} />
+            <i className={`${isEyeOpen ? "fa-solid fa-eye" : "fa-regular fa-eye-slash"} -ml-6 cursor-pointer`} onClick={handleEye}></i>
+          </div>
+
           <div className="flex justify-center items-center flex-col">
             <button className="btn btn-lg btn-primary btn-block" type="submit" fdprocessedid="a45f8">Log in</button>
           </div>

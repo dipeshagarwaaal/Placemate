@@ -21,7 +21,7 @@ router.post('/signup', Signup);
 router.post('/login', Login);
 
 // home page for student
-router.get('/home', authenticateToken, (req, res) => {
+router.get('/detail', authenticateToken, (req, res) => {
     res.json({
         name: `${req.user.name}`,
         email: `${req.user.email}`,

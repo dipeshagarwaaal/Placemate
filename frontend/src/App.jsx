@@ -1,9 +1,28 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import Login from "./pages/students/Login";
 import Signup from "./pages/students/Signup";
 import StudentHome from './pages/students/Home.jsx';
+import PageNotFound from "./pages/PageNotFound.jsx";
+import Account from "./components/students/Account.jsx";
+import Sidebar from './components/students/Sidebar';
+import Navbar from './components/students/Navbar';
+
+
+function StudentLayout() {
+  return (
+    <>
+      <Navbar />
+      <div className="flex">
+        <Sidebar />
+        <div className="content flex-grow p-4">
+          <Outlet />
+        </div>
+      </div>
+    </>
+  )
+}
 
 
 function App() {
@@ -12,17 +31,21 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* Public Route  */}
-          <Route index element={<LandingPage />}></Route>
+          <Route index element={<LandingPage />} />
 
           {/* Student Login, Sign Up  */}
-          <Route path="/student/login" element={<Login />}></Route>
-          <Route path="/student/signup" element={<Signup />}></Route>
-          <Route path="/student/home" element={<StudentHome />}></Route>
+          <Route path="/student/login" element={<Login />} />
+          <Route path="/student/signup" element={<Signup />} />
+
+          {/* Connected with sidebar and navbar  */}
+          <Route element={<StudentLayout />}>
+            <Route path="/student/dashboard" element={<StudentHome />} />
+            <Route path="/student/account" element={<Account />} />
+          </Route>
 
 
-
-          {/* Redirect unknown routes */}
-          <Route path="*" element={<Navigate to="student/login" />} />
+          {/* 404 page not found route */}
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -56,6 +56,13 @@ function Signup() {
     }
   }
 
+  // toggle eye
+  const [isEyeOpen, setEyeOpen] = useState(false);
+
+  const handleEye = () => {
+    setEyeOpen(!isEyeOpen);
+  }
+
   return (
     <>
       {/* for any message "toast" */}
@@ -74,13 +81,18 @@ function Signup() {
             <h1 className="h3 mb-3 font-weight-normal">Sign Up as a Student</h1>
           </div>
           <label htmlFor="inputFirstName" className="sr-only">First Name</label>
-          <input type="text" id="inputFirstName" className="form-control" placeholder="First Name" required autoFocus="" fdprocessedid="gwlj3s" autoComplete='Name' name='first_name' value={first_name} onChange={handleChange} />
+          <input type="text" id="inputFirstName" className="form-control ml-1" placeholder="First Name" required autoFocus="" fdprocessedid="gwlj3s" autoComplete='Name' name='first_name' value={first_name} onChange={handleChange} />
           <label htmlFor="inputLastName" className="sr-only">Last Name</label>
-          <input type="text" id="inputLastName" className="form-control" placeholder="Last Name" required autoFocus="" fdprocessedid="gwlj3s" autoComplete='Name' name='last_name' value={last_name} onChange={handleChange} />
+          <input type="text" id="inputLastName" className="form-control ml-1" placeholder="Last Name" required autoFocus="" fdprocessedid="gwlj3s" autoComplete='Name' name='last_name' value={last_name} onChange={handleChange} />
           <label htmlFor="inputEmail" className="sr-only">Email Address</label>
-          <input type="email" id="inputEmail" className="form-control" placeholder="Email Address" required autoFocus="" fdprocessedid="gwlj3s" autoComplete='email' name='email' value={email} onChange={handleChange} />
-          <label htmlFor="inputPassword" className="sr-only">Password</label>
-          <input type="password" id="inputPassword" className="form-control" placeholder="Password" required fdprocessedid="9sysne" autoComplete='current-password' name='password' value={password} onChange={handleChange} />
+          <input type="email" id="inputEmail" className="form-control ml-1" placeholder="Email Address" required autoFocus="" fdprocessedid="gwlj3s" autoComplete='email' name='email' value={email} onChange={handleChange} />
+
+          <div className="flex justify-center items-center w-full">
+            <label htmlFor="inputPassword" className="sr-only">Password</label>
+            <input type={`${isEyeOpen ? "text" : "password"}`} id="inputPassword" className="form-control" placeholder="Password" required fdprocessedid="9sysne" autoComplete='current-password' name='password' value={password} onChange={handleChange} />
+            <i className={`${isEyeOpen ? "fa-solid fa-eye" : "fa-regular fa-eye-slash"} -ml-6 cursor-pointer`} onClick={handleEye}></i>
+          </div>
+
           <div className="flex justify-center items-center flex-col">
             <button className="btn btn-lg btn-primary btn-block" type="submit" fdprocessedid="a45f8">Sign Up</button>
           </div>
