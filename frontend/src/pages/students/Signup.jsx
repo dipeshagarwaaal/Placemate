@@ -24,7 +24,7 @@ function Signup() {
     first_name: '',
     last_name: '',
     email: '',
-    password: ''
+    password: '',
   });
 
   const { first_name, last_name, email, password } = formData;
@@ -38,8 +38,15 @@ function Signup() {
       // console.log(response.data);
       setToastMessage("User Created Successfully! Now You Can Login.");
       setShowToast(true);
+
+      const dataToPass = {
+        showToastPass: true,
+        toastMessagePass: "User Created Successfully! Now You Can Login."
+      }
+      navigate('../student/login', { state: dataToPass });
+
       // after 3sec to go login page
-      setTimeout(() => navigate("../student/login"), 2000);
+      // setTimeout(() => navigate("../student/login"), 2000);
     } catch (error) {
       if (error.response.data.msg) {
         setToastMessage(error.response.data.msg);

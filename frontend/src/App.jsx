@@ -15,8 +15,8 @@ function App() {
           <Route index element={<LandingPage />}></Route>
 
           {/* Student Login, Sign Up  */}
-              <Route path="/student/login" element={<Login />}></Route>
-              <Route path="/student/signup" element={<Signup />}></Route>
+          <Route path="/student/login" element={<Login />}></Route>
+          <Route path="/student/signup" element={<Signup />}></Route>
           <Route path="/student/home" element={<StudentHome />}></Route>
 
 

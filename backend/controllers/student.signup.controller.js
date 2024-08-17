@@ -1,10 +1,11 @@
-const StudentUser = require("../models/student.model");
+const StudentUser = require("../models/user.model");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 
 const Signup = async (req, res) => {
   const { first_name, last_name, email, password } = req.body;
+  const name = first_name + " " + last_name;
 
   try {
     if (await StudentUser.findOne({ email }))
@@ -12,7 +13,7 @@ const Signup = async (req, res) => {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new StudentUser({ first_name, last_name, email, password: hashPassword });
+    const newUser = new StudentUser({ name: name, email: email, password: hashPassword, role:"student" });
     await newUser.save();
     res.json({ msg: "User Created!" });
   } catch (error) {

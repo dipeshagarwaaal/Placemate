@@ -1,23 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaBars, FaUser, FaTachometerAlt, FaUserCircle, FaCog, FaSignOutAlt, } from 'react-icons/fa';
+import { FaBars, FaUser, FaTachometerAlt, FaCog, FaSignOutAlt, } from 'react-icons/fa';
 import { IoIosArrowDropdown, IoIosArrowDropupCircle } from "react-icons/io";
 import axios from 'axios';
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const BASE_URL = "http://localhost:4518";
 
-  const [isOpen, setIsOpen] = useState(true);
+  const initialIsOpen = localStorage.getItem('nav-open') ? JSON.parse(localStorage.getItem('nav-open')) : true;
+
+  const [isOpen, setIsOpen] = useState(initialIsOpen);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+    const storedValue = JSON.parse(localStorage.getItem('nav-open'));
+
+    // toggle value of nav-open in localSTorage and useState
+    if (storedValue === true) {
+      setIsOpen(false);
+      localStorage.setItem('nav-open', false);
+    } else {
+      setIsOpen(true);
+      localStorage.setItem('nav-open', true);
+    }
+
     if (isOpen)
       setDropdownOpen(false);
   }
+
   const toggleDropdown = () => setDropdownOpen(!dropdownOpen);
 
-  const handleMouseOver = () => setIsOpen(true);
+  const handleMouseOver = () => {
+    setIsOpen(true);
+    localStorage.setItem('nav-open', isOpen);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -29,6 +46,7 @@ const Sidebar = () => {
   const [loadData, setLoadData] = useState({
     name: 'Not Found',
     email: 'Not Found',
+    profile: 'Profile Img',
   });
 
   // checking for authentication
@@ -41,8 +59,9 @@ const Sidebar = () => {
     })
       .then(res => {
         setLoadData({
-          name: res.data.username,
-          email: res.data.email
+          name: res.data.name,
+          email: res.data.email,
+          profile: res.data.profile,
         });
       })
       .catch(err => {
@@ -61,7 +80,9 @@ const Sidebar = () => {
         {
           isOpen &&
           <h1 className={`text-xl font-bold transition-opacity duration-300 opacity-100`}>
-            CPMS
+            <Link to='/student/home' className='no-underline text-black'>
+              CPMS
+            </Link>
           </h1>
         }
         <button onClick={toggleSidebar}>
@@ -73,7 +94,7 @@ const Sidebar = () => {
         {/* User Profile */}
         <div className=''>
           <div className={`flex items-center mt-2 cursor-pointer ${isOpen ? 'bg-slate-200' : 'justify-center'}`} onClick={toggleDropdown}>
-            <FaUserCircle size={isOpen ? 36 : 24} className="mx-2 my-2 transition-all duration-300" />
+            <img src={`${BASE_URL}${loadData.profile}`} alt="Profile Img" width={isOpen ? '36px' : "24px"} className="mx-2 my-2 rounded-2xl transition-all duration-300" />
             {
               isOpen && (
                 <div className='w-full flex justify-around items-center transition-all duration-300 ease-in-out'>

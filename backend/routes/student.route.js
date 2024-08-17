@@ -23,8 +23,9 @@ router.post('/login', Login);
 // home page for student
 router.get('/home', authenticateToken, (req, res) => {
     res.json({
-        username: `${req.user.first_name} ${req.user.last_name}`,
+        name: `${req.user.name}`,
         email: `${req.user.email}`,
+        profile: `${req.user.profilePicture}`,
     });
 });
 

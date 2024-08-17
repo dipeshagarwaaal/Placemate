@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Logo from '../../assets/CPMS.png';
 import Toast from '../../components/Toast';
@@ -7,10 +7,11 @@ import isAuthenticated from '../../utility/auth.utility';
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   // if login user visit redirect to home page
-  useEffect(()=>{
-    if (isAuthenticated())  {
+  useEffect(() => {
+    if (isAuthenticated()) {
       navigate("../student/home");
     }
   }, [navigate]);
@@ -44,6 +45,17 @@ function Login() {
       console.log("Error in Student login.jsx => ", error);
     }
   }
+
+  // if user came from signup page then this toast appears
+  const { showToastPass, toastMessagePass } = location.state || { showToastPass: false, toastMessagePass: '' };
+  useEffect(() => {
+    if (showToastPass) {
+      setToastMessage(toastMessagePass);
+      setShowToast(showToastPass);
+      // Clear the state after the toast is shown
+      navigate('.', { replace: true, state: {} });
+    }
+  }, []);
 
   return (
     <>
