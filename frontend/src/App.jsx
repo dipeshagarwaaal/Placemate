@@ -8,15 +8,17 @@ import PageNotFound from "./pages/PageNotFound.jsx";
 import Account from "./components/students/Account.jsx";
 import Sidebar from './components/students/Sidebar';
 import Navbar from './components/students/Navbar';
+import BreadcrumbExp from "./components/Breadcrumb.jsx";
+import './style/index.css';
 
-
-function StudentLayout() {
+function StudentLayout({ header }) {
   return (
     <>
       <Navbar />
       <div className="flex">
         <Sidebar />
         <div className="content flex-grow p-4">
+          <BreadcrumbExp header={header} />
           <Outlet />
         </div>
       </div>
@@ -38,8 +40,11 @@ function App() {
           <Route path="/student/signup" element={<Signup />} />
 
           {/* Connected with sidebar and navbar  */}
-          <Route element={<StudentLayout />}>
+          <Route element={<StudentLayout header="Dashboard" />}>
             <Route path="/student/dashboard" element={<StudentHome />} />
+          </Route>
+
+          <Route element={<StudentLayout header="Account Details" />}>
             <Route path="/student/account" element={<Account />} />
           </Route>
 

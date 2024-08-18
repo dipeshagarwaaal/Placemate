@@ -11,7 +11,7 @@ function Signup() {
   // if login user visit redirect to home page
   useEffect(() => {
     if (isAuthenticated()) {
-      navigate("../student/home");
+      navigate("../student/dashboard");
     }
   }, [navigate]);
 

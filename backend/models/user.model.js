@@ -13,6 +13,10 @@ const UserSchema = new mongoose.Schema({
     unique: true,
     trim: true
   },
+  number: {
+    type: Number,
+    unique: true,
+  },
   password: {
     type: String,
     required: true
@@ -22,7 +26,7 @@ const UserSchema = new mongoose.Schema({
     enum: ['student', 'tpo_admin', 'management_admin'],
     required: true
   },
-  profilePicture: {
+  profile: {
     type: String,
     default: '/profileImage/default/defaultProfileImg.jpg',
     trim: true

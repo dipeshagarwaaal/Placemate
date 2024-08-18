@@ -3,7 +3,7 @@ const StudentUser = require('../models/user.model');
 
 const authenticateToken = async (req, res, next) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
-  // console.log(token);
+  
   if (!token) return res.status(401).json({ msg: 'Login Required!' });
   
   try {
