@@ -62,7 +62,7 @@ The **College Placement Management System** is a web application designed to str
 │   ├── .gitignore
 │   ├── index.js
 │   ├── package.json
-│   └── postcss.config.js
+│   └── package-lock.js
 └── README.md
 ```
 
