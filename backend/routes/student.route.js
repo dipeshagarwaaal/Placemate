@@ -36,6 +36,7 @@ router.get('/detail', authenticateToken, (req, res) => {
         year: `${req.user.studentProfile.year}`,
         createdAt: `${req.user.createdAt}`,
         id: `${req.user.id}`,
+        role: `${req.user.role}`,
     });
 });
 

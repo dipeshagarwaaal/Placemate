@@ -19,7 +19,7 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate('../student/login');
+    navigate('../tpo/login');
   };
 
 
@@ -52,7 +52,7 @@ const Sidebar = () => {
               showToastPass: true,
               toastMessagePass: err.response.data.msg,
             }
-            navigate('../student/login', { state: dataToPass });
+            navigate('../tpo/login', { state: dataToPass });
           }
         } else
           console.log("Sidebar.jsx => ", err);
@@ -66,7 +66,7 @@ const Sidebar = () => {
       <div className='flex items-center px-3 py-4 gap-2 bg-slate-200 shadow-sm'>
         <img className="rounded-xl shadow-sm" src={`${Logo}`} alt="Logo Image" width="75" height="75" />
         <h1 className={`text-xl font-bold transition-opacity duration-300 opacity-100`}>
-          <Link to='/student/dashboard' className='no-underline text-black'>
+          <Link to='/tpo/dashboard' className='no-underline text-black'>
             CPMS
           </Link>
         </h1>
@@ -74,7 +74,7 @@ const Sidebar = () => {
 
       {/* Navigation Links */}
       <nav className='flex flex-col flex-grow overflow-x-auto sidebar-nav mb-24'>
-        <Link to="../student/dashboard" className="flex items-center no-underline p-4 hover:bg-slate-100">
+        <Link to="../tpo/dashboard" className="flex items-center no-underline p-4 hover:bg-slate-100">
           <FaTachometerAlt size={24} className="mr-3" />
           <span>Dashboard</span>
         </Link>
@@ -89,7 +89,7 @@ const Sidebar = () => {
         {/* Dropdown Menu */}
         {dropdownOpen && (
           <div className={`w-full rounded-t-md bg-slate-700  ${dropdownOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-5'}`}>
-            <Link to="../student/account" className="flex items-center rounded-t-md no-underline text-white p-3 hover:bg-slate-900">
+            <Link to="../tpo/account" className="flex items-center rounded-t-md no-underline text-white p-3 hover:bg-slate-900">
               <FaCog className="mr-2" /> <span className=''>Account Details</span>
             </Link>
             <button onClick={handleLogout} className="flex items-center rounded-t-md text-red-500 w-full p-3 hover:bg-slate-900">

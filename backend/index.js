@@ -15,8 +15,14 @@ const mongodb = require('./config/MongoDB');
 mongodb();
 
 
+// routes for user
+app.use('/user', require('./routes/user.route'));
 // routes for student user
 app.use('/student', require('./routes/student.route'));
+// routes for tpo user
+app.use('/tpo', require('./routes/tpo.route'));
+// routes for management user
+app.use('/management', require('./routes/management.route'));
 
 
 

@@ -1,6 +1,8 @@
-import React from 'react'
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function LandFooter() {
+  const navigate = useNavigate();
   return (
     <>
       <div className="container">
@@ -13,9 +15,17 @@ function LandFooter() {
           </ul>
           <ul className="nav justify-content-center border-bottom pb-3 mb-3">
             <span className='text-gray-300 text-3xl'>|</span>
-            <li className="nav-item"><a href="" className="nav-link px-2 text-body-secondary">Login as TPO Admin </a></li>
+            <li className="nav-item">
+              <span className="nav-link px-2 text-body-secondary cursor-pointer" onClick={()=>navigate('tpo/login')}>
+                Login as TPO Admin
+              </span>
+            </li>
             <span className='text-gray-300 text-3xl'>|</span>
-            <li className="nav-item"><a href="" className="nav-link px-2 text-body-secondary">Login as Management Admin</a></li>
+            <li className="nav-item">
+              <span className="nav-link px-2 text-body-secondary cursor-pointer" onClick={()=>navigate('management/login')}>
+                Login as Management Admin
+              </span>
+            </li>
             <span className='text-gray-300 text-3xl'>|</span>
           </ul>
           <p className="text-center text-body-secondary">© 2024 College Placement Management System</p>

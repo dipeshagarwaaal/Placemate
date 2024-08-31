@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaUser, FaTachometerAlt, FaCog, FaSignOutAlt, } from 'react-icons/fa';
+import { FaTachometerAlt, FaCog, FaSignOutAlt, } from 'react-icons/fa';
 import { IoIosArrowDropdown, IoIosArrowDropupCircle } from "react-icons/io";
+import { HiUserAdd } from "react-icons/hi";
 import axios from 'axios';
 import Logo from '../../assets/CPMS.png';
 
@@ -19,7 +20,7 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate('../student/login');
+    navigate('../management/login');
   };
 
 
@@ -66,7 +67,7 @@ const Sidebar = () => {
       <div className='flex items-center px-3 py-4 gap-2 bg-slate-200 shadow-sm'>
         <img className="rounded-xl shadow-sm" src={`${Logo}`} alt="Logo Image" width="75" height="75" />
         <h1 className={`text-xl font-bold transition-opacity duration-300 opacity-100`}>
-          <Link to='/student/dashboard' className='no-underline text-black'>
+          <Link to='/management/dashboard' className='no-underline text-black'>
             CPMS
           </Link>
         </h1>
@@ -74,13 +75,13 @@ const Sidebar = () => {
 
       {/* Navigation Links */}
       <nav className='flex flex-col flex-grow overflow-x-auto sidebar-nav mb-24'>
-        <Link to="../student/dashboard" className="flex items-center no-underline p-4 hover:bg-slate-100">
+        <Link to="../management/dashboard" className="flex items-center no-underline p-4 hover:bg-slate-100">
           <FaTachometerAlt size={24} className="mr-3" />
           <span>Dashboard</span>
         </Link>
-        <Link to="/account" className="flex items-center no-underline p-4 hover:bg-slate-100">
-          <FaUser size={24} className="mr-3" />
-          <span>Account</span>
+        <Link to="../management/tpoadmin" className="flex items-center no-underline p-4 hover:bg-slate-100">
+          <HiUserAdd size={24} className="mr-3" />
+          <span>TPO Admin</span>
         </Link>
         {/* add more */}
       </nav>
@@ -89,7 +90,7 @@ const Sidebar = () => {
         {/* Dropdown Menu */}
         {dropdownOpen && (
           <div className={`w-full rounded-t-md bg-slate-700  ${dropdownOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-5'}`}>
-            <Link to="../student/account" className="flex items-center rounded-t-md no-underline text-white p-3 hover:bg-slate-900">
+            <Link to="../management/account" className="flex items-center rounded-t-md no-underline text-white p-3 hover:bg-slate-900">
               <FaCog className="mr-2" /> <span className=''>Account Details</span>
             </Link>
             <button onClick={handleLogout} className="flex items-center rounded-t-md text-red-500 w-full p-3 hover:bg-slate-900">
