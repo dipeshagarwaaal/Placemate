@@ -1,4 +1,4 @@
-const User = require("../models/user.model");
+const StudentUser = require("../../models/user.model");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -7,12 +7,12 @@ const Login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const user = await StudentUser.findOne({ email });
     if (!user)
       return res.status(400).json({ msg: "User Doesn't Exist!" });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch || user.role !== "tpo_admin")
+    if (!isMatch || user.role !== "student")
       return res.status(400).json({ msg: 'Credentials Not Matched!' });
 
     const payload = { userId: user.id };
@@ -20,7 +20,7 @@ const Login = async (req, res) => {
 
     user.token = token;
     await user.save();
-    
+
     res.json({ token });
   } catch (error) {
     console.log("student.login.controller.js => ", error);

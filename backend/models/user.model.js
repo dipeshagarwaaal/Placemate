@@ -28,8 +28,7 @@ const UserSchema = new mongoose.Schema({
   },
   profile: {
     type: String,
-    default: '/profileImage/default/defaultProfileImg.jpg',
-    trim: true
+    default: '/profileImgs/default/defaultProfileImg.jpg',
   },
   // Student specific fields
   studentProfile: {

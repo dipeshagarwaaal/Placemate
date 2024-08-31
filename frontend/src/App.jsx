@@ -12,6 +12,7 @@ import Navbar from './components/students/Navbar';
 // TPO pages
 import SidebarTPO from './components/tpo/Sidebar';
 import LoginTPO from "./pages/TPO/Login.jsx";
+import AccountTPO from "./components/TPO/Account.jsx";
 // Management pages
 import SidebarManagement from "./components/Management/Sidebar.jsx";
 import LoginManagement from "./pages/Management/Login.jsx";
@@ -107,6 +108,9 @@ function App() {
           <Route element={<UserProvider><ProtectedRoute allowedRoles={['tpo_admin']} /></UserProvider>}>
             <Route element={<TPOLayout header="Dashboard" />}>
               <Route path="/tpo/dashboard" element={<StudentHome />} />
+            </Route>
+            <Route element={<TPOLayout header="Account Details" />}>
+              <Route path="/tpo/account" element={<AccountTPO />} />
             </Route>
           </Route>
 

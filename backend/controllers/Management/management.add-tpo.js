@@ -1,4 +1,4 @@
-const Users = require('../models/user.model');
+const Users = require('../../models/user.model');
 const bcrypt = require('bcrypt');
 
 const AddTPO = async (req, res) => {

@@ -1,4 +1,4 @@
-const Users = require('../models/user.model');
+const Users = require('../../models/user.model');
 
 const DeleteTPO = async (req, res) => {
     // const user = await Users.find({email: req.body.email});

@@ -13,7 +13,7 @@ function Account() {
 
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
-  // console.log(data)
+  
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -122,7 +122,10 @@ function Account() {
       console.log("Account.jsx updatepass =>", error);
       setPassData({ ...passData, error: error.message });
     }
-  }
+  }  
+
+  console.log(BASE_URL + data.profile);
+
 
   return (
     <>
