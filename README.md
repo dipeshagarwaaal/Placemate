@@ -29,19 +29,40 @@ The **College Placement Management System** is a web application designed to str
 ├── frontend
 │   ├── public
 │   ├── src
+|   |   ├── api
+|   |   ├── assets
 │   │   ├── components
+|   |   |   ├──LandingPages
+|   |   |   └──students
+│   │   ├── context
+│   │   ├── hooks
 │   │   ├── pages
 │   │   ├── styles
 │   │   ├── utils
-│   │   └── App.jsx
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── .gitignore
+│   ├── .eslint.config.js
+│   ├── index.html
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── postcss.config.js
+│   ├── tailwind.config.js
 │   └── vite.config.js
 ├── backend
 │   ├── config
 │   ├── controllers
+│   ├── middleware
 │   ├── models
+│   ├── public
+│   │   └──  profileImgs
+│   │         └── default
 │   ├── routes
-│   ├── utils
-│   └── server.js
+│   ├── .env(NOTE: YOU NEED TO CREATE THIS FILE)
+│   ├── .gitignore
+│   ├── index.js
+│   ├── package.json
+│   └── package-lock.js
 └── README.md
 ```
 
