@@ -75,7 +75,7 @@ function LoginTPO() {
         position="bottom-end"
       />
 
-      <div className="flex justify-center items-center h-screen bg-gradient-to-r from-indigo-400 from-10% via-sky-300 via-40% to-emerald-500 to-100% ">
+      <div className="flex justify-center items-center h-screen bg-gradient-to-r from-red-400 from-10% via-yellow-300 via-40% to-orange-500 to-100%">
         <form className="form-signin flex justify-center items-center flex-col gap-3 backdrop-blur-md bg-white/30 border border-white/20 rounded-lg p-8 shadow shadow-red-400 w-1/3 max-lg:w-2/3 max-md:w-3/4 max-[400px]:w-4/5" onSubmit={handleSubmit}>
           <div className='flex justify-center items-center flex-col'>
             <img className="mb-4 rounded-xl shadow" src={`${Logo}`} alt="Logo Image" width="150" height="150" />

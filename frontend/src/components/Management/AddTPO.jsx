@@ -4,8 +4,10 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import Placeholder from 'react-bootstrap/Placeholder';
 import { GrFormAdd } from "react-icons/gr";
 import Toast from '../Toast';
+import ModalBox from '../Modal';
 
 function AddTPO() {
   // tpo users store here
@@ -16,6 +18,10 @@ function AddTPO() {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
+  // useState for Modal display
+  const [showModal, setShowModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+
   const fetchUserDetails = async () => {
     try {
       const response = await axios.get("http://localhost:4518/management/tpo-users", {
@@ -25,6 +31,7 @@ function AddTPO() {
       });
 
       if (response.data) {
+        console.log(response.data.tpoUsers)
         setUsers(response.data.tpoUsers);
       } else {
         console.warn('Response does not contain tpoUsers:', response.data);
@@ -35,11 +42,11 @@ function AddTPO() {
       setLoading(false);
     }
   };
-  fetchUserDetails();
+  // fetchUserDetails();
 
   const [formOpen, setFormOpen] = useState(false);
   const [data, setData] = useState({
-    name: "",
+    first_name: "",
     email: "",
     number: "",
     password: ""
@@ -47,21 +54,36 @@ function AddTPO() {
 
   const handleDataChange = (e) => setData({ ...data, [e.target.name]: e.target.value });
 
-  const handleDeleteUser = async (email) => {
-    const response = await axios.post("http://localhost:4518/management/deletetpo",
-      { email },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+  const handleDeleteUser = (email) => {
+    setUserToDelete(email);
+    setShowModal(true);
+  }
+
+  const confirmDelete = async (email) => {
+    try {
+      const response = await axios.post("http://localhost:4518/management/deletetpo",
+        { email: userToDelete },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          }
         }
+      );
+      setShowModal(false);
+      if (response.data) {
+        setToastMessage(response.data.msg);
+        setShowToast(true);
+        fetchUserDetails();
       }
-    );
-    if (response.data) {
-      setToastMessage(response.data.msg);
-      setShowToast(true);
-      fetchUserDetails();
+    } catch (error) {
+      console.log("AddTPO => confirmDelete ==> ", error);
     }
   }
+
+  const closeModal = () => {
+    setShowModal(false);
+    setUserToDelete(null);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -95,12 +117,211 @@ function AddTPO() {
         delay={3000}
         position="top-center"
       />
-    
+
       <div className='ml-60'>
         {
           loading ? (
-            <div className="flex justify-center h-72 items-center">
-              <i className="fa-solid fa-spinner fa-spin text-3xl" />
+            // fake table loading animation 
+            <div>
+              <Table striped bordered hover className='bg-white p-6 rounded-lg shadow-md w-full'>
+                <thead>
+                  <tr>
+                    <th>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </th>
+                    <th>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </th>
+                    <th>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </th>
+                    <th>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </th>
+                    <th>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </th>
+                    <th>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                    <td>
+                      <Placeholder as="p" animation="glow">
+                        <Placeholder xs={12} />
+                      </Placeholder>
+                    </td>
+                  </tr>
+                </tbody>
+              </Table>
+              {/* <i className="fa-solid fa-spinner fa-spin text-3xl" /> */}
             </div>
           ) : (
             <Table striped bordered hover className='bg-white p-6 rounded-lg shadow-md w-full'>
@@ -119,7 +340,7 @@ function AddTPO() {
                   users.map((user, index) => (
                     <tr key={user.email}>
                       <td>{index + 1}</td>
-                      <td>{user.name}</td>
+                      <td>{user.first_name}</td>
                       <td>{user.email}</td>
                       <td>{user.number}</td>
                       <td>{new Date(user.createdAt).toLocaleDateString()}</td>
@@ -130,7 +351,7 @@ function AddTPO() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="5">No users found</td>
+                    <td colSpan="6">No users found</td>
                   </tr>
                 )}
               </tbody>
@@ -148,7 +369,7 @@ function AddTPO() {
                 <Form className='text-base' onSubmit={handleSubmit}>
                   <h2>New TPO Admin</h2>
                   <FloatingLabel className='my-3' label="Name">
-                    <Form.Control type="text" autoComplete="name" placeholder="Name" name='name' value={data.name || ''} onChange={handleDataChange} />
+                    <Form.Control type="text" autoComplete="name" placeholder="Name" name='first_name' value={data.first_name || ''} onChange={handleDataChange} />
                   </FloatingLabel>
                   <FloatingLabel className='my-3' label="Email">
                     <Form.Control type="email" autoComplete="email" placeholder="Email" name='email' value={data.email || ''} onChange={handleDataChange} />
@@ -168,6 +389,16 @@ function AddTPO() {
             </div>
           </>
         }
+
+        {/* ModalBox Component for Delete Confirmation */}
+        <ModalBox
+          show={showModal}
+          close={closeModal}
+          header={"Confirmation"}
+          body={`Do you want to delete ${userToDelete}?`}
+          btn={"Delete"}
+          confirmAction={confirmDelete}
+        />
       </div>
     </>
   );

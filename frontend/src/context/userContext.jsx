@@ -21,12 +21,15 @@ export const UserProvider = ({ children }) => {
             Authorization: `Bearer ${localStorage.getItem("token")}` // Assuming token is stored in localStorage
           }
         });
-        
+
         if (response.data) {
           setUser(response.data);
         }
       } catch (error) {
         console.error("Error fetching user details", error);
+        if(error.response.data.msg){
+          localStorage.removeItem('token');
+        }
         setUser(null); // In case of an error, reset user to null
       } finally {
         setLoading(false); // Stop loading indicator once the data is fetched or an error occurs

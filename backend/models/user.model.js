@@ -1,11 +1,21 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 
 const UserSchema = new mongoose.Schema({
-  name: {
+  first_name: {
     type: String,
-    required: true,
     trim: true
+  },
+  middle_name: {
+    type: String,
+    trim: true
+  },
+  last_name: {
+    type: String,
+    trim: true
+  },
+  gender: {
+    type: String,
+    enum: ['Male', 'Female', 'Other']
   },
   email: {
     type: String,
@@ -15,7 +25,6 @@ const UserSchema = new mongoose.Schema({
   },
   number: {
     type: Number,
-    unique: true,
   },
   password: {
     type: String,
@@ -30,9 +39,34 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: '/profileImgs/default/defaultProfileImg.jpg',
   },
+  fullAddress: {
+    address: {
+      type: String
+    },
+    pincode: {
+      type: Number
+    }
+  },
+  dataOfBirth: {
+    type: Date,
+  },
+  createdAt: {
+    type: Date,
+    default: new Date()
+  },
+  token: {
+    type: String
+  },
+  isProfileCompleted: {
+    type: Boolean,
+    default: false
+  },
   // Student specific fields
   studentProfile: {
-    enrollmentNumber: {
+    rollNumber: {
+      type: Number
+    },
+    UIN: {
       type: String,
       unique: true,
       sparse: true,
@@ -40,16 +74,81 @@ const UserSchema = new mongoose.Schema({
     },
     department: {
       type: String,
-      trim: true
+      enum: ['Computer', 'Civil', 'ECS', 'AIDS', 'Mechanical'],
     },
     year: {
+      type: Number,
+      enum: [1, 2, 3, 4],
+    },
+    addmissionYear:{
       type: Number
     },
-    // more for student
+    SGPA: {
+      sem1: {
+        type: Number
+      },
+      sem2: {
+        type: Number
+      },
+      sem3: {
+        type: Number
+      },
+      sem4: {
+        type: Number
+      },
+      sem5: {
+        type: Number
+      },
+      sem6: {
+        type: Number
+      },
+      sem7: {
+        type: Number
+      },
+      sem8: {
+        type: Number
+      },
+    },
+    pastQualification: {
+      ssc: {
+        board: {
+          type: String
+        },
+        percentage: {
+          type: Number
+        },
+        year: {
+          type: Number
+        }
+      },
+      hsc: {
+        board: {
+          type: String
+        },
+        percentage: {
+          type: Number
+        },
+        year: {
+          type: Number
+        }
+      },
+      diploma: {
+        department: {
+          type: String
+        },
+        percentage: {
+          type: Number
+        },
+        year: {
+          type: Number
+        }
+      },
+    }
+
   },
   // TPO Admin specific fields
   tpoProfile: {
-    department: {
+    position: {
       type: String,
       trim: true
     },
@@ -62,13 +161,6 @@ const UserSchema = new mongoose.Schema({
       trim: true
     },
     // more for management
-  },
-  createdAt: {
-    type: Date,
-    default: new Date()
-  },
-  token: {
-    type: String
   }
 });
 

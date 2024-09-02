@@ -143,33 +143,37 @@ function Account() {
             />
 
             <div className="ml-60 text-xl text-wrap">
-              <div className="container grid grid-cols-3 gap-3 mx-auto p-4">
+              <div className="container grid grid-cols-3 gap-3 mx-auto p-4 text-base">
                 {/* <div className="container flex justify-center items-start  gap-4 mx-auto p-4"> */}
                 {/* basic detail box  */}
                 <div className="bg-white p-6 rounded-lg shadow-md w-full">
-                  <div className="">
-                    <Form onSubmit={handleBasicDetailSubmit}>
-                      <Form.Group className="mb-3" controlId="formGroupName">
-                        <Form.Label>Full Name </Form.Label>
-                        <span className="text-red-500 px-1">*</span>
-                        <Form.Control type="text" placeholder="Enter Name" value={data.name || ''} name='name' onChange={handleBasicDetailChange} />
-                      </Form.Group>
-                      <Form.Group className="mb-3" controlId="formGroupEmail">
-                        <Form.Label>Email </Form.Label>
-                        <span className="text-red-500 px-1">*</span>
-                        <Form.Control disabled type="email" placeholder="Email Address" value={data.email || ''} name='email' />
-                      </Form.Group>
-                      <Form.Group className="mb-3" controlId="formGroupNumber">
-                        <Form.Label>Mobile Number </Form.Label>
-                        <span className="text-red-500 px-1">*</span>
-                        <Form.Control type="number" placeholder="Mobile Number" name='number' value={data.number || ''} onChange={handleBasicDetailChange} />
-                      </Form.Group>
-                      <button type="submit" className="flex items-center px-3 py-2 bg-blue-500 text-white rounded">
-                        <FaRegSave className="mr-2" />
-                        Submit
-                      </button>
-                    </Form>
-                  </div>
+                  <Form onSubmit={handleBasicDetailSubmit}>
+                    <div className="flex gap-1 justify-center items-start">
+                      <div className="">
+                        <FloatingLabel className='my-3' label="First Name">
+                          <Form.Control type="text" autoComplete="first_name" placeholder="First Name" name='first_name' value={data.first_name || ''} onChange={handleBasicDetailChange} required />
+                        </FloatingLabel>
+                        <FloatingLabel className='my-3' label="Middle Name">
+                          <Form.Control type="text" autoComplete="middle_name" placeholder="Middle Name" name='middle_name' value={data.middle_name || ''} onChange={handleBasicDetailChange} required />
+                        </FloatingLabel>
+                        <FloatingLabel className='my-3' label="Last Name">
+                          <Form.Control type="text" autoComplete="last_name" placeholder="Last Name" name='last_name' value={data.last_name || ''} onChange={handleBasicDetailChange} required />
+                        </FloatingLabel>
+                      </div>
+                      <div className="">
+                        <FloatingLabel className='my-3' label="Email">
+                          <Form.Control type="email" autoComplete="email" placeholder="Email" name='email' value={data.email || ''} onChange={handleBasicDetailChange} required disabled />
+                        </FloatingLabel>
+                        <FloatingLabel className='my-3' label="Number">
+                          <Form.Control type="number" autoComplete="number" placeholder="Number" name='number' value={data.number || ''} onChange={handleBasicDetailChange} required />
+                        </FloatingLabel>
+                      </div>
+                    </div>
+                    <button type="submit" className="flex items-center px-3 py-2 bg-blue-500 text-white rounded">
+                      <FaRegSave className="mr-2" />
+                      Submit
+                    </button>
+                  </Form>
                 </div>
 
                 {/* photo box */}
@@ -190,13 +194,13 @@ function Account() {
                   <div className="">
                     <Form onSubmit={handlePassUpdate} className='text-base'>
                       <FloatingLabel className='my-3' label="Old Password">
-                        <Form.Control type="password" autoComplete="password" placeholder="Password" name='oldpass' value={passData.oldpass || ''} onChange={handlePassChange} />
+                        <Form.Control type="password" autoComplete="password" placeholder="Password" name='oldpass' value={passData.oldpass || ''} onChange={handlePassChange} required />
                       </FloatingLabel>
                       <FloatingLabel className='my-3' label="New Password">
-                        <Form.Control type="password" autoComplete="password" placeholder="New Password" name='newpass' value={passData.newpass || ''} onChange={handlePassChange} />
+                        <Form.Control type="password" autoComplete="password" placeholder="New Password" name='newpass' value={passData.newpass || ''} onChange={handlePassChange} required />
                       </FloatingLabel>
                       <FloatingLabel className='my-3' label="Confirm New Password">
-                        <Form.Control type="password" autoComplete="password" placeholder="Confirm New Password" name='newcfmpass' value={passData.newcfmpass || ''} onChange={handlePassChange} />
+                        <Form.Control type="password" autoComplete="password" placeholder="Confirm New Password" name='newcfmpass' value={passData.newcfmpass || ''} onChange={handlePassChange} required />
                       </FloatingLabel>
                       <button type="submit" className="flex items-center px-3 py-2 bg-blue-500 text-white rounded">
                         <RiKeyFill className="mr-2" />

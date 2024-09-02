@@ -9,10 +9,12 @@ import StudentHome from './pages/students/Home.jsx';
 import Account from "./components/students/Account.jsx";
 import SidebarStudent from './components/students/Sidebar';
 import Navbar from './components/students/Navbar';
+import CompleteProfile from "./components/completeProfile.jsx";
 // TPO pages
 import SidebarTPO from './components/tpo/Sidebar';
 import LoginTPO from "./pages/TPO/Login.jsx";
 import AccountTPO from "./components/TPO/Account.jsx";
+import StudentsTPO from "./components/TPO/Students.jsx";
 // Management pages
 import SidebarManagement from "./components/Management/Sidebar.jsx";
 import LoginManagement from "./pages/Management/Login.jsx";
@@ -101,6 +103,7 @@ function App() {
             <Route element={<StudentLayout header="Account Details" />}>
               <Route path="/student/account" element={<Account />} />
             </Route>
+            <Route path="/student/complete-profile" element={<CompleteProfile />} />
           </Route>
 
 
@@ -112,6 +115,10 @@ function App() {
             <Route element={<TPOLayout header="Account Details" />}>
               <Route path="/tpo/account" element={<AccountTPO />} />
             </Route>
+            <Route element={<TPOLayout header="Students" />}>
+              <Route path="/tpo/students" element={<StudentsTPO />} />
+            </Route>
+            <Route path="/tpo/complete-profile" element={<CompleteProfile />} />
           </Route>
 
 
@@ -126,10 +133,11 @@ function App() {
             <Route element={<ManagementLayout header="TPO Admins" />}>
               <Route path="/management/tpoadmin" element={<AddTPO />} />
             </Route>
+            <Route path="/management/complete-profile" element={<CompleteProfile />} />
           </Route>
 
         </Routes>
-      </BrowserRouter >
+      </BrowserRouter>
     </>
   )
 }

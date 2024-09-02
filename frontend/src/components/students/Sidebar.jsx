@@ -5,6 +5,8 @@ import { IoIosArrowDropdown, IoIosArrowDropupCircle } from "react-icons/io";
 import axios from 'axios';
 import Logo from '../../assets/CPMS.png';
 
+// TODO: Reactjs Bootstrap offcanvas to implement
+
 const Sidebar = () => {
   const navigate = useNavigate();
   const BASE_URL = "http://localhost:4518";
@@ -40,7 +42,7 @@ const Sidebar = () => {
     })
       .then(res => {
         setLoadData({
-          name: res.data.name,
+          name: res.data.first_name + " " + res.data.middle_name + " " + res.data.last_name,
           email: res.data.email,
           profile: res.data.profile,
         });

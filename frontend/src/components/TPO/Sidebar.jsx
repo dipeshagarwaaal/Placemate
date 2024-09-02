@@ -78,9 +78,9 @@ const Sidebar = () => {
           <FaTachometerAlt size={24} className="mr-3" />
           <span>Dashboard</span>
         </Link>
-        <Link to="/account" className="flex items-center no-underline p-4 hover:bg-slate-100">
+        <Link to="../tpo/students" className="flex items-center no-underline p-4 hover:bg-slate-100">
           <FaUser size={24} className="mr-3" />
-          <span>Account</span>
+          <span>Students</span>
         </Link>
         {/* add more */}
       </nav>

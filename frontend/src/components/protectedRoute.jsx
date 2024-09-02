@@ -1,10 +1,11 @@
 import React from "react";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useUser } from "../context/userContext";
 
 const ProtectedRoute = ({ allowedRoles }) => {
   const { user, loading } = useUser();
   const location = useLocation();
+  const navigate = useNavigate();
 
   if (loading) {
     // You can replace this with a loading spinner or component if desired
@@ -21,6 +22,16 @@ const ProtectedRoute = ({ allowedRoles }) => {
     return <Navigate to="/" state={{ from: location }} replace />;
   }
 
+  if (user.isProfileCompleted === 'false') {
+    if (user.role === 'student') {
+      navigate("/student/complete-profile");
+    } else if (user.role === 'tpo_admin') {
+      navigate("/tpo/complete-profile");
+    } else  {
+      navigate("/management/complete-profile");
+    }
+  }
+
   if (!allowedRoles.includes(user.role)) {
     if (user.role === 'student') {
       return <Navigate to="/student/dashboard" replace />;
@@ -33,6 +44,7 @@ const ProtectedRoute = ({ allowedRoles }) => {
       return <Navigate to="/404" replace />;
     }
   }
+
 
   // If user has the proper role, render the children routes
   return <Outlet />;

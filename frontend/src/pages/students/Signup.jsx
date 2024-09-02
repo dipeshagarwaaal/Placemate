@@ -21,13 +21,13 @@ function Signup() {
 
   // useState for from data 
   const [formData, setFormData] = useState({
-    name: '',
+    first_name: '',
     email: '',
     number: '',
     password: '',
   });
 
-  const { name, number, email, password } = formData;
+  const { first_name, number, email, password } = formData;
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -81,7 +81,7 @@ function Signup() {
             <h1 className="h3 mb-3 font-weight-normal">Sign Up as a Student</h1>
           </div>
           <label htmlFor="inputName" className="sr-only">Name</label>
-          <input type="text" id="inputName" className="form-control ml-1" placeholder="Name" required autoFocus="" fdprocessedid="gwlj3s" autoComplete='Name' name='name' value={name} onChange={handleChange} />
+          <input type="text" id="inputName" className="form-control ml-1" placeholder="Name" required autoFocus="" fdprocessedid="gwlj3s" autoComplete='Name' name='first_name' value={first_name} onChange={handleChange} />
           <label htmlFor="inputEmail" className="sr-only">Email Address</label>
           <input type="email" id="inputEmail" className="form-control ml-1" placeholder="Email Address" required autoFocus="" fdprocessedid="gwlj3s" autoComplete='email' name='email' value={email} onChange={handleChange} />
           <label htmlFor="inputNumber" className="sr-only">Phone Number</label>
