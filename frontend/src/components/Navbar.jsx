@@ -7,6 +7,7 @@ function Navbar() {
   // page name 
   let pageName = location.pathname.split('/').filter(Boolean).pop();
   if (pageName === 'dashboard') pageName = "home";
+  if (pageName === 'tpo') pageName = "TPO";
 
   // capital 1st alphabet
   pageName = pageName.charAt(0).toUpperCase() + pageName.slice(1);

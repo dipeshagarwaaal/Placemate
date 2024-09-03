@@ -11,7 +11,13 @@ const Signup = async (req, res) => {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new User({ first_name: first_name, email: email,number: number, password: hashPassword, role:"student" });
+    const newUser = new User({
+      first_name: first_name,
+      email: email, number: number,
+      password: hashPassword,
+      role: "student",
+      isApproved: false
+    });
     await newUser.save();
     res.json({ msg: "User Created!" });
   } catch (error) {

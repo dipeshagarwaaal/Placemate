@@ -1,13 +1,13 @@
 const User = require("../../models/user.model");
 const bcrypt = require("bcrypt");
 
-// get management user
-const managementUsers = async (req, res) => {
-  const managementUsers = await User.find({ role: "management_admin" });
-  res.json({ managementUsers })
+
+const tpoUsers = async (req, res) => {
+  const tpoUsers = await User.find({ role: "tpo_admin" });
+  res.json({ tpoUsers })
 }
 
-const managementAddUsers = async (req, res) => {
+const tpoAddUsers = async (req, res) => {
   const email = req.body.email;
 
   try {
@@ -16,15 +16,15 @@ const managementAddUsers = async (req, res) => {
 
     const hashPassword = await bcrypt.hash(req.body.password, 10);
 
-    const newUser = new User({ first_name: req.body.first_name, email: req.body.email, number: req.body.number, password: hashPassword, role: "management_admin" });
+    const newUser = new User({ first_name: req.body.first_name, email: req.body.email, number: req.body.number, password: hashPassword, role: "tpo_admin" });
     await newUser.save();
     res.json({ msg: "User Created!" });
   } catch (error) {
-    console.log("admin.user-management => ", error);
+    console.log("user-tpo.controller => ", error);
   }
 }
 
-const managementDeleteUsers = async (req, res) => {
+const tpoDeleteUsers = async (req, res) => {
   // const user = await Users.find({email: req.body.email});
   const ress = await User.deleteOne({ email: req.body.email });
   if (ress.acknowledged) {
@@ -36,7 +36,7 @@ const managementDeleteUsers = async (req, res) => {
 
 
 module.exports = {
-  managementUsers,
-  managementAddUsers,
-  managementDeleteUsers
+  tpoUsers,
+  tpoAddUsers,
+  tpoDeleteUsers
 };

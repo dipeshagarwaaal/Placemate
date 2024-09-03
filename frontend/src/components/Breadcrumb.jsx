@@ -34,11 +34,14 @@ function BreadcrumbExp({ header }) {
             let routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
             const isLast = index === pathnames.length - 1;
             routeTo = userIs + routeTo;
-            // console.log(routeTo);
-
+            if(name === "tpo")
+              name = name.toUpperCase();
+            // console.log(name)
+            
             return isLast ? (
               <Breadcrumb.Item active key={name}>
-                {name.charAt(0).toUpperCase() + name.slice(1)}
+                &nbsp;  {/* addding space */}
+                {`${name.charAt(0).toUpperCase()}${name.slice(1)}`}
               </Breadcrumb.Item>
             ) : (
               <Breadcrumb.Item linkAs={Link} linkProps={{ to: routeTo, className: "no-underline px-1" }} key={name}>

@@ -11,9 +11,15 @@ const Login = async (req, res) => {
     if (!user)
       return res.status(400).json({ msg: "User Doesn't Exist!" });
 
+    // password match 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch || user.role !== "student")
       return res.status(400).json({ msg: 'Credentials Not Matched!' });
+
+    // check if tpo has approved student
+    if (!user.studentProfile.isApproved) 
+      return res.status(400).json({ msg: 'TPO has not approved you application, please try after some time!' });
+    
 
     const payload = { userId: user.id };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });

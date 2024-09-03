@@ -79,21 +79,23 @@ const CompleteProfile = async (req, res) => {
     if (!user)
       return res.status(400).json({ msg: "User Doesn't Exist!" });
 
-    ;
-    if (await User.findOne({ uin }))
-      return res.status(400).json({ msg: "UIN is Already Exist, Please Enter Correct UIN!" });
 
+    if (uin !== undefined)  {
+      if (await User.findOne({ uin }))
+        return res.status(400).json({ msg: "UIN is Already Exist, Please Enter Correct UIN!" });
+    }
+      
     user.first_name = req.body.first_name;
     user.middle_name = req.body.middle_name;
     user.last_name = req.body.last_name;
     user.number = req.body.number;
     user.gender = req.body.gender;
-    user.dataOfBirth = req.body.dataOfBirth;
+    user.dateOfBirth = req.body.dateOfBirth;
     user.profile = req.body.profile;
     user.fullAddress.address = req.body.address;
     user.fullAddress.pincode = req.body.pincode;
-    
-    if(user.role==="student") {
+
+    if (user.role === "student") {
       user.studentProfile.rollNumber = req.body.rollNumber;
       user.studentProfile.UIN = req.body.uin;
       user.studentProfile.department = req.body.department;

@@ -130,7 +130,7 @@ function CptProfile() {
                   </Form.Select>
                 </FloatingLabel>
                 <FloatingLabel controlId="floatingBirthDate" label="Date of Birth">
-                  <Form.Control type="date" placeholder="Date of Birth" name='dataOfBirth' value={formatDate(data.dataOfBirth)} onChange={handleDataChange} />
+                  <Form.Control type="date" placeholder="Date of Birth" name='dateOfBirth' value={formatDate(data.dateOfBirth)} onChange={handleDataChange} />
                 </FloatingLabel>
                 <FloatingLabel className='w-full' controlId="floatingTextareaAddress" label="Address">
                   <Form.Control

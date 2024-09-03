@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import Table from 'react-bootstrap/Table';
-import Button from 'react-bootstrap/Button';
 import axios from 'axios';
-import Form from 'react-bootstrap/Form';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import Placeholder from 'react-bootstrap/Placeholder';
-import { GrFormAdd } from "react-icons/gr";
 import Toast from '../Toast';
 import ModalBox from '../Modal';
+
 import AddUserTable from '../AddUserTable';
 
-function AddTPO() {
-  // tpo users store here
+function AddStudent() {
+
+  // student users store here
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -25,17 +21,16 @@ function AddTPO() {
 
   const fetchUserDetails = async () => {
     try {
-      const response = await axios.get("http://localhost:4518/management/tpo-users", {
+      const response = await axios.get("http://localhost:4518/admin/student-users", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming token is stored in localStorage
         }
       });
 
       if (response.data) {
-        console.log(response.data.tpoUsers)
-        setUsers(response.data.tpoUsers);
+        setUsers(response.data.studentUsers);
       } else {
-        console.warn('Response does not contain tpoUsers:', response.data);
+        console.warn('Response does not contain studentUsers:', response.data);
       }
     } catch (error) {
       console.error("Error fetching user details", error);
@@ -44,7 +39,6 @@ function AddTPO() {
     }
   };
 
-  
   useEffect(() => {
     fetchUserDetails();
   }, []);
@@ -66,7 +60,7 @@ function AddTPO() {
 
   const confirmDelete = async (email) => {
     try {
-      const response = await axios.post("http://localhost:4518/management/deletetpo",
+      const response = await axios.post("http://localhost:4518/admin/student-delete-user",
         { email: userToDelete },
         {
           headers: {
@@ -81,7 +75,7 @@ function AddTPO() {
         fetchUserDetails();
       }
     } catch (error) {
-      console.log("AddTPO => confirmDelete ==> ", error);
+      console.log("student => confirmDelete ==> ", error);
     }
   }
 
@@ -93,7 +87,7 @@ function AddTPO() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4518/management/addtpo",
+      const response = await axios.post("http://localhost:4518/admin/student-add-user",
         data,
         {
           headers: {
@@ -107,7 +101,7 @@ function AddTPO() {
         fetchUserDetails();
       }
     } catch (error) {
-      console.log("handleSubmit => AddTPO.jsx ==> ", error);
+      console.log("handleSubmit => Mangement.jsx ==> ", error);
     }
   }
 
@@ -120,9 +114,10 @@ function AddTPO() {
         onClose={() => setShowToast(false)}
         message={toastMessage}
         delay={3000}
-        position="top-center"
+        position="bottom-end"
       />
 
+      {/* AddUserTable Component */}
       <AddUserTable
         users={users}
         loading={loading}
@@ -136,6 +131,8 @@ function AddTPO() {
         closeModal={closeModal}
         confirmDelete={confirmDelete}
         userToDelete={userToDelete}
+        userToAdd="Student"
+        handleApproveStudent={null}
       />
 
       {/* ModalBox Component for Delete Confirmation */}
@@ -147,9 +144,8 @@ function AddTPO() {
         btn={"Delete"}
         confirmAction={confirmDelete}
       />
-
     </>
-  );
+  )
 }
 
-export default AddTPO;
+export default AddStudent

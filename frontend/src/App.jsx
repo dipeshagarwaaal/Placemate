@@ -2,13 +2,14 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 // Landing Page 
 import LandingPage from "./pages/LandingPage";
+
 // Student Pages 
 import Login from "./pages/Students/Login.jsx";
 import Signup from "./pages/students/Signup";
 import StudentHome from './pages/students/Home.jsx';
 import Account from "./components/students/Account.jsx";
 import SidebarStudent from './components/students/Sidebar';
-import Navbar from './components/students/Navbar';
+import Navbar from './components/Navbar.jsx';
 import CompleteProfile from "./components/completeProfile.jsx";
 // TPO pages
 import SidebarTPO from './components/tpo/Sidebar';
@@ -23,7 +24,14 @@ import AddTPO from "./components/Management/AddTPO.jsx";
 // super user
 import LoginSuperUser from "./components/SuperUser/Login.jsx";
 import SidebarSuperUser from './components/SuperUser/Sidebar';
-import ManagementSuperUser from "./components/SuperUser/Management.jsx";
+import ManagementSuperUser from "./components/SuperUser/AddManagement.jsx";
+import TPOSuperUser from "./components/SuperUser/AddTPO.jsx";
+import StudentSuperUser from "./components/SuperUser/AddStudent.jsx";
+import HomeSuperUser from "./components/SuperUser/Home.jsx";
+import ApproveStudent from "./components/SuperUser/ApproveStudent.jsx";
+
+// for admin, tpo to edit or view user details 
+import UserDetails from "./components/UserDetails.jsx";
 // Page not found 
 import PageNotFound from "./pages/PageNotFound.jsx";
 // breadcrumb
@@ -33,6 +41,8 @@ import './style/index.css';
 
 import { UserProvider } from "./context/userContext.jsx";
 import ProtectedRoute from "./components/protectedRoute.jsx";
+
+
 
 
 function StudentLayout({ header }) {
@@ -114,14 +124,25 @@ function App() {
           {/* 404 page not found route */}
           <Route path="*" element={<PageNotFound />} />
 
-          {/* admin page */}
+          {/* admin Routes */}
           <Route path="/admin" element={<LoginSuperUser />} />
+
           <Route element={<UserProvider><ProtectedRoute allowedRoles={['superuser']} /></UserProvider>}>
             <Route element={<SuperUserLayout header="Dashboard" />}>
-              <Route path="/admin/dashboard" element={<LoginSuperUser />} />
+              <Route path="/admin/Dashboard" element={<HomeSuperUser />} />
             </Route>
-            <Route element={<SuperUserLayout header="Management" />}>
+            <Route element={<SuperUserLayout header="Management Users" />}>
               <Route path="/admin/management" element={<ManagementSuperUser />} />
+            </Route>
+            <Route element={<SuperUserLayout header="TPO Users" />}>
+              <Route path="/admin/tpo" element={<TPOSuperUser />} />
+            </Route>
+            <Route element={<SuperUserLayout header="Student Users" />}>
+              <Route path="/admin/student" element={<StudentSuperUser />} />
+              <Route path="/admin/user/:studentId" element={<UserDetails />} />
+            </Route>
+            <Route element={<SuperUserLayout header="Approve Student User" />}>
+              <Route path="/admin/approve-student" element={<ApproveStudent />} />
             </Route>
           </Route>
 

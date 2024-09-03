@@ -27,7 +27,6 @@ app.use('/management', require('./routes/management.route'));
 app.use('/admin', require('./routes/superuser.route'));
 
 
-
 app.listen(process.env.PORT, () => {
   console.log(`server is running in http://localhost:${process.env.PORT}`);
 });

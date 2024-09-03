@@ -6,122 +6,63 @@ import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Placeholder from 'react-bootstrap/Placeholder';
 import { GrFormAdd } from "react-icons/gr";
-import Toast from '../Toast';
-import ModalBox from '../Modal';
+import { Link } from 'react-router-dom';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 
+function AddUserTable({
+  users,
+  loading,
+  handleDeleteUser,
+  formOpen,
+  setFormOpen,
+  data,
+  handleDataChange,
+  handleSubmit,
+  userToAdd,
+  handleApproveStudent
+}) {
 
-function Management() {
-  // Management users store here
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // useState for toast display
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
-
-  // useState for Modal display
-  const [showModal, setShowModal] = useState(false);
-  const [userToDelete, setUserToDelete] = useState(null);
-
-  const fetchUserDetails = async () => {
-    try {
-      const response = await axios.get("http://localhost:4518/admin/management-users", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming token is stored in localStorage
-        }
-      });
-
-      console.log(response.data);
-
-      if (response.data) {
-        console.log(response.data.managementUsers)
-        setUsers(response.data.managementUsers);
-      } else {
-        console.warn('Response does not contain ManagementUsers:', response.data);
-      }
-    } catch (error) {
-      console.error("Error fetching user details", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchUserDetails();
-  }, []);
-
-  const [formOpen, setFormOpen] = useState(false);
-  const [data, setData] = useState({
-    first_name: "",
-    email: "",
-    number: "",
-    password: ""
+  // useState for load data
+  const [currentUser, setCurrentUser] = useState({
+    name: 'Not Found',
+    email: 'Not Found',
+    profile: 'Profile Img',
   });
 
-  const handleDataChange = (e) => setData({ ...data, [e.target.name]: e.target.value });
-
-  const handleDeleteUser = (email) => {
-    setUserToDelete(email);
-    setShowModal(true);
-  }
-
-  const confirmDelete = async (email) => {
-    try {
-      const response = await axios.post("http://localhost:4518/admin/management-delete-user",
-        { email: userToDelete },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          }
-        }
-      );
-      setShowModal(false);
-      if (response.data) {
-        setToastMessage(response.data.msg);
-        setShowToast(true);
-        fetchUserDetails();
+  // checking for authentication
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    axios.get('http://localhost:4518/user/detail', {
+      headers: {
+        'Authorization': `Bearer ${token}`
       }
-    } catch (error) {
-      console.log("Management => confirmDelete ==> ", error);
-    }
-  }
+    })
+      .then(res => {
+        setCurrentUser({
+          email: res.data.email,
+          role: res.data.role,
+        });
+      })
+      .catch(err => {
+        console.log("AddUserTable.jsx => ", err);
+      });
+  }, []);
 
-  const closeModal = () => {
-    setShowModal(false);
-    setUserToDelete(null);
-  };
+  {/* for hover label effect  */ }
+  const renderTooltipDeleteUser = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Delete User
+    </Tooltip>
+  );
+  const renderTooltipApproveUser = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Approve User
+    </Tooltip>
+  );
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post("http://localhost:4518/admin/management-add-user",
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          }
-        }
-      );
-      if (response.data) {
-        setToastMessage(response.data.msg);
-        setShowToast(true);
-        fetchUserDetails();
-      }
-    } catch (error) {
-      console.log("handleSubmit => Mangement.jsx ==> ", error);
-    }
-  }
   return (
     <>
-      {/*  any message here  */}
-      < Toast
-        show={showToast}
-        onClose={() => setShowToast(false)}
-        message={toastMessage}
-        delay={3000}
-        position="bottom-end"
-      />
-
       <div className='ml-60'>
         {
           loading ? (
@@ -336,7 +277,7 @@ function Management() {
                   <th>Email</th>
                   <th>Phone Number</th>
                   <th>Date of Joining</th>
-                  <th>Delete User</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -344,12 +285,64 @@ function Management() {
                   users.map((user, index) => (
                     <tr key={user.email}>
                       <td>{index + 1}</td>
-                      <td>{user.first_name}</td>
-                      <td>{user.email}</td>
+                      <td>
+                        {
+                          // checking if user is superuser && checking if page is of approve student user 
+                          currentUser.role === "superuser" && userToAdd !== "approve-student" ?
+                            <>
+                              <Link to={`/admin/user/${user._id}`}>{user.first_name}</Link>
+                            </>
+                            :
+                            user.first_name
+                        }
+                      </td>
+                      <td>
+                        <Link to={`mailto:${user.email}`} className='no-underline'>
+                          {user.email}
+                        </Link>
+                      </td>
                       <td>{user.number}</td>
                       <td>{new Date(user.createdAt).toLocaleDateString()}</td>
                       <td>
-                        <i className="fa-regular fa-trash-can text-2xl cursor-pointer hover:text-red-500" onClick={() => handleDeleteUser(user.email)} />
+                        {/* for hover label effect  */}
+                        <div className="flex justify-around items-center">
+                          <div className="">
+                            <OverlayTrigger
+                              placement="top"
+                              delay={{ show: 250, hide: 400 }}
+                              overlay={renderTooltipDeleteUser}
+                            >
+                              <i
+                                className="fa-regular fa-trash-can text-2xl cursor-pointer hover:text-red-500"
+                                onClick={() => handleDeleteUser(user.email)}
+                              />
+                            </OverlayTrigger >
+                          </div>
+                          {
+                            userToAdd === 'approve-student' && (
+                              <div className="">
+                                <OverlayTrigger
+                                  placement="top"
+                                  delay={{ show: 250, hide: 400 }}
+                                  overlay={renderTooltipApproveUser}
+                                >
+                                  <i
+                                    className="fa-solid fa-square-check text-2xl cursor-pointer"
+                                    onClick={() => handleApproveStudent(user.email)}
+                                    onMouseEnter={(e) => {
+                                      e.target.classList.remove('fa-solid');
+                                      e.target.classList.add('fa-regular');
+                                    }}
+                                    onMouseLeave={(e) => {
+                                      e.target.classList.remove('fa-regular');
+                                      e.target.classList.add('fa-solid');
+                                    }}
+                                  />
+                                </OverlayTrigger >
+                              </div>
+                            )
+                          }
+                        </div>
                       </td>
                     </tr>
                   ))
@@ -362,16 +355,24 @@ function Management() {
             </Table>
           )
         }
-        <Button variant="dark" size="lg" onClick={() => setFormOpen(true)}>
-          <i className="fa-solid fa-person-circle-plus px-1" /> Add Management Admin
-        </Button>
+
+        {/* checking if approve student user page is open or not */}
+        {
+          userToAdd !== "approve-student" && (
+            <Button variant="dark" size="lg" onClick={() => setFormOpen(true)}>
+              <i className="fa-solid fa-person-circle-plus px-1" /> Add {userToAdd}
+            </Button>
+          )
+        }
+
+
         {
           formOpen &&
           <>
             <div className="bg-white flex justify-center w-full mt-4">
               <div className='w-1/2 rounded-lg shadow px-10 py-3'>
                 <Form className='text-base' onSubmit={handleSubmit}>
-                  <h2>New Management Admin</h2>
+                  <h2>New {userToAdd}</h2>
                   <FloatingLabel className='my-3' label="Name">
                     <Form.Control type="text" autoComplete="name" placeholder="Name" name='first_name' value={data.first_name || ''} onChange={handleDataChange} />
                   </FloatingLabel>
@@ -386,26 +387,16 @@ function Management() {
                   </FloatingLabel>
                   <button type="submit" className="flex items-center px-3 py-2 bg-blue-500 text-white rounded">
                     <GrFormAdd className="mr-2 text-3xl" />
-                    Create New Management User
+                    Create New {userToAdd}
                   </button>
                 </Form>
               </div>
             </div>
           </>
         }
-
-        {/* ModalBox Component for Delete Confirmation */}
-        <ModalBox
-          show={showModal}
-          close={closeModal}
-          header={"Confirmation"}
-          body={`Do you want to delete ${userToDelete}?`}
-          btn={"Delete"}
-          confirmAction={confirmDelete}
-        />
-      </div>
+      </div >
     </>
   )
 }
 
-export default Management
+export default AddUserTable;

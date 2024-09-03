@@ -47,7 +47,7 @@ const UserSchema = new mongoose.Schema({
       type: Number
     }
   },
-  dataOfBirth: {
+  dateOfBirth: {
     type: Date,
   },
   createdAt: {
@@ -63,6 +63,10 @@ const UserSchema = new mongoose.Schema({
   },
   // Student specific fields
   studentProfile: {
+    isApproved: {
+      type: Boolean,
+      default: false
+    },
     rollNumber: {
       type: Number
     },

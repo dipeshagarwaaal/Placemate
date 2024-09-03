@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaUser, FaTachometerAlt, FaCog, FaSignOutAlt, } from 'react-icons/fa';
+import { FaCog, FaSignOutAlt, } from 'react-icons/fa';
 import { IoIosArrowDropdown, IoIosArrowDropupCircle } from "react-icons/io";
 import axios from 'axios';
 import Logo from '../../assets/CPMS.png';
+import { GrUserWorker } from "react-icons/gr";
+import { FaUserSecret } from "react-icons/fa";
+import { PiStudentDuotone } from "react-icons/pi";
+import { AiTwotoneDashboard } from "react-icons/ai";
+import { FaClipboardCheck } from "react-icons/fa6";
 
 // TODO: Reactjs Bootstrap offcanvas to implement
 
@@ -77,23 +82,31 @@ const Sidebar = () => {
       {/* Navigation Links */}
       <nav className='flex flex-col flex-grow overflow-x-auto sidebar-nav mb-24'>
         <Link to="../admin/dashboard" className="flex items-center no-underline p-4 hover:bg-slate-100">
-          <FaTachometerAlt size={24} className="mr-3" />
+          <AiTwotoneDashboard size={24} className="mr-3" />
           <span>Dashboard</span>
         </Link>
         <Link to="../admin/management" className="flex items-center no-underline p-4 hover:bg-slate-100">
-          <FaUser size={24} className="mr-3" />
+          <FaUserSecret size={24} className="mr-3" />
           <span>Management</span>
         </Link>
-        {/* add more */}
+        <Link to="../admin/tpo" className="flex items-center no-underline p-4 hover:bg-slate-100">
+          <GrUserWorker size={24} className="mr-3" />
+          <span>TPO</span>
+        </Link>
+        <Link to="../admin/student" className="flex items-center no-underline p-4 hover:bg-slate-100">
+          <PiStudentDuotone size={24} className="mr-3" />
+          <span>Student</span>
+        </Link>
+        <Link to="../admin/approve-student" className="flex items-center no-underline p-4 hover:bg-slate-100">
+          <FaClipboardCheck size={24} className="mr-3" />
+          <span>Approve Students</span>
+        </Link>
       </nav>
 
-      <div className='bottom-0 absolute w-full shadow-sm transition-all duration-300'>
+      <div className='bottom-0 absolute w-full shadow-sm '>
         {/* Dropdown Menu */}
         {dropdownOpen && (
           <div className={`w-full rounded-t-md bg-slate-700  ${dropdownOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-5'}`}>
-            <Link to="../admin/account" className="flex items-center rounded-t-md no-underline text-white p-3 hover:bg-slate-900">
-              <FaCog className="mr-2" /> <span className=''>Account Details</span>
-            </Link>
             <button onClick={handleLogout} className="flex items-center rounded-t-md text-red-500 w-full p-3 hover:bg-slate-900">
               <FaSignOutAlt className="mr-2" /> Logout
             </button>
@@ -108,11 +121,13 @@ const Sidebar = () => {
               {/* <h2 className="text-base font-semibold">{loadData.name}</h2> */}
               <p className="text-sm text-gray-400">{loadData.email}</p>
             </div>
-            {
-              dropdownOpen
-                ? <IoIosArrowDropupCircle size={24} className=''></IoIosArrowDropupCircle >
-                : <IoIosArrowDropdown size={24} className=''></IoIosArrowDropdown>
-            }
+            <div className="transition-all duration-300 ease-in-out">
+              {
+                dropdownOpen
+                  ? <IoIosArrowDropupCircle size={24} className=''></IoIosArrowDropupCircle >
+                  : <IoIosArrowDropdown size={24} className=''></IoIosArrowDropdown>
+              }
+            </div>
           </div>
         </div>
       </div>
