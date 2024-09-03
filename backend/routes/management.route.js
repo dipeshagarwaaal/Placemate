@@ -7,13 +7,13 @@ const authenticateToken = require('../middleware/auth.middleware');
 
 
 // management login controller
-const Login = require('../controllers/Management/management.login');
+const Login = require('../controllers/Management/login.controller');
 // management UsersTPO controller
-const UsersTPO = require('../controllers/Management/management.tpo-users');
+const UsersTPO = require('../controllers/Management/tpo-users.controller');
 // management DeleteTPO controller
-const DeleteTPO = require('../controllers/Management/management.delete-tpo');
+const DeleteTPO = require('../controllers/Management/delete-tpo.controller');
 // management AddTPO controller
-const AddTPO = require('../controllers/Management/management.add-tpo');
+const AddTPO = require('../controllers/Management/add-tpo.controller');
 
 
 

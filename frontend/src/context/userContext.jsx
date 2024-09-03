@@ -27,8 +27,9 @@ export const UserProvider = ({ children }) => {
         }
       } catch (error) {
         console.error("Error fetching user details", error);
-        if(error.response.data.msg){
-          localStorage.removeItem('token');
+        if(error.response.data){
+          if(error.response.data.msg)
+            localStorage.removeItem('token');
         }
         setUser(null); // In case of an error, reset user to null
       } finally {

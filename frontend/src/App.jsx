@@ -20,6 +20,10 @@ import SidebarManagement from "./components/Management/Sidebar.jsx";
 import LoginManagement from "./pages/Management/Login.jsx";
 import AccountManagement from "./components/Management/Account.jsx";
 import AddTPO from "./components/Management/AddTPO.jsx";
+// super user
+import LoginSuperUser from "./components/SuperUser/Login.jsx";
+import SidebarSuperUser from './components/SuperUser/Sidebar';
+import ManagementSuperUser from "./components/SuperUser/Management.jsx";
 // Page not found 
 import PageNotFound from "./pages/PageNotFound.jsx";
 // breadcrumb
@@ -76,6 +80,21 @@ function TPOLayout({ header }) {
   )
 }
 
+function SuperUserLayout({ header }) {
+  return (
+    <>
+      <Navbar />
+      <div className="flex">
+        <SidebarSuperUser />
+        <div className="content flex-grow p-4">
+          <BreadcrumbExp header={header} />
+          <Outlet />
+        </div>
+      </div>
+    </>
+  )
+}
+
 
 function App() {
   return (
@@ -85,14 +104,26 @@ function App() {
           {/* Public Route  */}
           <Route index element={<LandingPage />} />
           {/* Student Login, Sign Up  */}
-          <Route path="/student/login" element={<Login />} />
+          <Route path="/student/logIn" element={<Login />} />
           <Route path="/student/signup" element={<Signup />} />
           {/* TPO Login  */}
           <Route path="/tpo/login" element={<LoginTPO />} />
           {/* Management Login  */}
           <Route path="/management/login" element={<LoginManagement />} />
+
           {/* 404 page not found route */}
           <Route path="*" element={<PageNotFound />} />
+
+          {/* admin page */}
+          <Route path="/admin" element={<LoginSuperUser />} />
+          <Route element={<UserProvider><ProtectedRoute allowedRoles={['superuser']} /></UserProvider>}>
+            <Route element={<SuperUserLayout header="Dashboard" />}>
+              <Route path="/admin/dashboard" element={<LoginSuperUser />} />
+            </Route>
+            <Route element={<SuperUserLayout header="Management" />}>
+              <Route path="/admin/management" element={<ManagementSuperUser />} />
+            </Route>
+          </Route>
 
 
           {/* All student routes  */}

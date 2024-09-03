@@ -6,11 +6,11 @@ const router = express.Router();
 const authenticateToken = require('../middleware/auth.middleware');
 
 // student sign controller
-const Signup = require('../controllers/Student/student.signup.controller.js');
+const Signup = require('../controllers/Student/signup.controller.js');
 // student login controller
-const Login = require('../controllers/Student/student.login.controller.js');
+const Login = require('../controllers/Student/login.controller.js');
 // student Update controller
-const { UpdateBasicDetail, UpdateProfile, UpdatePassword, CompleteProfile } = require('../controllers/Student/student.update.controller.js');
+const { UpdateBasicDetail, UpdateProfile, UpdatePassword, CompleteProfile } = require('../controllers/Student/update.controller.js');
 
 // import multer for user profile update 
 const uploadUserProfile = require('../config/Multer.js')

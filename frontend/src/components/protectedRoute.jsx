@@ -39,8 +39,9 @@ const ProtectedRoute = ({ allowedRoles }) => {
       return <Navigate to="/tpo/dashboard" replace />;
     } else if (user.role === 'management_admin') {
       return <Navigate to="/management/dashboard" replace />;
+    } else if (user.role === 'superuser') {
+      return <Navigate to="/admin/dashboard" replace />;
     } else {
-      // Redirect to a default 404 or error page
       return <Navigate to="/404" replace />;
     }
   }

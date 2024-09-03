@@ -9,8 +9,9 @@ import { GrFormAdd } from "react-icons/gr";
 import Toast from '../Toast';
 import ModalBox from '../Modal';
 
-function AddTPO() {
-  // tpo users store here
+
+function Management() {
+  // Management users store here
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -22,27 +23,30 @@ function AddTPO() {
   const [showModal, setShowModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
 
-  useEffect(()=>{
-    const fetchUserDetails = async () => {
-      try {
-        const response = await axios.get("http://localhost:4518/management/tpo-users", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming token is stored in localStorage
-          }
-        });
-  
-        if (response.data) {
-          console.log(response.data.tpoUsers)
-          setUsers(response.data.tpoUsers);
-        } else {
-          console.warn('Response does not contain tpoUsers:', response.data);
+  const fetchUserDetails = async () => {
+    try {
+      const response = await axios.get("http://localhost:4518/admin/management-users", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming token is stored in localStorage
         }
-      } catch (error) {
-        console.error("Error fetching user details", error);
-      } finally {
-        setLoading(false);
+      });
+
+      console.log(response.data);
+
+      if (response.data) {
+        console.log(response.data.managementUsers)
+        setUsers(response.data.managementUsers);
+      } else {
+        console.warn('Response does not contain ManagementUsers:', response.data);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching user details", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchUserDetails();
   }, []);
 
@@ -63,7 +67,7 @@ function AddTPO() {
 
   const confirmDelete = async (email) => {
     try {
-      const response = await axios.post("http://localhost:4518/management/deletetpo",
+      const response = await axios.post("http://localhost:4518/admin/management-delete-user",
         { email: userToDelete },
         {
           headers: {
@@ -78,7 +82,7 @@ function AddTPO() {
         fetchUserDetails();
       }
     } catch (error) {
-      console.log("AddTPO => confirmDelete ==> ", error);
+      console.log("Management => confirmDelete ==> ", error);
     }
   }
 
@@ -90,7 +94,7 @@ function AddTPO() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4518/management/addtpo",
+      const response = await axios.post("http://localhost:4518/admin/management-add-user",
         data,
         {
           headers: {
@@ -102,12 +106,11 @@ function AddTPO() {
         setToastMessage(response.data.msg);
         setShowToast(true);
         fetchUserDetails();
-      }} catch (error) {
-      console.log("handleSubmit => AddTPO.jsx ==> ", error);
+      }
+    } catch (error) {
+      console.log("handleSubmit => Mangement.jsx ==> ", error);
     }
   }
-
-
   return (
     <>
       {/*  any message here  */}
@@ -116,7 +119,7 @@ function AddTPO() {
         onClose={() => setShowToast(false)}
         message={toastMessage}
         delay={3000}
-        position="top-center"
+        position="bottom-end"
       />
 
       <div className='ml-60'>
@@ -360,7 +363,7 @@ function AddTPO() {
           )
         }
         <Button variant="dark" size="lg" onClick={() => setFormOpen(true)}>
-          <i className="fa-solid fa-person-circle-plus px-1" /> Add TPO Admin
+          <i className="fa-solid fa-person-circle-plus px-1" /> Add Management Admin
         </Button>
         {
           formOpen &&
@@ -368,7 +371,7 @@ function AddTPO() {
             <div className="bg-white flex justify-center w-full mt-4">
               <div className='w-1/2 rounded-lg shadow px-10 py-3'>
                 <Form className='text-base' onSubmit={handleSubmit}>
-                  <h2>New TPO Admin</h2>
+                  <h2>New Management Admin</h2>
                   <FloatingLabel className='my-3' label="Name">
                     <Form.Control type="text" autoComplete="name" placeholder="Name" name='first_name' value={data.first_name || ''} onChange={handleDataChange} />
                   </FloatingLabel>
@@ -383,7 +386,7 @@ function AddTPO() {
                   </FloatingLabel>
                   <button type="submit" className="flex items-center px-3 py-2 bg-blue-500 text-white rounded">
                     <GrFormAdd className="mr-2 text-3xl" />
-                    Create New TPO User
+                    Create New Management User
                   </button>
                 </Form>
               </div>
@@ -402,7 +405,7 @@ function AddTPO() {
         />
       </div>
     </>
-  );
+  )
 }
 
-export default AddTPO;
+export default Management

@@ -23,6 +23,8 @@ app.use('/student', require('./routes/student.route'));
 app.use('/tpo', require('./routes/tpo.route'));
 // routes for management user
 app.use('/management', require('./routes/management.route'));
+// routes for admin user
+app.use('/admin', require('./routes/superuser.route'));
 
 
 

@@ -12,7 +12,7 @@ const CustomToast = ({ show, onClose, message, delay = 3000, position = 'bottom-
   }, [show, delay, onClose]);
 
   return (
-    <ToastContainer position={position} className="p-3">
+    <ToastContainer position={position} className="p-3 position-fixed bottom-0 end-0" style={{ zIndex: 1050 }}>
       <Toast onClose={onClose} show={show} delay={delay} autohide>
         <Toast.Header>
           <strong className="me-auto text-blue-500">Notification</strong>
