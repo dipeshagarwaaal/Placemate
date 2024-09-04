@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
@@ -10,14 +10,58 @@ import Toast from '../components/Toast';
 
 function UserDetails() {
   const navigate = useNavigate();
+  const location = useLocation();
   const BASE_URL = "http://localhost:4518";
 
-  const { studentId } = useParams();
-  const [studentData, setStudentData] = useState(null);
-  const [loading, setLoading] = useState(true);
 
+  // studentId but its userId
+  const { studentId } = useParams();
+
+  // studentData but its userData
+  const [studentData, setStudentData] = useState(null);
+
+  const [loading, setLoading] = useState(true);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+
+  // checking request is of complete-profile 
+  const completeProfileReq = location.pathname.split('/').includes("complete-profile");
+
+
+  useEffect(() => {
+    const fetchCurrentUserData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://localhost:4518/user/detail', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          }
+        });
+        // setData(response.data);
+        // console.log(data)
+
+
+        // check authenticate user is requesting or not
+        if (completeProfileReq) {
+          if (!(studentId === response.data.id)) navigate('../404')
+
+          // checking if user completed profile then redirect to dashboard
+          if (response.data.isProfileCompleted === "true") {
+            if (response.data.role === "student") navigate('../student/dashboard')
+            if (response.data.role === "tpo_admin") navigate('../tpo/dashboard')
+            if (response.data.role === "management_admin") navigate('../management/dashboard')
+          }
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.log("Account.jsx => ", error);
+        setLoading(false);
+      }
+    }
+    fetchCurrentUserData();
+  }, [location]);
+
 
   useEffect(() => {
     const fetchStudentData = async () => {
@@ -69,6 +113,7 @@ function UserDetails() {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post('http://localhost:4518/admin/update-profile',
+        // for sending to backend is user is completing profile
         studentData,
         {
           headers: {
@@ -81,6 +126,10 @@ function UserDetails() {
         if (response.data.msg) {
           setToastMessage(response.data.msg);
           setShowToast(true);
+          if (completeProfileReq) {
+            if (response.data.msg === "Data Updated Successfully!")
+              navigate('../management/dashboard');
+          }
         }
         //   navigate("../student/dashboard");
       }
@@ -97,7 +146,7 @@ function UserDetails() {
       formData.append('userId', studentData._id);
 
       try {
-        const response = await axios.post("http://localhost:4518/student/upload-photo", formData);
+        const response = await axios.post("http://localhost:4518/user/upload-photo", formData);
         setStudentData({ ...studentData, profile: response.data.file });
         if (response.data) {
           if (response.data.msg) {
@@ -121,6 +170,7 @@ function UserDetails() {
   };
   // console.log(studentData)
 
+
   return (
     <>
       {
@@ -140,7 +190,11 @@ function UserDetails() {
             />
 
 
-            <div className="ml-60 px-4 py-10">
+            <div
+              className={`
+                ${!completeProfileReq && 'ml-60'}
+              px-4 py-10`
+              }>
               <h1 className='text-4xl'>
                 {studentData?.first_name + " "}
                 {studentData?.middle_name === undefined ? "" : studentData?.middle_name + " "}
@@ -153,16 +207,47 @@ function UserDetails() {
                   <div className="grid grid-cols-3">
                     <div className="px-2 py-3 flex flex-col gap-3">
                       <FloatingLabel controlId="floatingFirstName" label="First Name">
-                        <Form.Control type="text" placeholder="First Name" name='first_name' value={studentData?.first_name} onChange={handleDataChange} />
+                        <Form.Control
+                          type="text"
+                          placeholder="First Name"
+                          name='first_name'
+                          value={studentData?.first_name}
+                          onChange={handleDataChange}
+                          // if complete profile request then required
+                          required={completeProfileReq}
+                        />
                       </FloatingLabel>
                       <FloatingLabel controlId="floatingMiddleName" label="Middle Name">
-                        <Form.Control type="text" placeholder="Middle Name" name='middle_name' value={studentData?.middle_name} onChange={handleDataChange} />
+                        <Form.Control
+                          type="text"
+                          placeholder="Middle Name"
+                          name='middle_name'
+                          value={studentData?.middle_name}
+                          onChange={handleDataChange}
+                          required={completeProfileReq}
+                        />
                       </FloatingLabel>
                       <FloatingLabel controlId="floatingLastName" label="Last Name">
-                        <Form.Control type="text" placeholder="Last Name" name='last_name' value={studentData?.last_name} onChange={handleDataChange} />
+                        <Form.Control
+                          type="text"
+                          placeholder="Last Name"
+                          name='last_name'
+                          value={studentData?.last_name}
+                          onChange={handleDataChange}
+                          required={completeProfileReq}
+                        />
                       </FloatingLabel>
                       <FloatingLabel controlId="floatingEmail" label="Email address">
-                        <Form.Control type="email" placeholder="Email address" name='email' value={studentData?.email} onChange={handleDataChange} disabled />
+                        <Form.Control
+                          className='cursor-not-allowed'
+                          type="email"
+                          placeholder="Email address"
+                          name='email'
+                          value={studentData?.email}
+                          onChange={handleDataChange}
+                          readOnly
+                          required={completeProfileReq}
+                        />
                       </FloatingLabel>
                       <FloatingLabel controlId="floatingNumber" label="Mobile Number" name='number' value={studentData?.number} onChange={handleDataChange} >
                         <Form.Control
@@ -171,13 +256,12 @@ function UserDetails() {
                           name='number'
                           value={studentData?.number}
                           onChange={handleDataChange}
-                          maxLength={10}
-                          pattern="\d{10}"
                           onInput={(e) => {
                             if (e.target.value.length > 10) {
                               e.target.value = e.target.value.slice(0, 10);
                             }
                           }}
+                          required={completeProfileReq}
                         />
                       </FloatingLabel>
                     </div>
@@ -197,6 +281,7 @@ function UserDetails() {
                           name='dateOfBirth'
                           value={formatDate(studentData?.dateOfBirth)}
                           onChange={handleDataChange}
+                          required={completeProfileReq}
                         />
                       </FloatingLabel>
                       <FloatingLabel className='w-full' controlId="floatingTextareaAddress" label="Address">
@@ -215,6 +300,7 @@ function UserDetails() {
                               }
                             });
                           }}
+                          required={completeProfileReq}
                         />
                       </FloatingLabel>
                       <Form.Control
@@ -238,6 +324,7 @@ function UserDetails() {
                             e.target.value = e.target.value.slice(0, 6);
                           }
                         }}
+                        required={completeProfileReq}
                       />
                     </div>
 
@@ -251,7 +338,14 @@ function UserDetails() {
                         {studentData?.last_name === undefined ? "" : studentData?.last_name}
                       </span>
                       <FloatingLabel controlId="floatingFirstName" label="Change Profile Image">
-                        <Form.Control type="file" accept='.jpg, .png, .jpeg' placeholder="Change Profile Image" name='profile' onChange={handlePhotoChange} />
+                        <Form.Control
+                          type="file"
+                          accept='.jpg, .png, .jpeg'
+                          placeholder="Change Profile Image"
+                          name='profile'
+                          onChange={handlePhotoChange}
+                          required={studentData?.profile === '/profileImgs/default/defaultProfileImg.jpg' && completeProfileReq}
+                        />
                       </FloatingLabel>
                     </div>
 
@@ -298,6 +392,7 @@ function UserDetails() {
                                     }
                                   });
                                 }}
+                                required={completeProfileReq}
                               />
                             </FloatingLabel>
                           </div>
@@ -318,6 +413,7 @@ function UserDetails() {
                                     }
                                   });
                                 }}
+                                required={completeProfileReq}
                               >
                                 <option disabled value="undefined" className='text-gray-400'>Enter Your Department</option>
                                 <option value="Computer">Computer</option>
@@ -341,7 +437,9 @@ function UserDetails() {
                                       year: e.target.value
                                     }
                                   });
-                                }} >
+                                }}
+                                required={completeProfileReq}
+                              >
                                 <option disabled value="undefined" className='text-gray-400'>Enter Your Year</option>
                                 <option value="1">1st</option>
                                 <option value="2">2nd</option>
@@ -371,6 +469,7 @@ function UserDetails() {
                                     e.target.value = e.target.value.slice(0, 4);
                                   }
                                 }}
+                                required={completeProfileReq}
                               />
                             </FloatingLabel>
                           </div>
@@ -378,30 +477,30 @@ function UserDetails() {
                           <div className="grid grid-cols-2 gap-2">
                             <div className=" py-3 flex flex-wrap gap-2">
                               <FloatingLabel controlId="floatingSem1" label="Sem 1">
-                                <Form.Control type="number" placeholder="Sem 1" name='sem1' value={studentData?.studentProfile?.SGPA?.sem1} onChange={handleDataChangeForSGPA} />
+                                <Form.Control type="number" placeholder="Sem 1" name='sem1' value={studentData?.studentProfile?.SGPA?.sem1} onChange={handleDataChangeForSGPA} required={completeProfileReq} />
                               </FloatingLabel>
                               <FloatingLabel controlId="floatingSem2" label="Sem 2">
-                                <Form.Control type="number" placeholder="Sem 2" name='sem2' value={studentData?.studentProfile?.SGPA?.sem2} onChange={handleDataChangeForSGPA} />
+                                <Form.Control type="number" placeholder="Sem 2" name='sem2' value={studentData?.studentProfile?.SGPA?.sem2} onChange={handleDataChangeForSGPA} required={completeProfileReq} />
                               </FloatingLabel>
                               <FloatingLabel controlId="floatingSem3" label="Sem 3">
-                                <Form.Control type="number" placeholder="Sem 3" name='sem3' value={studentData?.studentProfile?.SGPA?.sem3} onChange={handleDataChangeForSGPA} />
+                                <Form.Control type="number" placeholder="Sem 3" name='sem3' value={studentData?.studentProfile?.SGPA?.sem3} onChange={handleDataChangeForSGPA} required={completeProfileReq} />
                               </FloatingLabel>
                               <FloatingLabel controlId="floatingSem4" label="Sem 4">
-                                <Form.Control type="number" placeholder="Sem 4" name='sem4' value={studentData?.studentProfile?.SGPA?.sem4} onChange={handleDataChangeForSGPA} />
+                                <Form.Control type="number" placeholder="Sem 4" name='sem4' value={studentData?.studentProfile?.SGPA?.sem4} onChange={handleDataChangeForSGPA} required={completeProfileReq} />
                               </FloatingLabel>
                             </div>
                             <div className=" py-3 flex flex-wrap gap-2">
                               <FloatingLabel controlId="floatingSem5" label="Sem 5">
-                                <Form.Control type="number" placeholder="Sem 5" name='sem5' value={studentData?.studentProfile?.SGPA?.sem5} onChange={handleDataChangeForSGPA} />
+                                <Form.Control type="number" placeholder="Sem 5" name='sem5' value={studentData?.studentProfile?.SGPA?.sem5} onChange={handleDataChangeForSGPA} required={completeProfileReq} />
                               </FloatingLabel>
                               <FloatingLabel controlId="floatingSem6" label="Sem 6">
-                                <Form.Control type="number" placeholder="Sem 6" name='sem6' value={studentData?.studentProfile?.SGPA?.sem6} onChange={handleDataChangeForSGPA} />
+                                <Form.Control type="number" placeholder="Sem 6" name='sem6' value={studentData?.studentProfile?.SGPA?.sem6} onChange={handleDataChangeForSGPA} required={completeProfileReq} />
                               </FloatingLabel>
                               <FloatingLabel controlId="floatingSem7" label="Sem 7">
-                                <Form.Control type="number" placeholder="Sem 7" name='sem7' value={studentData?.studentProfile?.SGPA?.sem7} onChange={handleDataChangeForSGPA} />
+                                <Form.Control type="number" placeholder="Sem 7" name='sem7' value={studentData?.studentProfile?.SGPA?.sem7} onChange={handleDataChangeForSGPA} required={completeProfileReq} />
                               </FloatingLabel>
                               <FloatingLabel controlId="floatingSem8" label="Sem 8">
-                                <Form.Control type="number" placeholder="Sem 8" name='sem8' value={studentData?.studentProfile?.SGPA?.sem8} onChange={handleDataChangeForSGPA} />
+                                <Form.Control type="number" placeholder="Sem 8" name='sem8' value={studentData?.studentProfile?.SGPA?.sem8} onChange={handleDataChangeForSGPA} required={completeProfileReq} />
                               </FloatingLabel>
                             </div>
                           </div>
@@ -435,6 +534,7 @@ function UserDetails() {
                                     }
                                   });
                                 }}
+                                required={completeProfileReq}
                               >
                                 <option disabled value="undefined" className='text-gray-400'>Enter Your SSC Board Name</option>
                                 <option value="Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)">Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)</option>
@@ -464,6 +564,7 @@ function UserDetails() {
                                     }
                                   });
                                 }}
+                                required={completeProfileReq}
                               />
                             </FloatingLabel>
                             <FloatingLabel controlId="floatingSelectSSCPassingYear" label="SSC Passing Year">
@@ -487,6 +588,7 @@ function UserDetails() {
                                     }
                                   });
                                 }}
+                                required={completeProfileReq}
                               />
                             </FloatingLabel>
                           </div>
@@ -513,6 +615,7 @@ function UserDetails() {
                                     }
                                   });
                                 }}
+                                required={completeProfileReq}
                               >
                                 <option disabled value="undefined" className='text-gray-400'>Enter Your SSC Board Name</option>
                                 <option value="Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)">Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)</option>
@@ -542,6 +645,7 @@ function UserDetails() {
                                     }
                                   });
                                 }}
+                                required={completeProfileReq}
                               />
                             </FloatingLabel>
                             <FloatingLabel controlId="floatingSelectHSCPassingYear" label="HSC Passing Year">
@@ -565,6 +669,7 @@ function UserDetails() {
                                     }
                                   });
                                 }}
+                                required={completeProfileReq}
                               />
                             </FloatingLabel>
                           </div>
@@ -591,6 +696,7 @@ function UserDetails() {
                                     }
                                   });
                                 }}
+                                required={completeProfileReq}
                               >
                                 <option disabled value="undefined" className='text-gray-400'>Enter Your Diploma University Name</option>
                                 <option value="Mumbai University">Mumbai University</option>
@@ -618,6 +724,7 @@ function UserDetails() {
                                     }
                                   });
                                 }}
+                                required={completeProfileReq}
                               />
                             </FloatingLabel>
                             <FloatingLabel controlId="floatingSelectDiplomaPassingYear" label="Diploma Passing Year">
@@ -641,6 +748,7 @@ function UserDetails() {
                                     }
                                   });
                                 }}
+                                required={completeProfileReq}
                               />
                             </FloatingLabel>
                           </div>

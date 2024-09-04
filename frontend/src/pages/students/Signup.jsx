@@ -85,7 +85,24 @@ function Signup() {
           <label htmlFor="inputEmail" className="sr-only">Email Address</label>
           <input type="email" id="inputEmail" className="form-control ml-1" placeholder="Email Address" required autoFocus="" fdprocessedid="gwlj3s" autoComplete='email' name='email' value={email} onChange={handleChange} />
           <label htmlFor="inputNumber" className="sr-only">Phone Number</label>
-          <input type="number" id="inputNumber" className="form-control ml-1" placeholder="Phone Number" required autoFocus="" fdprocessedid="gwlj3s" autoComplete='number' name='number' value={number} onChange={handleChange} />
+          <input
+            type="number"
+            id="inputNumber"
+            className="form-control ml-1"
+            placeholder="Phone Number"
+            autoFocus=""
+            fdprocessedid="gwlj3s"
+            autoComplete='number'
+            name='number'
+            value={number}
+            onChange={handleChange}
+            onInput={(e) => {
+              if (e.target.value > 10) {
+                e.target.value = e.target.value.slice(0, 10);
+              }
+            }}
+            required
+          />
 
           <div className="flex justify-center items-center w-full">
             <label htmlFor="inputPassword" className="sr-only">Password</label>

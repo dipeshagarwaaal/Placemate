@@ -143,7 +143,6 @@ const CompleteProfile = async (req, res) => {
 
 module.exports = {
   UpdateBasicDetail,
-  UpdateProfile,
   UpdatePassword,
   CompleteProfile
 };

@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const UpdateProfile = async (req, res) => {
   const email = req.body.email;
   const uin = req.body.uin;
-  
+  // console.log("hello ", req.body);
   try {
     const user = await User.findOne({ email });
     if (!user)
@@ -68,8 +68,11 @@ const UpdateProfile = async (req, res) => {
       }
     }
 
-    // Update profile completion status
-    // user.isProfileCompleted = true;
+    // check if request came from user except superuser
+    if (req.body.role !== 'superuser') {
+      // set isProfileCompleted true
+      user.isProfileCompleted = true;
+    }
 
     // Save the updated user data
     await user.save();

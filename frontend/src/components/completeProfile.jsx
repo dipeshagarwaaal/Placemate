@@ -12,6 +12,7 @@ import Image from 'react-bootstrap/Image';
 function CptProfile() {
   const BASE_URL = "http://localhost:4518";
   const navigate = useNavigate();
+  // user data save here
   const [data, setData] = useState({});
 
 
@@ -40,7 +41,8 @@ function CptProfile() {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:4518/student/complete-profile',
+      console.log(data)
+      const response = await axios.post('http://localhost:4518/user/complete-profile',
         data,
         {
           headers: {
@@ -66,7 +68,7 @@ function CptProfile() {
       formData.append('userId', data.id);
 
       try {
-        const response = await axios.post("http://localhost:4518/student/upload-photo", formData);
+        const response = await axios.post("http://localhost:4518/user/upload-photo", formData);
         setData({ ...data, profile: response.data.file });
       } catch (error) {
         console.error('Error uploading photo:', error);
@@ -83,7 +85,7 @@ function CptProfile() {
 
   return (
     <>
-      <div className="px-4 py-10 bg-gradient-to-r from-cyan-500 from-10% via-purple-400 via-40% to-pink-500 to-100%">
+      <div className="px-4 py-10">
         <h1 className='text-4xl font-semibold'>Complete Profile</h1>
         <form onSubmit={handleSubmit}>
           {/* personal info  */}
@@ -138,9 +140,16 @@ function CptProfile() {
                     placeholder="Enter Full Address here..."
                     style={{ height: '150px', resize: "none" }}
                     name='address'
-
-                    value={data.address === "undefined" ? "" : data.address}
-                    onChange={handleDataChange}
+                    value={data?.fullAddress?.address}
+                    onChange={(e) => {
+                      setData({
+                        ...data,
+                        fullAddress: {
+                          ...data?.fullAddress,
+                          address: e.target.value
+                        }
+                      });
+                    }}
                   />
                 </FloatingLabel>
                 <Form.Control
@@ -148,8 +157,16 @@ function CptProfile() {
                   placeholder="Pincode"
                   maxLength={6}
                   name='pincode'
-                  value={data.pincode === "undefined" ? "" : data.pincode}
-                  onChange={handleDataChange}
+                  value={data?.fullAddress?.pincode}
+                  onChange={(e) => {
+                    setData({
+                      ...data,
+                      fullAddress: {
+                        ...data?.fullAddress,
+                        pincode: e.target.value
+                      }
+                    });
+                  }}
                   pattern="\d{6}"
                   onInput={(e) => {
                     if (e.target.value.length > 6) {
@@ -164,9 +181,9 @@ function CptProfile() {
                   <Image src={BASE_URL + data.profile} roundedCircle />
                 </Col>
                 <span className='text-xl'>
-                  {data.first_name !== "undefined" && data.first_name + " "}
-                  {data.middle_name !== "undefined" && data.middle_name + " "}
-                  {data.last_name !== "undefined" && data.last_name}
+                  {studentData?.first_name + " "}
+                  {studentData?.middle_name === undefined ? "" : studentData?.middle_name + " "}
+                  {studentData?.last_name === undefined ? "" : studentData?.last_name}
                 </span>
                 <FloatingLabel controlId="floatingFirstName" label="Change Profile Image">
                   <Form.Control type="file" accept='.jpg, .png, .jpeg' placeholder="Change Profile Image" name='profile' onChange={handlePhotoChange} />
@@ -327,9 +344,9 @@ function CptProfile() {
             <span className='text-black'>
               {
                 data.role === "student" ?
-                "Note: All field are required, except sem 3 to 8 and HSC or Diploma!"
-                :
-                "Note: All field are required!"
+                  "Note: All field are required, except sem 3 to 8 and HSC or Diploma!"
+                  :
+                  "Note: All field are required!"
               }
             </span>
           </div>

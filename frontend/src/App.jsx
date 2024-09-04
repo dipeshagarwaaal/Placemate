@@ -120,31 +120,9 @@ function App() {
           <Route path="/tpo/login" element={<LoginTPO />} />
           {/* Management Login  */}
           <Route path="/management/login" element={<LoginManagement />} />
-
-          {/* 404 page not found route */}
-          <Route path="*" element={<PageNotFound />} />
-
-          {/* admin Routes */}
+          {/* admin login */}
           <Route path="/admin" element={<LoginSuperUser />} />
 
-          <Route element={<UserProvider><ProtectedRoute allowedRoles={['superuser']} /></UserProvider>}>
-            <Route element={<SuperUserLayout header="Dashboard" />}>
-              <Route path="/admin/Dashboard" element={<HomeSuperUser />} />
-            </Route>
-            <Route element={<SuperUserLayout header="Management Users" />}>
-              <Route path="/admin/management" element={<ManagementSuperUser />} />
-            </Route>
-            <Route element={<SuperUserLayout header="TPO Users" />}>
-              <Route path="/admin/tpo" element={<TPOSuperUser />} />
-            </Route>
-            <Route element={<SuperUserLayout header="Student Users" />}>
-              <Route path="/admin/student" element={<StudentSuperUser />} />
-              <Route path="/admin/user/:studentId" element={<UserDetails />} />
-            </Route>
-            <Route element={<SuperUserLayout header="Approve Student User" />}>
-              <Route path="/admin/approve-student" element={<ApproveStudent />} />
-            </Route>
-          </Route>
 
 
           {/* All student routes  */}
@@ -185,8 +163,33 @@ function App() {
             <Route element={<ManagementLayout header="TPO Admins" />}>
               <Route path="/management/tpoadmin" element={<AddTPO />} />
             </Route>
-            <Route path="/management/complete-profile" element={<CompleteProfile />} />
+            <Route path="/management/complete-profile/:studentId" element={<UserDetails />} />
           </Route>
+
+
+          {/* all admin routes  */}
+          <Route element={<UserProvider><ProtectedRoute allowedRoles={['superuser']} /></UserProvider>}>
+            <Route element={<SuperUserLayout header="Dashboard" />}>
+              <Route path="/admin/Dashboard" element={<HomeSuperUser />} />
+            </Route>
+            <Route element={<SuperUserLayout header="Management Users" />}>
+              <Route path="/admin/management" element={<ManagementSuperUser />} />
+            </Route>
+            <Route element={<SuperUserLayout header="TPO Users" />}>
+              <Route path="/admin/tpo" element={<TPOSuperUser />} />
+            </Route>
+            <Route element={<SuperUserLayout header="Student Users" />}>
+              <Route path="/admin/student" element={<StudentSuperUser />} />
+              <Route path="/admin/user/:studentId" element={<UserDetails />} />
+            </Route>
+            <Route element={<SuperUserLayout header="Approve Student User" />}>
+              <Route path="/admin/approve-student" element={<ApproveStudent />} />
+            </Route>
+          </Route>
+
+
+          {/* 404 page not found route */}
+          <Route path="*" element={<PageNotFound />} />
 
         </Routes>
       </BrowserRouter>

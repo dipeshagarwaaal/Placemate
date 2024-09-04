@@ -65,7 +65,7 @@ function Account() {
 
       try {
         // const token = localStorage.getItem('token');
-        const response = await axios.post("http://localhost:4518/student/upload-photo", formData
+        const response = await axios.post("http://localhost:4518/user/upload-photo", formData
           // , {
           // headers: {
           //   'Authorization': `Bearer ${token}`,

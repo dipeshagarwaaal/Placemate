@@ -64,8 +64,7 @@ const UserSchema = new mongoose.Schema({
   // Student specific fields
   studentProfile: {
     isApproved: {
-      type: Boolean,
-      default: false
+      type: Boolean
     },
     rollNumber: {
       type: Number
@@ -84,7 +83,7 @@ const UserSchema = new mongoose.Schema({
       type: Number,
       enum: [1, 2, 3, 4],
     },
-    addmissionYear:{
+    addmissionYear: {
       type: Number
     },
     SGPA: {
