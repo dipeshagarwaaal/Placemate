@@ -23,7 +23,7 @@ function AddStudent() {
     try {
       const response = await axios.get("http://localhost:4518/admin/student-users", {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming token is stored in localStorage
+          Authorization: `Bearer ${localStorage.getItem("token")}`, 
         }
       });
 

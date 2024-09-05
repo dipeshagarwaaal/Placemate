@@ -2,18 +2,28 @@ const User = require("../../models/user.model");
 
 // update any user data by admin
 const UpdateProfile = async (req, res) => {
-  const email = req.body.email;
-  const uin = req.body.uin;
   // console.log("hello ", req.body);
+
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findById(req.body.id);
+
     if (!user)
       return res.status(400).json({ msg: "User Doesn't Exist!" });
 
-    if (uin !== undefined) {
-      if (await User.findOne({ uin }))
+    // checking if email which is to update is already there or not 
+    if (req.body.email !== user.email) {
+      if (await User.findOne({ email: req.body.email }))
+        return res.status(400).json({ msg: "Email is Already Exist, Please Enter Another Email!" });
+      else
+        user.email = req.body.email;
+    }
+
+
+    if (req.body.studentProfile.UIN !== undefined) {
+      if (await User.findOne({ studentProfile: { UIN: req.body.studentProfile.UIN } }))
         return res.status(400).json({ msg: "UIN is Already Exist, Please Enter Correct UIN!" });
     }
+
 
     if (req.body.first_name) user.first_name = req.body.first_name;
     if (req.body.middle_name) user.middle_name = req.body.middle_name;
@@ -78,7 +88,7 @@ const UpdateProfile = async (req, res) => {
 
     res.json({ msg: "Data Updated Successfully!" });
   } catch (error) {
-    console.log("student.update.controller => CompletProfile ==> ", error)
+    console.log("user.update-profile.controller ==> ", error)
   }
 }
 

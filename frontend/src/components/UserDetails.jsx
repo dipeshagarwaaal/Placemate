@@ -6,7 +6,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
-import Toast from '../components/Toast';
+import Toast from './Toast';
 
 function UserDetails() {
   const navigate = useNavigate();
@@ -17,12 +17,14 @@ function UserDetails() {
   // userId but its userId
   const { userId } = useParams();
 
-  // studentData but its userData
-  const [studentData, setStudentData] = useState(null);
+  // userData to store user data get from userId
+  const [userData, setUserData] = useState(null);
 
   const [loading, setLoading] = useState(true);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+
+  const [currentUserData, setCurrentUserData] = useState('');
 
   // checking request is of complete-profile 
   const completeProfileReq = location.pathname.split('/').includes("complete-profile");
@@ -36,8 +38,9 @@ function UserDetails() {
           'Authorization': `Bearer ${token}`,
         }
       });
-      // setData(response.data);
-      // console.log(data);
+      setCurrentUserData(response.data);
+      // console.log(currentUserData);
+      // console.log("resss", response.data);
 
       // check authenticate user is requesting or not
       if (completeProfileReq) {
@@ -60,7 +63,7 @@ function UserDetails() {
 
   useEffect(() => {
     fetchCurrentUserData();
-  }, []);
+  }, [loading]);
 
 
   useEffect(() => {
@@ -71,7 +74,7 @@ function UserDetails() {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           }
         });
-        setStudentData(response.data);
+        setUserData(response.data);
         // console.log(response.data)
       } catch (error) {
         if (error.response.data) {
@@ -89,17 +92,17 @@ function UserDetails() {
   }, [userId]);
 
 
-  const handleDataChange = (e) => setStudentData({ ...studentData, [e.target.name]: e.target.value })
+  const handleDataChange = (e) => setUserData({ ...userData, [e.target.name]: e.target.value })
 
-  // console.log(studentData)
+  // console.log(userData)
 
   const handleDataChangeForSGPA = (e) => {
-    setStudentData({
-      ...studentData,
+    setUserData({
+      ...userData,
       studentProfile: {
-        ...studentData?.studentProfile,
+        ...userData?.studentProfile,
         SGPA: {
-          ...studentData?.studentProfile?.SGPA,
+          ...userData?.studentProfile?.SGPA,
           [e.target.name]: e.target.value
         }
       }
@@ -114,7 +117,7 @@ function UserDetails() {
       const token = localStorage.getItem('token');
       const response = await axios.post('http://localhost:4518/user/update-profile',
         // for sending to backend is user is completing profile
-        studentData,
+        userData,
         {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -143,11 +146,11 @@ function UserDetails() {
     if (file) {
       const formData = new FormData();
       formData.append('profileImgs', file);
-      formData.append('userId', studentData._id);
+      formData.append('userId', userData._id);
 
       try {
         const response = await axios.post("http://localhost:4518/user/upload-photo", formData);
-        setStudentData({ ...studentData, profile: response.data.file });
+        setUserData({ ...userData, profile: response.data.file });
         if (response.data) {
           if (response.data.msg) {
             setToastMessage(response.data.msg);
@@ -168,7 +171,7 @@ function UserDetails() {
     const date = new Date(isoString);
     return date.toISOString().split('T')[0]; // Returns YYYY-MM-DD
   };
-  // console.log(studentData)
+  // console.log(userData)
 
 
   return (
@@ -191,14 +194,11 @@ function UserDetails() {
 
 
             <div
-              className={`
-                ${!completeProfileReq && 'ml-60'}
-              px-4 py-10`
-              }>
+              className='px-4 py-10'>
               <h1 className='text-4xl'>
-                {studentData?.first_name + " "}
-                {studentData?.middle_name === undefined ? "" : studentData?.middle_name + " "}
-                {studentData?.last_name === undefined ? "" : studentData?.last_name}
+                {userData?.first_name + " "}
+                {userData?.middle_name === undefined ? "" : userData?.middle_name + " "}
+                {userData?.last_name === undefined ? "" : userData?.last_name}
               </h1>
               <form onSubmit={handleSubmit}>
                 {/* personal info  */}
@@ -211,10 +211,11 @@ function UserDetails() {
                           type="text"
                           placeholder="First Name"
                           name='first_name'
-                          value={studentData?.first_name}
+                          value={userData?.first_name}
                           onChange={handleDataChange}
                           // if complete profile request then required
                           required={completeProfileReq}
+                          disabled={currentUserData.role !== 'superuser'}
                         />
                       </FloatingLabel>
                       <FloatingLabel controlId="floatingMiddleName" label="Middle Name">
@@ -222,9 +223,10 @@ function UserDetails() {
                           type="text"
                           placeholder="Middle Name"
                           name='middle_name'
-                          value={studentData?.middle_name}
+                          value={userData?.middle_name}
                           onChange={handleDataChange}
                           required={completeProfileReq}
+                          disabled={currentUserData.role !== 'superuser'}
                         />
                       </FloatingLabel>
                       <FloatingLabel controlId="floatingLastName" label="Last Name">
@@ -232,9 +234,10 @@ function UserDetails() {
                           type="text"
                           placeholder="Last Name"
                           name='last_name'
-                          value={studentData?.last_name}
+                          value={userData?.last_name}
                           onChange={handleDataChange}
                           required={completeProfileReq}
+                          disabled={currentUserData.role !== 'superuser'}
                         />
                       </FloatingLabel>
                       <FloatingLabel controlId="floatingEmail" label="Email address">
@@ -243,18 +246,18 @@ function UserDetails() {
                           type="email"
                           placeholder="Email address"
                           name='email'
-                          value={studentData?.email}
+                          value={userData?.email}
                           onChange={handleDataChange}
-                          readOnly
                           required={completeProfileReq}
+                          disabled
                         />
                       </FloatingLabel>
-                      <FloatingLabel controlId="floatingNumber" label="Mobile Number" name='number' value={studentData?.number} onChange={handleDataChange} >
+                      <FloatingLabel controlId="floatingNumber" label="Mobile Number" name='number'>
                         <Form.Control
                           type="number"
                           placeholder="Mobile Number"
                           name='number'
-                          value={studentData?.number}
+                          value={userData?.number}
                           onChange={handleDataChange}
                           onInput={(e) => {
                             if (e.target.value.length > 10) {
@@ -262,12 +265,20 @@ function UserDetails() {
                             }
                           }}
                           required={completeProfileReq}
+                          disabled={currentUserData.role !== 'superuser'}
                         />
                       </FloatingLabel>
                     </div>
                     <div className="px-2 py-3 flex flex-col gap-3">
                       <FloatingLabel controlId="floatingSelectGender" label="Gender">
-                        <Form.Select aria-label="Floating label select gender" className='cursor-pointer' name='gender' value={studentData?.gender === undefined ? "undefined" : studentData?.gender} onChange={handleDataChange} >
+                        <Form.Select
+                          aria-label="Floating label select gender"
+                          className='cursor-pointer'
+                          name='gender'
+                          value={userData?.gender === undefined ? "undefined" : userData?.gender}
+                          onChange={handleDataChange}
+                          disabled={currentUserData.role !== 'superuser'}
+                        >
                           <option disabled value="undefined" className='text-gray-400'>Enter Your Gender</option>
                           <option value="Male">Male</option>
                           <option value="Female">Female</option>
@@ -279,9 +290,10 @@ function UserDetails() {
                           type="date"
                           placeholder="Date of Birth"
                           name='dateOfBirth'
-                          value={formatDate(studentData?.dateOfBirth)}
+                          value={formatDate(userData?.dateOfBirth)}
                           onChange={handleDataChange}
                           required={completeProfileReq}
+                          disabled={currentUserData.role !== 'superuser'}
                         />
                       </FloatingLabel>
                       <FloatingLabel className='w-full' controlId="floatingTextareaAddress" label="Address">
@@ -290,17 +302,18 @@ function UserDetails() {
                           placeholder="Enter Full Address here..."
                           style={{ height: '150px', resize: "none" }}
                           name='address'
-                          value={studentData?.fullAddress?.address}
+                          value={userData?.fullAddress?.address}
                           onChange={(e) => {
-                            setStudentData({
-                              ...studentData,
+                            setUserData({
+                              ...userData,
                               fullAddress: {
-                                ...studentData?.fullAddress,
+                                ...userData?.fullAddress,
                                 address: e.target.value
                               }
                             });
                           }}
                           required={completeProfileReq}
+                          disabled={currentUserData.role !== 'superuser'}
                         />
                       </FloatingLabel>
                       <Form.Control
@@ -308,12 +321,12 @@ function UserDetails() {
                         placeholder="Pincode"
                         maxLength={6}
                         name='pincode'
-                        value={studentData?.fullAddress?.pincode}
+                        value={userData?.fullAddress?.pincode}
                         onChange={(e) => {
-                          setStudentData({
-                            ...studentData,
+                          setUserData({
+                            ...userData,
                             fullAddress: {
-                              ...studentData?.fullAddress,
+                              ...userData?.fullAddress,
                               pincode: e.target.value
                             }
                           });
@@ -325,17 +338,18 @@ function UserDetails() {
                           }
                         }}
                         required={completeProfileReq}
+                        disabled={currentUserData.role !== 'superuser'}
                       />
                     </div>
 
                     <div className="px-2 py-3 flex flex-col items-center gap-4 my-1">
                       <Col xs={8} md={4}>
-                        <Image src={BASE_URL + studentData?.profile} roundedCircle />
+                        <Image src={BASE_URL + userData?.profile} roundedCircle />
                       </Col>
                       <span className='text-xl'>
-                        {studentData?.first_name + " "}
-                        {studentData?.middle_name === undefined ? "" : studentData?.middle_name + " "}
-                        {studentData?.last_name === undefined ? "" : studentData?.last_name}
+                        {userData?.first_name + " "}
+                        {userData?.middle_name === undefined ? "" : userData?.middle_name + " "}
+                        {userData?.last_name === undefined ? "" : userData?.last_name}
                       </span>
                       <FloatingLabel controlId="floatingFirstName" label="Change Profile Image">
                         <Form.Control
@@ -344,7 +358,8 @@ function UserDetails() {
                           placeholder="Change Profile Image"
                           name='profile'
                           onChange={handlePhotoChange}
-                          required={studentData?.profile === '/profileImgs/default/defaultProfileImg.jpg' && completeProfileReq}
+                          required={userData?.profile === '/profileImgs/default/defaultProfileImg.jpg' && completeProfileReq}
+                          disabled={currentUserData.role !== 'superuser'}
                         />
                       </FloatingLabel>
                     </div>
@@ -353,7 +368,7 @@ function UserDetails() {
                 </div>
 
                 {
-                  studentData?.role === "student" &&
+                  userData?.role === "student" &&
                   (
                     <>
                       {/* college info  */}
@@ -367,32 +382,36 @@ function UserDetails() {
                                 placeholder="UIN"
                                 name='uin'
                                 onChange={(e) => {
-                                  setStudentData({
-                                    ...studentData,
+                                  setUserData({
+                                    ...userData,
                                     studentProfile: {
-                                      ...studentData?.studentProfile,
+                                      ...userData?.studentProfile,
                                       UIN: e.target.value
                                     }
                                   });
                                 }}
-                                value={studentData?.studentProfile?.UIN} />
+                                value={userData?.studentProfile?.UIN}
+                                required={completeProfileReq}
+                                disabled={currentUserData.role !== 'superuser'}
+                              />
                             </FloatingLabel>
                             <FloatingLabel controlId="floatingRollNumber" label="Roll Number" >
                               <Form.Control
                                 type="number"
                                 placeholder="Roll Number"
                                 name='rollNumber'
-                                value={studentData?.studentProfile?.rollNumber}
+                                value={userData?.studentProfile?.rollNumber}
                                 onChange={(e) => {
-                                  setStudentData({
-                                    ...studentData,
+                                  setUserData({
+                                    ...userData,
                                     studentProfile: {
-                                      ...studentData?.studentProfile,
+                                      ...userData?.studentProfile,
                                       rollNumber: e.target.value
                                     }
                                   });
                                 }}
                                 required={completeProfileReq}
+                                disabled={currentUserData.role !== 'superuser'}
                               />
                             </FloatingLabel>
                           </div>
@@ -403,17 +422,18 @@ function UserDetails() {
                                 aria-label="Floating label select department"
                                 className='cursor-pointer'
                                 name='department'
-                                value={studentData?.studentProfile?.department || "undefined"}
+                                value={userData?.studentProfile?.department || "undefined"}
                                 onChange={(e) => {
-                                  setStudentData({
-                                    ...studentData,
+                                  setUserData({
+                                    ...userData,
                                     studentProfile: {
-                                      ...studentData?.studentProfile,
+                                      ...userData?.studentProfile,
                                       department: e.target.value
                                     }
                                   });
                                 }}
                                 required={completeProfileReq}
+                                disabled={currentUserData.role !== 'superuser'}
                               >
                                 <option disabled value="undefined" className='text-gray-400'>Enter Your Department</option>
                                 <option value="Computer">Computer</option>
@@ -428,17 +448,18 @@ function UserDetails() {
                                 aria-label="Floating label select year"
                                 className='cursor-pointer'
                                 name='year'
-                                value={studentData?.studentProfile?.year || "undefined"}
+                                value={userData?.studentProfile?.year || "undefined"}
                                 onChange={(e) => {
-                                  setStudentData({
-                                    ...studentData,
+                                  setUserData({
+                                    ...userData,
                                     studentProfile: {
-                                      ...studentData?.studentProfile,
+                                      ...userData?.studentProfile,
                                       year: e.target.value
                                     }
                                   });
                                 }}
                                 required={completeProfileReq}
+                                disabled={currentUserData.role !== 'superuser'}
                               >
                                 <option disabled value="undefined" className='text-gray-400'>Enter Your Year</option>
                                 <option value="1">1st</option>
@@ -454,12 +475,12 @@ function UserDetails() {
                                 maxLength={4}
                                 pattern="\d{4}"
                                 name='addmissionYear'
-                                value={studentData?.studentProfile?.addmissionYear}
+                                value={userData?.studentProfile?.addmissionYear}
                                 onChange={(e) => {
-                                  setStudentData({
-                                    ...studentData,
+                                  setUserData({
+                                    ...userData,
                                     studentProfile: {
-                                      ...studentData?.studentProfile,
+                                      ...userData?.studentProfile,
                                       addmissionYear: e.target.value
                                     }
                                   });
@@ -470,6 +491,7 @@ function UserDetails() {
                                   }
                                 }}
                                 required={completeProfileReq}
+                                disabled={currentUserData.role !== 'superuser'}
                               />
                             </FloatingLabel>
                           </div>
@@ -481,9 +503,10 @@ function UserDetails() {
                                   type="number"
                                   placeholder="Sem 1"
                                   name='sem1'
-                                  value={studentData?.studentProfile?.SGPA?.sem1}
+                                  value={userData?.studentProfile?.SGPA?.sem1}
                                   onChange={handleDataChangeForSGPA}
-                                // required={completeProfileReq}
+                                  // required={completeProfileReq}
+                                  disabled={currentUserData.role !== 'superuser'}
                                 />
                               </FloatingLabel>
                               <FloatingLabel controlId="floatingSem2" label="Sem 2">
@@ -491,9 +514,10 @@ function UserDetails() {
                                   type="number"
                                   placeholder="Sem 2"
                                   name='sem2'
-                                  value={studentData?.studentProfile?.SGPA?.sem2}
+                                  value={userData?.studentProfile?.SGPA?.sem2}
                                   onChange={handleDataChangeForSGPA}
-                                // required={completeProfileReq}
+                                  // required={completeProfileReq}
+                                  disabled={currentUserData.role !== 'superuser'}
                                 />
                               </FloatingLabel>
                               <FloatingLabel controlId="floatingSem3" label="Sem 3">
@@ -501,9 +525,10 @@ function UserDetails() {
                                   type="number"
                                   placeholder="Sem 3"
                                   name='sem3'
-                                  value={studentData?.studentProfile?.SGPA?.sem3}
+                                  value={userData?.studentProfile?.SGPA?.sem3}
                                   onChange={handleDataChangeForSGPA}
-                                // required={completeProfileReq}
+                                  // required={completeProfileReq}
+                                  disabled={currentUserData.role !== 'superuser'}
                                 />
                               </FloatingLabel>
                               <FloatingLabel controlId="floatingSem4" label="Sem 4">
@@ -511,9 +536,10 @@ function UserDetails() {
                                   type="number"
                                   placeholder="Sem 4"
                                   name='sem4'
-                                  value={studentData?.studentProfile?.SGPA?.sem4}
+                                  value={userData?.studentProfile?.SGPA?.sem4}
                                   onChange={handleDataChangeForSGPA}
-                                // required={completeProfileReq}
+                                  // required={completeProfileReq}
+                                  disabled={currentUserData.role !== 'superuser'}
                                 />
                               </FloatingLabel>
                             </div>
@@ -523,9 +549,10 @@ function UserDetails() {
                                   type="number"
                                   placeholder="Sem 5"
                                   name='sem5'
-                                  value={studentData?.studentProfile?.SGPA?.sem5}
+                                  value={userData?.studentProfile?.SGPA?.sem5}
                                   onChange={handleDataChangeForSGPA}
-                                // required={completeProfileReq}
+                                  // required={completeProfileReq}
+                                  disabled={currentUserData.role !== 'superuser'}
                                 />
                               </FloatingLabel>
                               <FloatingLabel controlId="floatingSem6" label="Sem 6">
@@ -533,9 +560,10 @@ function UserDetails() {
                                   type="number"
                                   placeholder="Sem 6"
                                   name='sem6'
-                                  value={studentData?.studentProfile?.SGPA?.sem6}
+                                  value={userData?.studentProfile?.SGPA?.sem6}
                                   onChange={handleDataChangeForSGPA}
-                                // required={completeProfileReq}
+                                  // required={completeProfileReq}
+                                  disabled={currentUserData.role !== 'superuser'}
                                 />
                               </FloatingLabel>
                               <FloatingLabel controlId="floatingSem7" label="Sem 7">
@@ -543,9 +571,10 @@ function UserDetails() {
                                   type="number"
                                   placeholder="Sem 7"
                                   name='sem7'
-                                  value={studentData?.studentProfile?.SGPA?.sem7}
+                                  value={userData?.studentProfile?.SGPA?.sem7}
                                   onChange={handleDataChangeForSGPA}
-                                // required={completeProfileReq}
+                                  // required={completeProfileReq}
+                                  disabled={currentUserData.role !== 'superuser'}
                                 />
                               </FloatingLabel>
                               <FloatingLabel controlId="floatingSem8" label="Sem 8">
@@ -553,9 +582,10 @@ function UserDetails() {
                                   type="number"
                                   placeholder="Sem 8"
                                   name='sem8'
-                                  value={studentData?.studentProfile?.SGPA?.sem8}
+                                  value={userData?.studentProfile?.SGPA?.sem8}
                                   onChange={handleDataChangeForSGPA}
-                                // required={completeProfileReq}
+                                  // required={completeProfileReq}
+                                  disabled={currentUserData.role !== 'superuser'}
                                 />
                               </FloatingLabel>
                             </div>
@@ -574,16 +604,16 @@ function UserDetails() {
                                 aria-label="Floating label select SSCBoard"
                                 className='cursor-pointer'
                                 name='sscBoard'
-                                value={studentData?.studentProfile?.pastQualification?.ssc?.board || "undefined"}
+                                value={userData?.studentProfile?.pastQualification?.ssc?.board || "undefined"}
                                 onChange={(e) => {
-                                  setStudentData({
-                                    ...studentData,
+                                  setUserData({
+                                    ...userData,
                                     studentProfile: {
-                                      ...studentData?.studentProfile,
+                                      ...userData?.studentProfile,
                                       pastQualification: {
-                                        ...studentData?.studentProfile?.pastQualification,
+                                        ...userData?.studentProfile?.pastQualification,
                                         ssc: {
-                                          ...studentData?.studentProfile?.pastQualification?.ssc,
+                                          ...userData?.studentProfile?.pastQualification?.ssc,
                                           board: e.target.value
                                         }
                                       }
@@ -591,6 +621,7 @@ function UserDetails() {
                                   });
                                 }}
                                 required={completeProfileReq}
+                                disabled={currentUserData.role !== 'superuser'}
                               >
                                 <option disabled value="undefined" className='text-gray-400'>Enter Your SSC Board Name</option>
                                 <option value="Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)">Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)</option>
@@ -604,16 +635,16 @@ function UserDetails() {
                                 type="number"
                                 placeholder="SSC Percentage"
                                 name='sscPercentage'
-                                value={studentData?.studentProfile?.pastQualification?.ssc?.percentage}
+                                value={userData?.studentProfile?.pastQualification?.ssc?.percentage}
                                 onChange={(e) => {
-                                  setStudentData({
-                                    ...studentData,
+                                  setUserData({
+                                    ...userData,
                                     studentProfile: {
-                                      ...studentData?.studentProfile,
+                                      ...userData?.studentProfile,
                                       pastQualification: {
-                                        ...studentData?.studentProfile?.pastQualification,
+                                        ...userData?.studentProfile?.pastQualification,
                                         ssc: {
-                                          ...studentData?.studentProfile?.pastQualification?.ssc,
+                                          ...userData?.studentProfile?.pastQualification?.ssc,
                                           percentage: e.target.value
                                         }
                                       }
@@ -621,6 +652,7 @@ function UserDetails() {
                                   });
                                 }}
                                 required={completeProfileReq}
+                                disabled={currentUserData.role !== 'superuser'}
                               />
                             </FloatingLabel>
                             <FloatingLabel controlId="floatingSelectSSCPassingYear" label="SSC Passing Year">
@@ -628,16 +660,16 @@ function UserDetails() {
                                 type="number"
                                 placeholder="SSC Passing Year"
                                 name='sscPassingYear'
-                                value={studentData?.studentProfile?.pastQualification?.ssc?.year}
+                                value={userData?.studentProfile?.pastQualification?.ssc?.year}
                                 onChange={(e) => {
-                                  setStudentData({
-                                    ...studentData,
+                                  setUserData({
+                                    ...userData,
                                     studentProfile: {
-                                      ...studentData?.studentProfile,
+                                      ...userData?.studentProfile,
                                       pastQualification: {
-                                        ...studentData?.studentProfile?.pastQualification,
+                                        ...userData?.studentProfile?.pastQualification,
                                         ssc: {
-                                          ...studentData?.studentProfile?.pastQualification?.ssc,
+                                          ...userData?.studentProfile?.pastQualification?.ssc,
                                           year: e.target.value
                                         }
                                       }
@@ -645,6 +677,7 @@ function UserDetails() {
                                   });
                                 }}
                                 required={completeProfileReq}
+                                disabled={currentUserData.role !== 'superuser'}
                               />
                             </FloatingLabel>
                           </div>
@@ -655,23 +688,24 @@ function UserDetails() {
                                 aria-label="Floating label select HSC Board"
                                 className='cursor-pointer'
                                 name='hscBoard'
-                                value={studentData?.studentProfile?.pastQualification?.hsc?.board || "undefined"}
+                                value={userData?.studentProfile?.pastQualification?.hsc?.board || "undefined"}
                                 onChange={(e) => {
-                                  setStudentData({
-                                    ...studentData,
+                                  setUserData({
+                                    ...userData,
                                     studentProfile: {
-                                      ...studentData?.studentProfile,
+                                      ...userData?.studentProfile,
                                       pastQualification: {
-                                        ...studentData?.studentProfile?.pastQualification,
+                                        ...userData?.studentProfile?.pastQualification,
                                         hsc: {
-                                          ...studentData?.studentProfile?.pastQualification?.hsc,
+                                          ...userData?.studentProfile?.pastQualification?.hsc,
                                           board: e.target.value
                                         }
                                       }
                                     }
                                   });
                                 }}
-                              // required={completeProfileReq}
+                                // required={completeProfileReq}
+                                disabled={currentUserData.role !== 'superuser'}
                               >
                                 <option disabled value="undefined" className='text-gray-400'>Enter Your SSC Board Name</option>
                                 <option value="Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)">Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)</option>
@@ -685,23 +719,24 @@ function UserDetails() {
                                 type="number"
                                 placeholder="HSC Percentage"
                                 name='hscPercentage'
-                                value={studentData?.studentProfile?.pastQualification?.hsc?.percentage}
+                                value={userData?.studentProfile?.pastQualification?.hsc?.percentage}
                                 onChange={(e) => {
-                                  setStudentData({
-                                    ...studentData,
+                                  setUserData({
+                                    ...userData,
                                     studentProfile: {
-                                      ...studentData?.studentProfile,
+                                      ...userData?.studentProfile,
                                       pastQualification: {
-                                        ...studentData?.studentProfile?.pastQualification,
+                                        ...userData?.studentProfile?.pastQualification,
                                         hsc: {
-                                          ...studentData?.studentProfile?.pastQualification?.hsc,
+                                          ...userData?.studentProfile?.pastQualification?.hsc,
                                           percentage: e.target.value
                                         }
                                       }
                                     }
                                   });
                                 }}
-                              // required={completeProfileReq}
+                                // required={completeProfileReq}
+                                disabled={currentUserData.role !== 'superuser'}
                               />
                             </FloatingLabel>
                             <FloatingLabel controlId="floatingSelectHSCPassingYear" label="HSC Passing Year">
@@ -709,23 +744,24 @@ function UserDetails() {
                                 type="number"
                                 placeholder="HSC Passing Year"
                                 name='hscPassingYear'
-                                value={studentData?.studentProfile?.pastQualification?.hsc?.year}
+                                value={userData?.studentProfile?.pastQualification?.hsc?.year}
                                 onChange={(e) => {
-                                  setStudentData({
-                                    ...studentData,
+                                  setUserData({
+                                    ...userData,
                                     studentProfile: {
-                                      ...studentData?.studentProfile,
+                                      ...userData?.studentProfile,
                                       pastQualification: {
-                                        ...studentData?.studentProfile?.pastQualification,
+                                        ...userData?.studentProfile?.pastQualification,
                                         hsc: {
-                                          ...studentData?.studentProfile?.pastQualification?.hsc,
+                                          ...userData?.studentProfile?.pastQualification?.hsc,
                                           year: e.target.value
                                         }
                                       }
                                     }
                                   });
                                 }}
-                              // required={completeProfileReq}
+                                // required={completeProfileReq}
+                                disabled={currentUserData.role !== 'superuser'}
                               />
                             </FloatingLabel>
                           </div>
@@ -736,23 +772,24 @@ function UserDetails() {
                                 aria-label="Floating label select Diploma Board"
                                 className='cursor-pointer'
                                 name='diplomaBoard'
-                                value={studentData?.studentProfile?.pastQualification?.diploma?.board || "undefined"}
+                                value={userData?.studentProfile?.pastQualification?.diploma?.board || "undefined"}
                                 onChange={(e) => {
-                                  setStudentData({
-                                    ...studentData,
+                                  setUserData({
+                                    ...userData,
                                     studentProfile: {
-                                      ...studentData?.studentProfile,
+                                      ...userData?.studentProfile,
                                       pastQualification: {
-                                        ...studentData?.studentProfile?.pastQualification,
+                                        ...userData?.studentProfile?.pastQualification,
                                         diploma: {
-                                          ...studentData?.studentProfile?.pastQualification?.diploma,
+                                          ...userData?.studentProfile?.pastQualification?.diploma,
                                           board: e.target.value
                                         }
                                       }
                                     }
                                   });
                                 }}
-                              // required={completeProfileReq}
+                                // required={completeProfileReq}
+                                disabled={currentUserData.role !== 'superuser'}
                               >
                                 <option disabled value="undefined" className='text-gray-400'>Enter Your Diploma University Name</option>
                                 <option value="Mumbai University">Mumbai University</option>
@@ -764,23 +801,24 @@ function UserDetails() {
                                 type="number"
                                 placeholder="Diploma Percentage"
                                 name='diplomaPercentage'
-                                value={studentData?.studentProfile?.pastQualification?.diploma?.percentage}
+                                value={userData?.studentProfile?.pastQualification?.diploma?.percentage}
                                 onChange={(e) => {
-                                  setStudentData({
-                                    ...studentData,
+                                  setUserData({
+                                    ...userData,
                                     studentProfile: {
-                                      ...studentData?.studentProfile,
+                                      ...userData?.studentProfile,
                                       pastQualification: {
-                                        ...studentData?.studentProfile?.pastQualification,
+                                        ...userData?.studentProfile?.pastQualification,
                                         diploma: {
-                                          ...studentData?.studentProfile?.pastQualification?.diploma,
+                                          ...userData?.studentProfile?.pastQualification?.diploma,
                                           percentage: e.target.value
                                         }
                                       }
                                     }
                                   });
                                 }}
-                              // required={completeProfileReq}
+                                // required={completeProfileReq}
+                                disabled={currentUserData.role !== 'superuser'}
                               />
                             </FloatingLabel>
                             <FloatingLabel controlId="floatingSelectDiplomaPassingYear" label="Diploma Passing Year">
@@ -788,23 +826,24 @@ function UserDetails() {
                                 type="number"
                                 placeholder="Diploma Passing Year"
                                 name='diplomaPassingYear'
-                                value={studentData?.studentProfile?.pastQualification?.diploma?.year}
+                                value={userData?.studentProfile?.pastQualification?.diploma?.year}
                                 onChange={(e) => {
-                                  setStudentData({
-                                    ...studentData,
+                                  setUserData({
+                                    ...userData,
                                     studentProfile: {
-                                      ...studentData?.studentProfile,
+                                      ...userData?.studentProfile,
                                       pastQualification: {
-                                        ...studentData?.studentProfile?.pastQualification,
+                                        ...userData?.studentProfile?.pastQualification,
                                         diploma: {
-                                          ...studentData?.studentProfile?.pastQualification?.diploma,
+                                          ...userData?.studentProfile?.pastQualification?.diploma,
                                           year: e.target.value
                                         }
                                       }
                                     }
                                   });
                                 }}
-                              // required={completeProfileReq}
+                                // required={completeProfileReq}
+                                disabled={currentUserData.role !== 'superuser'}
                               />
                             </FloatingLabel>
                           </div>
@@ -813,9 +852,13 @@ function UserDetails() {
                     </>
                   )
                 }
-                <div className="flex flex-col justify-center items-center gap-2">
-                  <Button variant="primary" type='submit' size='lg'>Save</Button>
-                </div>
+                {
+                  currentUserData.role === 'superuser' && (
+                    <div className="flex flex-col justify-center items-center gap-2">
+                      <Button variant="primary" type='submit' size='lg'>Save</Button>
+                    </div>
+                  )
+                }
               </form>
             </div>
           </>

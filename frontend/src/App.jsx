@@ -7,30 +7,29 @@ import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Students/Login.jsx";
 import Signup from "./pages/students/Signup";
 import StudentHome from './pages/students/Home.jsx';
-import Account from "./components/students/Account.jsx";
-import SidebarStudent from './components/students/Sidebar';
 import Navbar from './components/Navbar.jsx';
 // TPO pages
-import SidebarTPO from './components/tpo/Sidebar';
 import LoginTPO from "./pages/TPO/Login.jsx";
-import AccountTPO from "./components/TPO/Account.jsx";
 import StudentsTPO from "./components/TPO/Students.jsx";
+import StudentAccYearTPO from "./components/TPO/StudentYear.jsx";
+import PostJobTPO from "./components/TPO/PostJob.jsx";
 // Management pages
-import SidebarManagement from "./components/Management/Sidebar.jsx";
 import LoginManagement from "./pages/Management/Login.jsx";
-import AccountManagement from "./components/Management/Account.jsx";
-import AddTPO from "./components/Management/AddTPO.jsx";
+import AddTPO from "./pages/Management/AddTPO.jsx";
 // super user
 import LoginSuperUser from "./components/SuperUser/Login.jsx";
-import SidebarSuperUser from './components/SuperUser/Sidebar';
 import ManagementSuperUser from "./components/SuperUser/AddManagement.jsx";
 import TPOSuperUser from "./components/SuperUser/AddTPO.jsx";
 import StudentSuperUser from "./components/SuperUser/AddStudent.jsx";
 import HomeSuperUser from "./components/SuperUser/Home.jsx";
-import ApproveStudent from "./components/SuperUser/ApproveStudent.jsx";
+import ApproveStudent from "./components/ApproveStudent.jsx";
 
+// common users
 // for admin, tpo to edit or view user details 
 import UserDetails from "./components/UserDetails.jsx";
+import Sidebar from './components/Sidebar.jsx';
+import Account from "./components/Account.jsx";
+
 // Page not found 
 import PageNotFound from "./pages/PageNotFound.jsx";
 // breadcrumb
@@ -40,68 +39,45 @@ import './style/index.css';
 
 import { UserProvider } from "./context/userContext.jsx";
 import ProtectedRoute from "./components/protectedRoute.jsx";
+import { useState, useEffect } from "react";
 
 
 
+function Layout({ header }) {
+  // Get sidebar state from localStorage or default to false
+  const isSidebarOpenFromStorage = localStorage.getItem('isSidebarOpen') === 'true';
 
-function StudentLayout({ header }) {
+  // State to control sidebar visibility
+  const [isSidebarVisible, setSidebarVisible] = useState(isSidebarOpenFromStorage);
+
+  // Toggle sidebar visibility and update localStorage
+  const toggleSidebar = () => {
+    const newState = !isSidebarVisible;
+    setSidebarVisible(newState);
+    localStorage.setItem('isSidebarOpen', newState);
+  };
+
+  useEffect(() => {
+    // Ensure localStorage has a default value on initial load
+    if (localStorage.getItem('isSidebarOpen') === null) {
+      localStorage.setItem('isSidebarOpen', 'false');
+    }
+  }, []);
+
   return (
     <>
-      <Navbar />
-      <div className="flex">
-        <SidebarStudent />
-        <div className="content flex-grow p-4">
-          <BreadcrumbExp header={header} />
-          <Outlet />
+      <div className="">
+        <Navbar isSidebarVisible={isSidebarVisible} toggleSidebar={toggleSidebar} />
+        <div className="flex">
+          <Sidebar isSidebarVisible={isSidebarVisible} />
+          <div className={`content flex-grow p-4 transition-all duration-300 ${isSidebarVisible ? 'ml-64' : 'ml-0'}`}>
+            <BreadcrumbExp header={header} />
+            <Outlet />
+          </div>
         </div>
       </div>
     </>
-  )
-}
-
-function ManagementLayout({ header }) {
-  return (
-    <>
-      <Navbar />
-      <div className="flex">
-        <SidebarManagement />
-        <div className="content flex-grow p-4">
-          <BreadcrumbExp header={header} />
-          <Outlet />
-        </div>
-      </div>
-    </>
-  )
-}
-
-function TPOLayout({ header }) {
-  return (
-    <>
-      <Navbar />
-      <div className="flex">
-        <SidebarTPO />
-        <div className="content flex-grow p-4">
-          <BreadcrumbExp header={header} />
-          <Outlet />
-        </div>
-      </div>
-    </>
-  )
-}
-
-function SuperUserLayout({ header }) {
-  return (
-    <>
-      <Navbar />
-      <div className="flex">
-        <SidebarSuperUser />
-        <div className="content flex-grow p-4">
-          <BreadcrumbExp header={header} />
-          <Outlet />
-        </div>
-      </div>
-    </>
-  )
+  );
 }
 
 
@@ -126,10 +102,10 @@ function App() {
 
           {/* All student routes  */}
           <Route element={<UserProvider><ProtectedRoute allowedRoles={['student']} /></UserProvider>}>
-            <Route element={<StudentLayout header="Dashboard" />}>
+            <Route element={<Layout header="Dashboard" />}>
               <Route path="/student/dashboard" element={<StudentHome />} />
             </Route>
-            <Route element={<StudentLayout header="Account Details" />}>
+            <Route element={<Layout header="Account Details" />}>
               <Route path="/student/account" element={<Account />} />
             </Route>
             <Route path="/student/complete-profile/:userId" element={<UserDetails />} />
@@ -138,29 +114,48 @@ function App() {
 
           {/* All tpo routes  */}
           <Route element={<UserProvider><ProtectedRoute allowedRoles={['tpo_admin']} /></UserProvider>}>
-            <Route element={<TPOLayout header="Dashboard" />}>
+            <Route element={<Layout header="Dashboard" />}>
               <Route path="/tpo/dashboard" element={<StudentHome />} />
             </Route>
-            <Route element={<TPOLayout header="Account Details" />}>
-              <Route path="/tpo/account" element={<AccountTPO />} />
+            <Route element={<Layout header="Account Details" />}>
+              <Route path="/tpo/account" element={<Account />} />
             </Route>
-            <Route element={<TPOLayout header="Students" />}>
-              <Route path="/tpo/students" element={<StudentsTPO />} />
+            <Route element={<Layout header="Students" />}>
+              <Route path="/tpo/students" element={<StudentAccYearTPO />} />
             </Route>
+            <Route element={<Layout header="Approve Student User" />}>
+              <Route path="/tpo/approve-student" element={<ApproveStudent />} />
+            </Route>
+            {/* to view student data  */}
+            <Route element={<Layout header="User" />}>
+              <Route path="/tpo/user/:userId" element={<UserDetails />} />
+            </Route>
+            {/* post jobs */}
+            <Route element={<Layout header="Post New Job" />}>
+              <Route path="/tpo/post-job" element={<PostJobTPO />} />
+            </Route>
+
             <Route path="/tpo/complete-profile/:userId" element={<UserDetails />} />
           </Route>
 
 
           {/* All management routes  */}
           <Route element={<UserProvider><ProtectedRoute allowedRoles={['management_admin']} /></UserProvider>}>
-            <Route element={<ManagementLayout header="Dashboard" />}>
+            <Route element={<Layout header="Dashboard" />}>
               <Route path="/management/dashboard" element={<StudentHome />} />
             </Route>
-            <Route element={<ManagementLayout header="Account Details" />}>
-              <Route path="/management/account" element={<AccountManagement />} />
+            <Route element={<Layout header="Account Details" />}>
+              <Route path="/management/account" element={<Account />} />
             </Route>
-            <Route element={<ManagementLayout header="TPO Admins" />}>
+            <Route element={<Layout header="TPO Admins" />}>
               <Route path="/management/tpoadmin" element={<AddTPO />} />
+            </Route>
+            <Route element={<Layout header="Approve Student User" />}>
+              <Route path="/management/approve-student" element={<ApproveStudent />} />
+            </Route>
+            {/* to view student data  */}
+            <Route element={<Layout header="User" />}>
+              <Route path="/management/user/:userId" element={<UserDetails />} />
             </Route>
             <Route path="/management/complete-profile/:userId" element={<UserDetails />} />
           </Route>
@@ -168,22 +163,22 @@ function App() {
 
           {/* all admin routes  */}
           <Route element={<UserProvider><ProtectedRoute allowedRoles={['superuser']} /></UserProvider>}>
-            <Route element={<SuperUserLayout header="Dashboard" />}>
+            <Route element={<Layout header="Dashboard" />}>
               <Route path="/admin/Dashboard" element={<HomeSuperUser />} />
             </Route>
-            <Route element={<SuperUserLayout header="Management Users" />}>
+            <Route element={<Layout header="Management Users" />}>
               <Route path="/admin/management" element={<ManagementSuperUser />} />
             </Route>
-            <Route element={<SuperUserLayout header="TPO Users" />}>
+            <Route element={<Layout header="TPO Users" />}>
               <Route path="/admin/tpo" element={<TPOSuperUser />} />
             </Route>
-            <Route element={<SuperUserLayout header="Student Users" />}>
+            <Route element={<Layout header="Student Users" />}>
               <Route path="/admin/student" element={<StudentSuperUser />} />
             </Route>
-            <Route element={<SuperUserLayout header="Approve Student User" />}>
+            <Route element={<Layout header="Approve Student User" />}>
               <Route path="/admin/approve-student" element={<ApproveStudent />} />
             </Route>
-            <Route element={<SuperUserLayout header="Users" />}>
+            <Route element={<Layout header="Users" />}>
               <Route path="/admin/user/:userId" element={<UserDetails />} />
             </Route>
           </Route>

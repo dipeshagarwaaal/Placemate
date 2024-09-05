@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Toast from '../Toast';
-import ModalBox from '../Modal';
-import AddUserTable from '../AddUserTable';
+import Toast from '../../components/Toast';
+import ModalBox from '../../components/Modal';
+import AddUserTable from '../../components/AddUserTable';
 
 function AddTPO() {
   // tpo users store here
@@ -26,7 +26,7 @@ function AddTPO() {
       });
 
       if (response.data) {
-        console.log(response.data.tpoUsers)
+        // console.log(response.data.tpoUsers)
         setUsers(response.data.tpoUsers);
       } else {
         console.warn('Response does not contain tpoUsers:', response.data);
@@ -130,6 +130,7 @@ function AddTPO() {
         closeModal={closeModal}
         confirmDelete={confirmDelete}
         userToDelete={userToDelete}
+        userToAdd={"TPO Admin"}
       />
 
       {/* ModalBox Component for Delete Confirmation */}

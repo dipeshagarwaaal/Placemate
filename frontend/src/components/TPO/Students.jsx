@@ -5,7 +5,7 @@ function Students() {
   const [isDropdown, setDropdown] = useState(false);
   return (
     <>
-      <div className='ml-60 h-full my-4'>
+      <div className='ml-64 h-full my-4'>
         <div className="bg-slate-300/20 rounded flex justify-between px-2 items-center border-t-4 border-t-blue-500">
           <span className='text-2xl py-2 px-1'>Computer</span>
           <span className='mr-2 cursor-pointer' onClick={() => setDropdown(!isDropdown)}>

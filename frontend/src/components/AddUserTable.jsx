@@ -60,10 +60,11 @@ function AddUserTable({
       Approve User
     </Tooltip>
   );
-
+  
+  
   return (
     <>
-      <div className='ml-60'>
+      <div className=''>
         {
           loading ? (
             // fake table loading animation 
@@ -286,15 +287,37 @@ function AddUserTable({
                     <tr key={user.email}>
                       <td>{index + 1}</td>
                       <td>
+
                         {
+                          // for super user 
                           // checking if user is superuser && checking if page is of approve student user 
-                          currentUser.role === "superuser" && userToAdd !== "approve-student" ?
-                            <>
-                              <Link to={`/admin/user/${user._id}`}>{user.first_name}</Link>
-                            </>
-                            :
-                            user.first_name
+                          currentUser.role === "superuser" && (
+                            <Link to={`/admin/user/${user._id}`}>
+                              {user.first_name + " " + user.last_name}
+                            </Link>
+                          )
                         }
+                        {
+                          // for management user
+                          currentUser.role === "management_admin" && (
+                            <Link to={`/management/user/${user._id}`}>
+                              {user.first_name + " " + user.last_name}
+                            </Link>
+                          )
+                        }
+                        {
+                          // for tpo user
+                          currentUser.role === "tpo_admin" && (
+                            <Link to={`/tpo/user/${user._id}`}>
+                              {user.first_name + " " + user.last_name}
+                            </Link>
+                          )
+                        }
+
+                        {/* // :
+                      // user.first_name +
+                      // " " +
+                      // user.last_name */}
                       </td>
                       <td>
                         <Link to={`mailto:${user.email}`} className='no-underline'>

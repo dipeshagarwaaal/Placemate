@@ -17,7 +17,7 @@ function BreadcrumbExp({ header }) {
   // console.log(pathnames);
 
   return (
-    <div className="ml-60 flex justify-between items-center">
+    <div className="flex justify-between items-center">
       <div className="">
         <span className='text-2xl'>
           {header}

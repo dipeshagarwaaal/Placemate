@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import AddUserTable from '../AddUserTable';
-import Toast from '../Toast';
-import ModalBox from '../Modal';
+import AddUserTable from './AddUserTable';
+import Toast from './Toast';
+import ModalBox from './Modal';
 import axios from 'axios';
 
 function ApproveStudent() {

@@ -30,7 +30,7 @@ function Home() {
             <i className="fa-solid fa-spinner fa-spin text-3xl" />
           </div>
         ) : (
-          <div className="ml-60 mt-10">
+          <div className="mt-10">
             <div className="  flex flex-col gap-20 justify-center items-center flex-wrap">
               <div className="  w-full px-10 flex flex-wrap justify-evenly items-center gap-4">
                 <Link className='text-black no-underline' to='../admin/management'>
