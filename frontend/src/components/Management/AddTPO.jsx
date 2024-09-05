@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Table from 'react-bootstrap/Table';
-import Button from 'react-bootstrap/Button';
 import axios from 'axios';
-import Form from 'react-bootstrap/Form';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import Placeholder from 'react-bootstrap/Placeholder';
-import { GrFormAdd } from "react-icons/gr";
 import Toast from '../Toast';
 import ModalBox from '../Modal';
 import AddUserTable from '../AddUserTable';
@@ -44,7 +38,7 @@ function AddTPO() {
     }
   };
 
-  
+
   useEffect(() => {
     fetchUserDetails();
   }, []);

@@ -9,8 +9,7 @@ const authenticateToken = require('../middleware/auth.middleware');
 const Signup = require('../controllers/Student/signup.controller.js');
 // student login controller
 const Login = require('../controllers/Student/login.controller.js');
-// student Update controller
-const { UpdateBasicDetail, UpdatePassword, CompleteProfile } = require('../controllers/Student/update.controller.js');
+
 
 
 
@@ -21,15 +20,6 @@ router.post('/signup', Signup);
 router.post('/login', Login);
 
 
-// update basic detail of user
-router.post('/complete-profile', authenticateToken, CompleteProfile);
-
-// update basic detail of user
-router.post('/update-basic-detail', authenticateToken, UpdateBasicDetail);
-
-
-// update password
-router.post('/changepass', authenticateToken, UpdatePassword);
 
 
 module.exports = router;

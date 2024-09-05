@@ -46,29 +46,6 @@ const studentDeleteUsers = async (req, res) => {
   }
 }
 
-const studentData = async (req, res) => {
-  const { studentId } = req.params;
-  // console.log(studentId);
-  try {
-    // Fetch student details from the database
-    const student = await User.findById(studentId);
-    // console.log(student)
-    // Check if student exists
-    if (!student)
-      return res.status(404).json({ msg: 'Student not found' });
-
-    // Return the student details
-    res.json(student);
-  } catch (error) {
-    // checking if studentId is exist or not
-    if (error.name === 'CastError' && error.kind === 'ObjectId') {
-      return res.status(404).json({ msg: 'Student not found' });
-    }
-    console.error('Error fetching student details:', error);
-    res.status(500).json({ msg: 'Server error' });
-  }
-}
-
 const studentApprove = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -92,6 +69,5 @@ module.exports = {
   studentUsers,
   studentAddUsers,
   studentDeleteUsers,
-  studentData,
   studentApprove
 };

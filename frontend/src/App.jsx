@@ -10,7 +10,6 @@ import StudentHome from './pages/students/Home.jsx';
 import Account from "./components/students/Account.jsx";
 import SidebarStudent from './components/students/Sidebar';
 import Navbar from './components/Navbar.jsx';
-import CompleteProfile from "./components/completeProfile.jsx";
 // TPO pages
 import SidebarTPO from './components/tpo/Sidebar';
 import LoginTPO from "./pages/TPO/Login.jsx";
@@ -133,7 +132,7 @@ function App() {
             <Route element={<StudentLayout header="Account Details" />}>
               <Route path="/student/account" element={<Account />} />
             </Route>
-            <Route path="/student/complete-profile" element={<CompleteProfile />} />
+            <Route path="/student/complete-profile/:userId" element={<UserDetails />} />
           </Route>
 
 
@@ -148,7 +147,7 @@ function App() {
             <Route element={<TPOLayout header="Students" />}>
               <Route path="/tpo/students" element={<StudentsTPO />} />
             </Route>
-            <Route path="/tpo/complete-profile" element={<CompleteProfile />} />
+            <Route path="/tpo/complete-profile/:userId" element={<UserDetails />} />
           </Route>
 
 
@@ -163,7 +162,7 @@ function App() {
             <Route element={<ManagementLayout header="TPO Admins" />}>
               <Route path="/management/tpoadmin" element={<AddTPO />} />
             </Route>
-            <Route path="/management/complete-profile/:studentId" element={<UserDetails />} />
+            <Route path="/management/complete-profile/:userId" element={<UserDetails />} />
           </Route>
 
 
@@ -180,10 +179,12 @@ function App() {
             </Route>
             <Route element={<SuperUserLayout header="Student Users" />}>
               <Route path="/admin/student" element={<StudentSuperUser />} />
-              <Route path="/admin/user/:studentId" element={<UserDetails />} />
             </Route>
             <Route element={<SuperUserLayout header="Approve Student User" />}>
               <Route path="/admin/approve-student" element={<ApproveStudent />} />
+            </Route>
+            <Route element={<SuperUserLayout header="Users" />}>
+              <Route path="/admin/user/:userId" element={<UserDetails />} />
             </Route>
           </Route>
 

@@ -13,7 +13,7 @@ function Account() {
 
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -39,7 +39,7 @@ function Account() {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post("http://localhost:4518/student/update-basic-detail",
+      const response = await axios.post("http://localhost:4518/user/update-profile",
         data,
         {
           headers: {
@@ -65,7 +65,7 @@ function Account() {
 
       try {
         // const token = localStorage.getItem('token');
-        const response = await axios.post("http://localhost:4518/student/upload-photo", formData
+        const response = await axios.post("http://localhost:4518/user/upload-photo", formData
           // , {
           // headers: {
           //   'Authorization': `Bearer ${token}`,
@@ -109,7 +109,7 @@ function Account() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = axios.post("http://localhost:4518/student/changepass",
+      const response = axios.post("http://localhost:4518/user/change-password",
         passData,
         {
           headers: {
@@ -122,7 +122,7 @@ function Account() {
       console.log("Account.jsx updatepass =>", error);
       setPassData({ ...passData, error: error.message });
     }
-  }  
+  }
 
   console.log(BASE_URL + data.profile);
 

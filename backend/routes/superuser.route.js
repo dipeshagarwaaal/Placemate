@@ -6,14 +6,14 @@ const router = express.Router();
 const authenticateToken = require('../middleware/auth.middleware');
 
 const Login = require('../controllers/SuperUser/login.controller.js');
+
 // management methods
 const { managementUsers, managementAddUsers, managementDeleteUsers } = require('../controllers/SuperUser/user-management.controller.js');
 // tpo methods
 const { tpoUsers, tpoAddUsers, tpoDeleteUsers } = require('../controllers/SuperUser/user-tpo.controller.js');
 // student methods
-const { studentUsers, studentAddUsers, studentDeleteUsers, studentData, studentApprove } = require('../controllers/SuperUser/user-student.controller.js');
+const { studentUsers, studentAddUsers, studentDeleteUsers, studentApprove } = require('../controllers/SuperUser/user-student.controller.js');
 
-const UpdateProfile = require('../controllers/SuperUser/update-profile.controller.js');
 
 
 router.post('/login', Login);
@@ -35,10 +35,6 @@ router.post('/student-delete-user', authenticateToken, studentDeleteUsers);
 // approve student
 router.post('/student-approve', authenticateToken, studentApprove);
 
-
-router.get('/user/:studentId', authenticateToken, studentData);
-
-router.post('/update-profile', authenticateToken, UpdateProfile);
 
 
 

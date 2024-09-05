@@ -1,6 +1,5 @@
-
 const UserDetail = async (req, res) => {
-    console.log(req.user)
+    // console.log(req.user)
     res.json({
         id: `${req.user.id}`,
 

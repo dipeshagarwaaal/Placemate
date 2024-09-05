@@ -39,7 +39,7 @@ function Account() {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post("http://localhost:4518/student/update-basic-detail",
+      const response = await axios.post("http://localhost:4518/user/update-profile",
         data,
         {
           headers: {
@@ -109,7 +109,7 @@ function Account() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = axios.post("http://localhost:4518/student/changepass",
+      const response = axios.post("http://localhost:4518/user/change-password",
         passData,
         {
           headers: {

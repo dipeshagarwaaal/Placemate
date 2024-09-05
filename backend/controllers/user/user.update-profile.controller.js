@@ -1,5 +1,4 @@
 const User = require("../../models/user.model");
-const bcrypt = require("bcrypt");
 
 // update any user data by admin
 const UpdateProfile = async (req, res) => {
@@ -37,8 +36,8 @@ const UpdateProfile = async (req, res) => {
       if (req.body.studentProfile.addmissionYear) user.studentProfile.addmissionYear = req.body.studentProfile.addmissionYear;
 
       if (req.body.studentProfile.SGPA) {
-        if (req.body.studentProfile.SGPA.sem1) user.studentProfile.SGPA.sem1 = req.body.studentProfile.SGPA.sem1;
-        if (req.body.studentProfile.SGPA.sem2) user.studentProfile.SGPA.sem2 = req.body.studentProfile.SGPA.sem2;
+        if (req.body.studentProfile.SGPA.sem1 && req.body.studentProfile.SGPA.sem1 !== "undefined") user.studentProfile.SGPA.sem1 = req.body.studentProfile.SGPA.sem1;
+        if (req.body.studentProfile.SGPA.sem2 && req.body.studentProfile.SGPA.sem2 !== "undefined") user.studentProfile.SGPA.sem2 = req.body.studentProfile.SGPA.sem2;
         if (req.body.studentProfile.SGPA.sem3 && req.body.studentProfile.SGPA.sem3 !== "undefined") user.studentProfile.SGPA.sem3 = req.body.studentProfile.SGPA.sem3;
         if (req.body.studentProfile.SGPA.sem4 && req.body.studentProfile.SGPA.sem4 !== "undefined") user.studentProfile.SGPA.sem4 = req.body.studentProfile.SGPA.sem4;
         if (req.body.studentProfile.SGPA.sem5 && req.body.studentProfile.SGPA.sem5 !== "undefined") user.studentProfile.SGPA.sem5 = req.body.studentProfile.SGPA.sem5;

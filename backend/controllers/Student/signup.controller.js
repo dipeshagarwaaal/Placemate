@@ -13,10 +13,13 @@ const Signup = async (req, res) => {
 
     const newUser = new User({
       first_name: first_name,
-      email: email, number: number,
+      email: email,
+      number: number,
       password: hashPassword,
       role: "student",
-      isApproved: false
+      studentProfile: {
+        isApproved: false
+      }
     });
     await newUser.save();
     res.json({ msg: "User Created!" });
