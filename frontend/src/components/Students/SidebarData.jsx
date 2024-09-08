@@ -25,33 +25,33 @@ export const SidebarData = [
     //   },
     // ],
   },
-  // {
-  //   title: "Students",
-  //   // path: "",
-  //   icon: <IoIcons.IoIosPaper />,
-  //   iconClosed: <RiIcons.RiArrowDownSFill />,
-  //   iconOpened: <RiIcons.RiArrowUpSFill />,
+  {
+    title: "Placements",
+    // path: "",
+    icon: <IoIcons.IoIosPaper />,
+    iconClosed: <RiIcons.RiArrowDownSFill />,
+    iconOpened: <RiIcons.RiArrowUpSFill />,
 
-  //   subNav: [
-  //     {
-  //       title: "Approve Students",
-  //       path: "/tpo/approve-student",
-  //       icon: <IoIcons.IoIosPaper />,
-  //       cName: "sub-nav",
-  //     },
-      //   {
-      //     title: "Service 2",
-      //     path: "/services/services2",
-      //     icon: <IoIcons.IoIosPaper />,
-      //     cName: "sub-nav",
-      //   },
+    subNav: [
+      {
+        title: "Placement Profile",
+        path: "/student/placement-profile",
+        icon: <IoIcons.IoIosPaper />,
+        cName: "sub-nav",
+      },
+      {
+        title: "Job Listings",
+        path: "/student/job-listings",
+        icon: <IoIcons.IoIosPaper />,
+        cName: "sub-nav",
+      },
       //   {
       //     title: "Service 3",
       //     path: "/services/services3",
       //     icon: <IoIcons.IoIosPaper />,
       //   },
-  //   ],
-  // },
+    ],
+  },
   // {
   //   title: "Job Listings",
   //   // path: "/tpo/post-job",

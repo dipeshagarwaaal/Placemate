@@ -9,6 +9,7 @@ app.use(cors());
 
 // public folder for users profile
 app.use('/profileImgs', express.static(path.join(__dirname, 'public/profileImgs')));
+app.use('/resume', express.static(path.join(__dirname, 'public/resumes')));
 
 // database import 
 const mongodb = require('./config/MongoDB');
@@ -25,6 +26,10 @@ app.use('/tpo', require('./routes/tpo.route'));
 app.use('/management', require('./routes/management.route'));
 // routes for admin user
 app.use('/admin', require('./routes/superuser.route'));
+
+// route for company
+app.use('/company', require('./routes/company.route'));
+
 
 
 app.listen(process.env.PORT, () => {

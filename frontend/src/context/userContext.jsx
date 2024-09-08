@@ -32,7 +32,11 @@ export const UserProvider = ({ children }) => {
         if (error.response.data) {
           if (error.response.data.msg) {
             localStorage.removeItem('token');
-            navigate('../');
+            const dataToPass = {
+              showToastPass: true,
+              toastMessagePass: error.response.data.msg 
+            }
+            navigate('../', { state: dataToPass });
           }
         }
         setUser(null); // In case of an error, reset user to null

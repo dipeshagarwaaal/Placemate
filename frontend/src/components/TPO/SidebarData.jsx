@@ -62,15 +62,37 @@ export const SidebarData = [
 
     subNav: [
       {
+        title: "All Jobs",
+        path: "/tpo/job-listings",
+        icon: <IoIcons.IoIosPaper />,
+        cName: "sub-nav",
+      },
+      {
         title: "Post Job",
         path: "/tpo/post-job",
         icon: <IoIcons.IoIosPaper />,
       },
-      // {
-      //   title: "Event 2",
-      //   path: "/events/events2",
-      //   icon: <IoIcons.IoIosPaper />,
-      // },
+    ],
+  },
+  {
+    title: "Company",
+    // path: "/tpo/post-job",
+    icon: <FaIcons.FaEnvelopeOpenText />,
+
+    iconClosed: <RiIcons.RiArrowDownSFill />,
+    iconOpened: <RiIcons.RiArrowUpSFill />,
+    subNav: [
+      {
+        title: "All Companys",
+        path: "/tpo/companys",
+        icon: <IoIcons.IoIosPaper />,
+        cName: "sub-nav",
+      },
+      {
+        title: "Add Company",
+        path: "/tpo/add-company",
+        icon: <IoIcons.IoIosPaper />,
+      },
     ],
   },
 ];

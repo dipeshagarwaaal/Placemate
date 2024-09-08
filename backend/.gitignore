@@ -12,6 +12,14 @@ dist
 dist-ssr
 *.local
 
+# public folder
+public/profileImgs/*
+public/resumes/*
+
+# But don't ignore the default directory and its contents
+!public/profileImgs/default/
+!public/profileImgs/default/*
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

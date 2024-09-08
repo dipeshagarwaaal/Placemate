@@ -345,7 +345,7 @@ function Account() {
                 <div className="bg-white p-6 rounded-lg shadow-md w-full">
                   <Form onSubmit={handlePassUpdate}>
                     <div className="grid gap-2 ">
-                      <FloatingLabel label="Old Password">
+                      <FloatingLabel label="Current Password">
                         <Form.Control
                           type="password"
                           autoComplete="password"

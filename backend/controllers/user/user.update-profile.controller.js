@@ -2,10 +2,10 @@ const User = require("../../models/user.model");
 
 // update any user data by admin
 const UpdateProfile = async (req, res) => {
-  // console.log("hello ", req.body);
+  // console.log("hello ", req.body.studentProfile);
 
   try {
-    const user = await User.findById(req.body.id);
+    const user = await User.findById(req.body._id || req.body.id);
 
     if (!user)
       return res.status(400).json({ msg: "User Doesn't Exist!" });
@@ -20,7 +20,7 @@ const UpdateProfile = async (req, res) => {
 
 
     if (req.body.studentProfile.UIN !== undefined) {
-      if (await User.findOne({ studentProfile: { UIN: req.body.studentProfile.UIN } }))
+      if (await User.findOne({ studentProfile: { UIN: req.body.studentProfile.UIN } }) !== null)
         return res.status(400).json({ msg: "UIN is Already Exist, Please Enter Correct UIN!" });
     }
 
@@ -44,6 +44,8 @@ const UpdateProfile = async (req, res) => {
       if (req.body.studentProfile.department) user.studentProfile.department = req.body.studentProfile.department;
       if (req.body.studentProfile.year) user.studentProfile.year = req.body.studentProfile.year;
       if (req.body.studentProfile.addmissionYear) user.studentProfile.addmissionYear = req.body.studentProfile.addmissionYear;
+      if (req.body.studentProfile.gap !== undefined) user.studentProfile.gap = req.body.studentProfile.gap;
+      if (req.body.studentProfile.liveKT) user.studentProfile.liveKT = req.body.studentProfile.liveKT;
 
       if (req.body.studentProfile.SGPA) {
         if (req.body.studentProfile.SGPA.sem1 && req.body.studentProfile.SGPA.sem1 !== "undefined") user.studentProfile.SGPA.sem1 = req.body.studentProfile.SGPA.sem1;
@@ -70,7 +72,7 @@ const UpdateProfile = async (req, res) => {
         }
 
         if (req.body.studentProfile.pastQualification.diploma && req.body.studentProfile.pastQualification.diploma.board !== "undefined") {
-          user.studentProfile.pastQualification.diploma.department = req.body.studentProfile.pastQualification.diploma.department;
+          user.studentProfile.pastQualification.diploma.department = req.body.studentProfile.pastQualification.diploma.board;
           user.studentProfile.pastQualification.diploma.year = req.body.studentProfile.pastQualification.diploma.year;
           user.studentProfile.pastQualification.diploma.percentage = req.body.studentProfile.pastQualification.diploma.percentage;
         }

@@ -27,6 +27,17 @@ const UserSchema = new mongoose.Schema({
   studentProfile: {
     isApproved: { type: Boolean },
     rollNumber: { type: Number },
+    resume: {
+      filename: {
+        type: String,
+      },
+      filepath: {
+        type: String,
+      },
+      contentType: {
+        type: String,
+      }
+    },
     UIN: {
       type: String, unique: true,
       sparse: true, trim: true
@@ -34,6 +45,8 @@ const UserSchema = new mongoose.Schema({
     department: { type: String, enum: ['Computer', 'Civil', 'ECS', 'AIDS', 'Mechanical'] },
     year: { type: Number, enum: [1, 2, 3, 4] },
     addmissionYear: { type: Number },
+    gap: { type: Boolean, default: false },
+    liveKT: { type: Number, default: 0 },
     SGPA: {
       sem1: { type: Number },
       sem2: { type: Number },
@@ -75,7 +88,7 @@ const UserSchema = new mongoose.Schema({
 
   // TPO Admin specific fields
   tpoProfile: {
-    position: { type: String, trim: true },    
+    position: { type: String, trim: true },
     // more for tpo
   },
   // Management Admin specific fields

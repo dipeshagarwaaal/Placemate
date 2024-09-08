@@ -88,8 +88,9 @@ const Sidebar = ({ isSidebarVisible }) => {
     }
   }, [loadData.role]);
 
+
   return (
-    <nav className={`bg-[#f2f2f2] w-[260px] h-screen z-20 flex justify-center fixed top-0 left-0 transition-all duration-300 ${sidebar ? 'left-0' : '-left-[260px]'} z-10 shadow-md`}>
+    <nav className={`bg-[#f2f2f2] w-[260px] h-screen z-20 flex justify-center fixed top-0 transition-transform duration-300 ${sidebar ? 'translate-x-0' : '-translate-x-full'} shadow-md`}>
       <div className="w-full">
         {/* Main Sidebar Logo and Name */}
         <div className="flex items-center px-4 py-6 gap-3 bg-blue-50">

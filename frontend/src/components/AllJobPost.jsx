@@ -1,34 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
-import Button from 'react-bootstrap/Button';
 import axios from 'axios';
-import Form from 'react-bootstrap/Form';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Placeholder from 'react-bootstrap/Placeholder';
-import { GrFormAdd } from "react-icons/gr";
-import { Link } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
+import ModalBox from './Modal';
+import Toast from './Toast';
 
-function AddUserTable({
-  users,
-  loading,
-  handleDeleteUser,
-  formOpen,
-  setFormOpen,
-  data,
-  handleDataChange,
-  handleSubmit,
-  userToAdd,
-  handleApproveStudent
-}) {
+function AllJobPost() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const [loading, setLoading] = useState(true);
+  const [jobs, setJobs] = useState([]);
+  const [companies, setCompanies] = useState({});
+
+  // useState for toast display
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+
+  // useState for Modal display
+  const [showModal, setShowModal] = useState(false);
+  const [dataToParasModal, setDataToParasModal] = useState(null);
+  const [modalBody, setModalBody] = useState({
+    cmpName: '',
+    jbTitle: ''
+  });
+  // const [modalBtn, setModalBtn] = useState('');
 
   // useState for load data
   const [currentUser, setCurrentUser] = useState({
     name: 'Not Found',
     email: 'Not Found',
-    profile: 'Profile Img',
   });
+
 
   // checking for authentication
   useEffect(() => {
@@ -46,24 +52,123 @@ function AddUserTable({
       })
       .catch(err => {
         console.log("AddUserTable.jsx => ", err);
+        setToastMessage(err);
+        setShowToast(true);
       });
+
+    // calling function fetch jobs
+    fetchJobs();
   }, []);
 
-  {/* for hover label effect  */ }
-  const renderTooltipDeleteUser = (props) => (
+  const fetchJobs = async () => {
+    try {
+      const response = await axios.get('http://localhost:4518/tpo/jobs');
+      setJobs(response.data.data)
+      fetchCompanies(response.data.data);
+      setLoading(false);
+    } catch (error) {
+      console.log("Error fetching jobs ", error);
+      if (error?.response?.data?.msg) {
+        setToastMessage(error.response.data.msg);
+        setShowToast(true);
+      }
+    }
+  }
+
+  const handleDeletePost = (jobId, cmpName, jbTitle) => {
+    setDataToParasModal(jobId);
+    setModalBody({
+      cmpName: cmpName,
+      jbTitle: jbTitle
+    });
+    setShowModal(true);
+  }
+
+  const confirmDelete = async (jobId) => {
+    try {
+      const response = await axios.post('http://localhost:4518/tpo/delete-job', { jobId });
+
+      setShowModal(false);
+      fetchJobs();
+      if (response?.data?.msg) {
+        setToastMessage(response?.data?.msg);
+        setShowToast(true);
+      }
+      // setLoading(false);
+    } catch (error) {
+      if (error?.response?.data?.msg) {
+        setToastMessage(error?.response?.data?.msg);
+        setShowToast(true);
+      }
+      console.log("Error deleting job ", error);
+    }
+  }
+
+  const fetchCompanies = async (jobs) => {
+    const companyNames = {};
+    for (const job of jobs) {
+      if (job.company && !companyNames[job.company]) {
+        try {
+          const response = await axios.get(`http://localhost:4518/company/company-data?companyId=${job.company}`);
+          companyNames[job.company] = response.data.company.companyName;
+        } catch (error) {
+          console.log("Error fetching company name => ", error);
+        }
+      }
+    }
+    setCompanies(companyNames);
+  };
+
+
+
+  const renderTooltipDeletePost = (props) => (
     <Tooltip id="button-tooltip" {...props}>
-      Delete User
-    </Tooltip>
-  );
-  const renderTooltipApproveUser = (props) => (
-    <Tooltip id="button-tooltip" {...props}>
-      Approve User
+      Delete Post
     </Tooltip>
   );
 
+  const renderTooltipEditPost = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Edit Post
+    </Tooltip>
+  );
 
+  const renderTooltipViewPost = (props) => (
+    <Tooltip id="button-tooltip" {...props}>
+      View Post
+    </Tooltip>
+  );
+
+  const closeModal = () => {
+    setShowModal(false);
+    setDataToParasModal(null);
+  };
+
+
+  const { showToastPass, toastMessagePass } = location.state || { showToastPass: false, toastMessagePass: '' };
+
+
+  useEffect(() => {
+    if (showToastPass) {
+      setToastMessage(toastMessagePass);
+      setShowToast(showToastPass);
+      // Clear the state after the toast is shown
+      navigate('.', { replace: true, state: {} });
+    }
+  }, []);
+
+  // console.log(jobs.data);
   return (
     <>
+      {/* Toast Component */}
+      <Toast
+        show={showToast}
+        onClose={() => setShowToast(false)}
+        message={toastMessage}
+        delay={3000}
+        position="bottom-end"
+      />
+
       <div className=''>
         {
           loading ? (
@@ -273,127 +378,106 @@ function AddUserTable({
             <Table striped bordered hover className='bg-white my-6 rounded-lg shadow w-full'>
               <thead>
                 <tr>
-                  <th style={{ width: '10%' }}>Sr. No.</th>
-                  <th style={{ width: '15%' }}>Name</th>
-                  <th style={{ width: '25%' }}>Email</th>
-                  <th style={{ width: '15%' }}>Phone Number</th>
-                  <th style={{ width: '20%' }}>Date of Joining</th>
+                  <th style={{ width: '5%' }}>Sr. No.</th>
+                  <th style={{ width: '15%' }}><b>Company Name</b></th>
+                  <th style={{ width: '15%' }}>Job Title</th>
+                  <th style={{ width: '15%' }}>Annual CTC</th>
+                  <th style={{ width: '15%' }}>Last date of Application</th>
+                  <th style={{ width: '15%' }}>No. of Students Applied</th>
                   <th style={{ width: '15%' }}>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {users.length > 0 ? (
-                  users.map((user, index) => (
-                    <tr key={user?.email}>
+                {jobs?.length > 0 ? (
+                  jobs?.map((job, index) => (
+                    <tr key={job?._id}>
                       <td>{index + 1}</td>
                       <td>
-
-                        {
-                          // for super user 
-                          // checking if user is superuser && checking if page is of approve student user 
-                          currentUser.role === "superuser" && (
-                            <Link to={`/admin/user/${user?._id}`}>
-                              {user?.first_name + " "}
-                              {user?.last_name !== undefined && user?.last_name}
-                            </Link>
-                          )
-                        }
-                        {
-                          // for management user
-                          currentUser.role === "management_admin" && (
-                            <Link to={`/management/user/${user?._id}`}>
-                              {user?.first_name + " "}
-                              {user?.last_name !== undefined && user?.last_name}
-                            </Link>
-                          )
-                        }
-                        {
-                          // for tpo user
-                          currentUser.role === "tpo_admin" && (
-                            <Link to={`/tpo/user/${user?._id}`}>
-                              {user?.first_name + " "}
-                              {user?.last_name !== undefined && user?.last_name}
-                            </Link>
-                          )
-                        }
-
-                        {/* // :
-                      // user.first_name +
-                      // " " +
-                      // user.last_name */}
+                        <b>
+                          {companies[job?.company] || <Placeholder as="p" animation="glow">
+                            <Placeholder xs={12} />
+                          </Placeholder>}
+                        </b>
                       </td>
                       <td>
-                        <Link to={`mailto:${user.email}`} className='no-underline'>
-                          {user.email}
-                        </Link>
+                        {job?.jobTitle}
                       </td>
-                      <td>{user.number}</td>
-                      <td>{new Date(user.createdAt).toLocaleDateString('en-IN')}</td>
+                      <td>
+                        {job?.salary}
+                      </td>
+                      <td>
+                        {new Date(job?.applicationDeadline).toLocaleDateString()}
+                      </td>
+                      <td>
+                        {job?.applicants?.length}
+                      </td>
                       <td>
                         {/* for hover label effect  */}
-                        <div className="">
-                          {
-                            userToAdd === 'approve-student' ? (
-                              <div className="flex justify-around items-center">
-                                <OverlayTrigger
-                                  placement="top"
-                                  delay={{ show: 250, hide: 400 }}
-                                  overlay={renderTooltipDeleteUser}
-                                >
-                                  <i
-                                    className="fa-solid fa-circle-xmark text-2xl cursor-pointer hover:text-red-500"
-                                    onClick={() => handleDeleteUser(user.email)}
-                                    onMouseEnter={(e) => {
-                                      e.target.classList.remove('fa-solid');
-                                      e.target.classList.add('fa-regular');
-                                    }}
-                                    onMouseLeave={(e) => {
-                                      e.target.classList.remove('fa-regular');
-                                      e.target.classList.add('fa-solid');
-                                    }}
-                                  />
-                                </OverlayTrigger >
-                                <OverlayTrigger
-                                  placement="top"
-                                  delay={{ show: 250, hide: 400 }}
-                                  overlay={renderTooltipApproveUser}
-                                >
-                                  <i
-                                    className="fa-solid fa-square-check text-2xl cursor-pointer hover:text-green-500"
-                                    onClick={() => handleApproveStudent(user.email)}
-                                    onMouseEnter={(e) => {
-                                      e.target.classList.remove('fa-solid');
-                                      e.target.classList.add('fa-regular');
-                                    }}
-                                    onMouseLeave={(e) => {
-                                      e.target.classList.remove('fa-regular');
-                                      e.target.classList.add('fa-solid');
-                                    }}
-                                  />
-                                </OverlayTrigger >
-                              </div>
+                        <div className="flex justify-around items-center">
 
-                            ) : (
-                              <div className="">
-                                <OverlayTrigger
-                                  placement="top"
-                                  delay={{ show: 250, hide: 400 }}
-                                  overlay={renderTooltipDeleteUser}
-                                >
-                                  <i
-                                    className="fa-regular fa-trash-can text-2xl cursor-pointer hover:text-red-500"
-                                    onClick={() => handleDeleteUser(user.email)}
-                                    onMouseEnter={(e) => {
-                                      e.target.classList.remove('fa-solid');
-                                      e.target.classList.add('fa-regular');
-                                    }}
-                                    onMouseLeave={(e) => {
-                                      e.target.classList.remove('fa-regular');
-                                      e.target.classList.add('fa-solid');
-                                    }}
-                                  />
-                                </OverlayTrigger >
-                              </div>
+                          <div className="px-0.5">
+                            {/* view post  */}
+                            <OverlayTrigger
+                              placement="top"
+                              delay={{ show: 250, hide: 400 }}
+                              overlay={renderTooltipViewPost}
+                            >
+                              <i
+                                className="fa-solid fa-circle-info text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-green-500"
+                                onClick={() => {
+                                  if (currentUser.role === 'tpo_admin') navigate(`../tpo/job/${job?._id}`)
+                                  else if (currentUser.role === 'student') navigate(`../student/job/${job?._id}`)
+                                }}
+                              />
+                            </OverlayTrigger>
+                          </div>
+                          {
+                            currentUser.role === 'tpo_admin' && (
+                              <>
+
+                                <div className="px-0.5">
+                                  {/* edit post  */}
+                                  <OverlayTrigger
+                                    placement="top"
+                                    delay={{ show: 250, hide: 400 }}
+                                    overlay={renderTooltipEditPost}
+                                  >
+                                    <i
+                                      className="fa-regular fa-pen-to-square text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-blue-500"
+                                      onClick={() => navigate(`../tpo/post-job/${job._id}`)}
+                                      onMouseEnter={(e) => {
+                                        e.target.classList.add('fa-solid');
+                                        e.target.classList.remove('fa-regular');
+                                      }}
+                                      onMouseLeave={(e) => {
+                                        e.target.classList.add('fa-regular');
+                                        e.target.classList.remove('fa-solid');
+                                      }}
+                                    />
+                                  </OverlayTrigger>
+                                </div>
+                                <div className="px-0.5">
+                                  {/* delete post  */}
+                                  <OverlayTrigger
+                                    placement="top"
+                                    delay={{ show: 250, hide: 400 }}
+                                    overlay={renderTooltipDeletePost}
+                                  >
+                                    <i
+                                      className="fa-regular fa-trash-can text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-red-500"
+                                      onClick={() => handleDeletePost(job?._id, companies[job?.company], job?.jobTitle)}
+                                      onMouseEnter={(e) => {
+                                        e.target.classList.add('fa-solid');
+                                        e.target.classList.remove('fa-regular');
+                                      }}
+                                      onMouseLeave={(e) => {
+                                        e.target.classList.add('fa-regular');
+                                        e.target.classList.remove('fa-solid');
+                                      }}
+                                    />
+                                  </OverlayTrigger>
+                                </div>
+                              </>
                             )
                           }
                         </div>
@@ -402,55 +486,27 @@ function AddUserTable({
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="6">No users found</td>
+                    <td colSpan="7">No Jobs found</td>
                   </tr>
                 )}
               </tbody>
             </Table>
           )
         }
-
-        {/* checking if approve student user page is open or not */}
-        {
-          userToAdd !== "approve-student" && (
-            <Button variant="dark" size="lg" onClick={() => setFormOpen(true)}>
-              <i className="fa-solid fa-person-circle-plus px-1" /> Add {userToAdd}
-            </Button>
-          )
-        }
-
-
-        {
-          formOpen &&
-          <>
-            <div className="bg-white flex justify-center w-full mt-4">
-              <div className='w-1/2 rounded-lg shadow px-10 py-3'>
-                <Form className='text-base' onSubmit={handleSubmit}>
-                  <h2>New {userToAdd}</h2>
-                  <FloatingLabel className='my-3' label="Name">
-                    <Form.Control type="text" autoComplete="name" placeholder="Name" name='first_name' value={data.first_name || ''} onChange={handleDataChange} />
-                  </FloatingLabel>
-                  <FloatingLabel className='my-3' label="Email">
-                    <Form.Control type="email" autoComplete="email" placeholder="Email" name='email' value={data.email || ''} onChange={handleDataChange} />
-                  </FloatingLabel>
-                  <FloatingLabel className='my-3' label="Number">
-                    <Form.Control type="number" autoComplete="number" placeholder="Phone Number" name='number' value={data.number || ''} onChange={handleDataChange} />
-                  </FloatingLabel>
-                  <FloatingLabel className='my-3' label="Password">
-                    <Form.Control type="password" autoComplete="password" placeholder="Enter Initial Password" name='password' value={data.password || ''} onChange={handleDataChange} />
-                  </FloatingLabel>
-                  <button type="submit" className="flex items-center px-3 py-2 bg-blue-500 text-white rounded">
-                    <GrFormAdd className="mr-2 text-3xl" />
-                    Create New {userToAdd}
-                  </button>
-                </Form>
-              </div>
-            </div>
-          </>
-        }
       </div >
+
+
+      {/* ModalBox Component for Delete Confirmation */}
+      <ModalBox
+        show={showModal}
+        close={closeModal}
+        header={"Confirmation"}
+        body={`Do you want to delete post of ${modalBody.cmpName} for ${modalBody.jbTitle}`}
+        btn={"Delete"}
+        confirmAction={() => confirmDelete(dataToParasModal)}
+      />
     </>
   )
 }
 
-export default AddUserTable;
+export default AllJobPost

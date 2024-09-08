@@ -5,8 +5,9 @@ const userData = async (req, res) => {
   // console.log(userId);
   try {
     // Fetch user details from the database
+    // console.log(userId)
     const user = await User.findById(userId);
-    // console.log(user)
+
     // Check if user exists
     if (!user)
       return res.status(404).json({ msg: 'Student not found' });

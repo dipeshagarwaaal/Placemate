@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 // import multer for user profile update 
-const uploadUserProfile = require('../config/Multer.js')
+const uploadUserProfile = require('../config/MulterProfilePhoto.js');
 
 const authenticateToken = require('../middleware/auth.middleware');
 
@@ -14,19 +14,21 @@ const AllUsers = require('../controllers/user/user.all-users.controller.js');
 const UpdatePhoto = require('../controllers/user/user.update-photo.controller.js');
 const UpdateProfile = require('../controllers/user/user.update-profile.controller.js');
 const UpdatePassword = require('../controllers/user/user.update-password.js');
-const userData = require('../controllers/user/user.show-data.js');
+const UserData = require('../controllers/user/user.show-data.js');
 
 // details of users student
 router.get('/detail', authenticateToken, UserDetail);
 
 router.get('/all-users', AllUsers);
 
-router.get('/:userId', authenticateToken, userData);
+router.get('/:userId', authenticateToken, UserData);
 
 router.post('/upload-photo', uploadUserProfile.single('profileImgs'), UpdatePhoto);
 
 router.post('/update-profile', authenticateToken, UpdateProfile);
 
 router.post('/change-password', authenticateToken, UpdatePassword);
+
+
 
 module.exports = router;

@@ -1,0 +1,312 @@
+import React, { useEffect, useState } from 'react'
+import Accordion from 'react-bootstrap/Accordion';
+import { useParams } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import axios from 'axios';
+import Table from 'react-bootstrap/Table';
+import Toast from './Toast';
+import ModalBox from './Modal';
+
+
+function ViewJobPost() {
+  const { jobId } = useParams();
+
+  const [data, setData] = useState({});
+  const [company, setCompany] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // useState for toast display
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+
+  // useState for Modal display
+  const [showModal, setShowModal] = useState(false);
+
+  // useState for load data
+  const [currentUser, setCurrentUser] = useState({
+    name: 'Not Found',
+    email: 'Not Found'
+  });
+
+
+  // checking for authentication
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    axios.get('http://localhost:4518/user/detail', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then(res => {
+        setCurrentUser({
+          email: res.data.email,
+          role: res.data.role,
+        });
+      })
+      .catch(err => {
+        console.log("AddUserTable.jsx => ", err);
+        setToastMessage(err);
+        setShowToast(true);
+      });
+  }, []);
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  const fetchJobDetail = async () => {
+    try {
+      const response = await axios.get(`http://localhost:4518/tpo/${jobId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          }
+        }
+      )
+      setData(response.data);
+      setLoading(false)
+    } catch (error) {
+      if (error.response) {
+        if (error?.response.data?.msg) setToastMessage(error.response.data.msg)
+        else setToastMessage(error.message)
+        setShowToast(true);
+
+        if (error?.response?.data?.msg === "job data not found") navigate('../404');
+      }
+      console.log("Error while fetching details => ", error);
+    }
+  }
+
+  const fetchCompanyData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:4518/company/company-data?companyId=${data.company}`);
+      setCompany(response.data.company);
+    } catch (error) {
+      console.log("AddCompany error while fetching => ", error);
+    }
+  }
+
+  useEffect(() => {
+    fetchJobDetail();
+    if (data?.company) {
+      fetchCompanyData();
+    }
+  }, [loading])
+
+
+
+  return (
+    <>
+      {/*  any message here  */}
+      < Toast
+        show={showToast}
+        onClose={() => setShowToast(false)}
+        message={toastMessage}
+        delay={3000}
+        position="bottom-end"
+      />
+
+      {
+        loading ? (
+          <div className="flex justify-center h-72 items-center">
+            <i className="fa-solid fa-spinner fa-spin text-3xl" />
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 gap-2 my-6">
+              <div className="flex flex-col grid-flow-row-dense gap-2">
+
+                <div className="text-base">
+                  {/* Company Details  */}
+                  <Accordion defaultActiveKey={['0']} alwaysOpen className='shadow rounded'>
+                    <Accordion.Item eventKey="0">
+                      <Accordion.Header>Company Details</Accordion.Header>
+                      <Accordion.Body>
+                        <div className="">
+                          {/* company name  */}
+                          <h3 className='text-3xl text-center border-b-2 py-4 mb-4'>
+                            {company?.companyName}
+                          </h3>
+                          <div className="flex justify-between p-2 border-b-2 my-2">
+                            {/* company website  */}
+                            <span>Website</span>
+                            <span className='bg-blue-500 py-1 px-2 text-white rounded cursor-pointer'>
+                              <a
+                                href={`${company?.companyWebsite}`}
+                                target='_blanck'
+                                className='no-underline text-white'
+                              >
+                                {company?.companyWebsite}
+                              </a>
+                            </span>
+                          </div>
+                          <div className="flex justify-between p-2 border-b-2 my-2">
+                            {/* company location  */}
+                            <span>Job Locations</span>
+                            <div className="flex gap-2">
+                              {company?.companyLocation?.split(',').map((location, index) => (
+                                <span key={index} className='bg-blue-500 py-1 px-2 text-white rounded'>
+                                  {location.trim()}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="flex justify-between p-2 border-b-2 my-2">
+                            {/* company difficulty  */}
+                            <span>Difficulty Level</span>
+                            {
+                              company?.companyDifficulty === "Easy" &&
+                              <span className='bg-green-500 py-1 px-2 text-white rounded'>
+                                {company?.companyDifficulty}
+                              </span>
+                            }
+                            {
+                              company?.companyDifficulty === "Moderate" &&
+                              <span className='bg-orange-500 py-1 px-2 text-white rounded'>
+                                {company?.companyDifficulty}
+                              </span>
+                            }
+                            {
+                              company?.companyDifficulty === "Hard" &&
+                              <span className='bg-red-500 py-1 px-2 text-white rounded'>
+                                {company?.companyDifficulty}
+                              </span>
+                            }
+                          </div>
+                        </div>
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  </Accordion>
+                </div>
+
+                {
+                  currentUser.role !== "student" && (
+                    <>
+                      {/* pending */}
+                      <div className="text-base">
+                        {/* Applicants applied */}
+                        <Accordion defaultActiveKey={['3']} alwaysOpen className='shadow rounded'>
+                          <Accordion.Item eventKey="3">
+                            <Accordion.Header>Applicants Applied</Accordion.Header>
+                            <Accordion.Body>
+                              <Table striped borderless hover>
+                                <thead>
+                                  <tr>
+                                    <th style={{ width: '10%' }}>#</th>
+                                    <th style={{ width: '25%' }}>Name</th>
+                                    <th style={{ width: '25%' }}>Email</th>
+                                    <th style={{ width: '20%' }}>UIN</th>
+                                    <th style={{ width: '20%' }}>Status</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>1</td>
+                                    <td>Mark</td>
+                                    <td>Otto</td>
+                                    <td>@mdo</td>
+                                    <td>@mdo</td>
+                                  </tr>
+                                </tbody>
+                              </Table>
+                            </Accordion.Body>
+                          </Accordion.Item>
+                        </Accordion>
+                      </div>
+                    </>
+                  )
+                }
+
+              </div>
+
+
+              <div className="text-base">
+                {/* Job details  */}
+                <Accordion defaultActiveKey={['1']} alwaysOpen className='shadow rounded'>
+                  <Accordion.Item eventKey="1">
+                    <Accordion.Header>Job Details</Accordion.Header>
+                    <Accordion.Body>
+                      <div className="flex flex-col gap-4">
+                        {/* job title  */}
+                        <div className="flex flex-col backdrop-blur-md bg-white/30 border border-white/20 rounded-lg px-2 shadow-sm shadow-red-400">
+                          <span className='text-xl text-blue-500 py-2 border-b-2'>
+                            Job Title
+                          </span>
+                          <span className='py-3'>
+                            {data?.jobTitle}
+                          </span>
+                        </div>
+                        {/* job Profile  */}
+                        <div className="flex flex-col backdrop-blur-md bg-white/30 border border-white/20 rounded-lg px-2 shadow-sm shadow-red-400">
+                          <span className='text-xl text-blue-500 py-2 border-b-2'>
+                            Job Profile
+                          </span>
+                          <span className='py-3' dangerouslySetInnerHTML={{ __html: data?.jobDescription }} />
+                        </div>
+                        {/* job eligibility  */}
+                        <div className="flex flex-col backdrop-blur-md bg-white/30 border border-white/20 rounded-lg px-2 shadow-sm shadow-red-400">
+                          <span className='text-xl text-blue-500 py-2 border-b-2'>
+                            Eligibility
+                          </span>
+                          <span className='py-3' dangerouslySetInnerHTML={{ __html: data?.eligibility }} />
+                        </div>
+                        {/* job salary  */}
+                        <div className="flex flex-col backdrop-blur-md bg-white/30 border border-white/20 rounded-lg px-2 shadow-sm shadow-red-400">
+                          <span className='text-xl text-blue-500 py-2 border-b-2'>
+                            Annual CTC
+                          </span>
+                          <span className='py-3'>
+                            {data?.salary} LPA
+                          </span>
+                        </div>
+                        {/* job deadline  */}
+                        <div className="flex flex-col backdrop-blur-md bg-white/30 border border-white/20 rounded-lg px-2 shadow-sm shadow-red-400">
+                          <span className='text-xl text-blue-500 py-2 border-b-2'>
+                            Last Date of Application
+                          </span>
+                          <span className='py-3'>
+                            {new Date(data?.applicationDeadline).toLocaleDateString('en-IN', {
+                              month: 'long',
+                              year: 'numeric',
+                              day: 'numeric',
+                            })}
+                          </span>
+                        </div>
+                        {/* how to apply  */}
+                        <div className="flex flex-col backdrop-blur-md bg-white/30 border border-white/20 rounded-lg px-2 shadow-sm shadow-red-400">
+                          <span className='text-xl text-blue-500 py-2 border-b-2'>
+                            How to Apply?
+                          </span>
+                          <span className='py-3' dangerouslySetInnerHTML={{ __html: data?.howToApply }} />
+                        </div>
+                        <div className="flex justify-center ">
+                          <Button variant="warning">
+                            <i className="fa-solid fa-check px-2" />
+                            Check & Update Status
+                          </Button>
+                        </div>
+                      </div>
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion>
+              </div>
+
+            </div>
+          </>
+        )
+      }
+
+      {/* ModalBox Component for Delete Confirmation */}
+      <ModalBox
+        show={showModal}
+        close={closeModal}
+        header={"Confirmation"}
+        // body={``}
+        btn={"Post"}
+      // confirmAction={}
+      />
+    </>
+  )
+}
+
+export default ViewJobPost

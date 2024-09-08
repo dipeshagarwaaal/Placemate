@@ -1,0 +1,85 @@
+const CompanySchema = require("../../models/company.model");
+
+
+// const AllJobs = async (req, res) => {
+//   try {
+//     const jobs = await JobSchema.find();
+//     res.json({ data: jobs });
+//   } catch (error) {
+//     console.log("user.all-jobs.controller.js => ", error);
+//     res.status(500).json({ msg: 'Server Error' });
+//   }
+// }
+
+
+
+const AddCompany = async (req, res) => {
+  try {
+    const companyName = req.body.companyName;
+    const companyDescription = req.body.companyDescription;
+    const companyWebsite = req.body.companyWebsite;
+    const companyLocation = req.body.companyLocation;
+    const companyDifficulty = req.body.companyDifficulty;
+
+    if (await CompanySchema.findOne({ companyName: companyName })) {
+      return res.json({ msg: "Company Name Already Exist!" })
+    }
+
+    const newcmp = new CompanySchema({
+      companyName,
+      companyDescription,
+      companyWebsite,
+      companyLocation,
+      companyDifficulty
+    });
+
+    await newcmp.save();
+
+    res.status(201).json({ msg: "Company Created Successfully!", });
+  } catch (error) {
+    console.log("company.all-company.controller.js = AddCompany => ", error);
+    res.status(500).json({ msg: 'Server Error' });
+  }
+}
+
+
+const CompanyDetail = async (req, res) => {
+  try {
+    if (req.query.companyId) {
+      const company = await CompanySchema.findById(req.query.companyId);
+      res.json({ company });
+    }
+  } catch (error) {
+    console.log("company.all-company.controller.js = CompanyDetail => ", error);
+    res.status(500).json({ msg: 'Server Error' });
+  }
+}
+
+const AllCompanyDetail = async (req, res) => {
+  try {
+    const companys = await CompanySchema.find();
+    // console.log(companys)
+    res.json({ companys });
+  } catch (error) {
+    console.log("company.all-company.controller.js = AllCompanyDetail => ", error);
+    res.status(500).json({ msg: 'Server Error' });
+  }
+}
+
+const DeleteCompany = async (req, res) => {
+  try {
+    await CompanySchema.findByIdAndDelete(req.body.companyId);
+    res.json({ msg: "Company Deleted Successfully!" });
+  } catch (error) {
+    console.log("company.all-company.controller.js = DeleteCompany => ", error);
+    res.status(500).json({ msg: 'Server Error' });
+  }
+}
+
+
+module.exports = {
+  AddCompany,
+  CompanyDetail,
+  AllCompanyDetail,
+  DeleteCompany
+};

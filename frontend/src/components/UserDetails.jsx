@@ -80,7 +80,7 @@ function UserDetails() {
         if (error.response.data) {
           setToastMessage(error.response.data.msg);
           setShowToast(true);
-          if (error.response.data.msg === "Student not found")
+          if (error.response.data.msg === "Student not found" || "user not found")
             navigate("../404")
         }
         console.error("Error fetching student data", error);
@@ -90,7 +90,6 @@ function UserDetails() {
     };
     fetchStudentData();
   }, [userId]);
-
 
   const handleDataChange = (e) => setUserData({ ...userData, [e.target.name]: e.target.value })
 
@@ -125,6 +124,7 @@ function UserDetails() {
         }
       );
       // console.log(response.data);
+      console.log(response.data.msg)
       if (response.data) {
         if (response.data.msg) {
           setToastMessage(response.data.msg);
@@ -137,6 +137,11 @@ function UserDetails() {
         //   navigate("../student/dashboard");
       }
     } catch (error) {
+      if (error?.response?.data?.msg) {
+        setToastMessage(error.response.data.msg);
+        setShowToast(true);
+      }
+      //   navigate("../student/dashboard");
       console.log("UserDetails => ", error);
     }
   }
@@ -171,8 +176,8 @@ function UserDetails() {
     const date = new Date(isoString);
     return date.toISOString().split('T')[0]; // Returns YYYY-MM-DD
   };
-  // console.log(userData)
 
+  // console.log(userData)
 
   return (
     <>
@@ -202,7 +207,7 @@ function UserDetails() {
               </h1>
               <form onSubmit={handleSubmit}>
                 {/* personal info  */}
-                <div className=" my-8 backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6">
+                <div className="my-8 backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6">
                   <span className='text-2xl'>Personal Details</span>
                   <div className="grid grid-cols-3">
                     <div className="px-2 py-3 flex flex-col gap-3">
@@ -215,7 +220,7 @@ function UserDetails() {
                           onChange={handleDataChange}
                           // if complete profile request then required
                           required={completeProfileReq}
-                          disabled={currentUserData.role !== 'superuser'}
+                          disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                         />
                       </FloatingLabel>
                       <FloatingLabel controlId="floatingMiddleName" label="Middle Name">
@@ -226,7 +231,7 @@ function UserDetails() {
                           value={userData?.middle_name}
                           onChange={handleDataChange}
                           required={completeProfileReq}
-                          disabled={currentUserData.role !== 'superuser'}
+                          disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                         />
                       </FloatingLabel>
                       <FloatingLabel controlId="floatingLastName" label="Last Name">
@@ -237,12 +242,11 @@ function UserDetails() {
                           value={userData?.last_name}
                           onChange={handleDataChange}
                           required={completeProfileReq}
-                          disabled={currentUserData.role !== 'superuser'}
+                          disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                         />
                       </FloatingLabel>
                       <FloatingLabel controlId="floatingEmail" label="Email address">
                         <Form.Control
-                          className='cursor-not-allowed'
                           type="email"
                           placeholder="Email address"
                           name='email'
@@ -265,7 +269,7 @@ function UserDetails() {
                             }
                           }}
                           required={completeProfileReq}
-                          disabled={currentUserData.role !== 'superuser'}
+                          disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                         />
                       </FloatingLabel>
                     </div>
@@ -277,7 +281,7 @@ function UserDetails() {
                           name='gender'
                           value={userData?.gender === undefined ? "undefined" : userData?.gender}
                           onChange={handleDataChange}
-                          disabled={currentUserData.role !== 'superuser'}
+                          disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                         >
                           <option disabled value="undefined" className='text-gray-400'>Enter Your Gender</option>
                           <option value="Male">Male</option>
@@ -293,7 +297,7 @@ function UserDetails() {
                           value={formatDate(userData?.dateOfBirth)}
                           onChange={handleDataChange}
                           required={completeProfileReq}
-                          disabled={currentUserData.role !== 'superuser'}
+                          disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                         />
                       </FloatingLabel>
                       <FloatingLabel className='w-full' controlId="floatingTextareaAddress" label="Address">
@@ -313,7 +317,7 @@ function UserDetails() {
                             });
                           }}
                           required={completeProfileReq}
-                          disabled={currentUserData.role !== 'superuser'}
+                          disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                         />
                       </FloatingLabel>
                       <Form.Control
@@ -338,7 +342,7 @@ function UserDetails() {
                           }
                         }}
                         required={completeProfileReq}
-                        disabled={currentUserData.role !== 'superuser'}
+                        disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                       />
                     </div>
 
@@ -359,11 +363,10 @@ function UserDetails() {
                           name='profile'
                           onChange={handlePhotoChange}
                           required={userData?.profile === '/profileImgs/default/defaultProfileImg.jpg' && completeProfileReq}
-                          disabled={currentUserData.role !== 'superuser'}
+                          disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                         />
                       </FloatingLabel>
                     </div>
-
                   </div>
                 </div>
 
@@ -392,7 +395,7 @@ function UserDetails() {
                                 }}
                                 value={userData?.studentProfile?.UIN}
                                 required={completeProfileReq}
-                                disabled={currentUserData.role !== 'superuser'}
+                                disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                               />
                             </FloatingLabel>
                             <FloatingLabel controlId="floatingRollNumber" label="Roll Number" >
@@ -411,7 +414,7 @@ function UserDetails() {
                                   });
                                 }}
                                 required={completeProfileReq}
-                                disabled={currentUserData.role !== 'superuser'}
+                                disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                               />
                             </FloatingLabel>
                           </div>
@@ -433,7 +436,7 @@ function UserDetails() {
                                   });
                                 }}
                                 required={completeProfileReq}
-                                disabled={currentUserData.role !== 'superuser'}
+                                disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                               >
                                 <option disabled value="undefined" className='text-gray-400'>Enter Your Department</option>
                                 <option value="Computer">Computer</option>
@@ -459,7 +462,7 @@ function UserDetails() {
                                   });
                                 }}
                                 required={completeProfileReq}
-                                disabled={currentUserData.role !== 'superuser'}
+                                disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                               >
                                 <option disabled value="undefined" className='text-gray-400'>Enter Your Year</option>
                                 <option value="1">1st</option>
@@ -491,7 +494,7 @@ function UserDetails() {
                                   }
                                 }}
                                 required={completeProfileReq}
-                                disabled={currentUserData.role !== 'superuser'}
+                                disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                               />
                             </FloatingLabel>
                           </div>
@@ -506,7 +509,7 @@ function UserDetails() {
                                   value={userData?.studentProfile?.SGPA?.sem1}
                                   onChange={handleDataChangeForSGPA}
                                   // required={completeProfileReq}
-                                  disabled={currentUserData.role !== 'superuser'}
+                                  disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                                 />
                               </FloatingLabel>
                               <FloatingLabel controlId="floatingSem2" label="Sem 2">
@@ -517,7 +520,7 @@ function UserDetails() {
                                   value={userData?.studentProfile?.SGPA?.sem2}
                                   onChange={handleDataChangeForSGPA}
                                   // required={completeProfileReq}
-                                  disabled={currentUserData.role !== 'superuser'}
+                                  disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                                 />
                               </FloatingLabel>
                               <FloatingLabel controlId="floatingSem3" label="Sem 3">
@@ -528,7 +531,7 @@ function UserDetails() {
                                   value={userData?.studentProfile?.SGPA?.sem3}
                                   onChange={handleDataChangeForSGPA}
                                   // required={completeProfileReq}
-                                  disabled={currentUserData.role !== 'superuser'}
+                                  disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                                 />
                               </FloatingLabel>
                               <FloatingLabel controlId="floatingSem4" label="Sem 4">
@@ -539,7 +542,7 @@ function UserDetails() {
                                   value={userData?.studentProfile?.SGPA?.sem4}
                                   onChange={handleDataChangeForSGPA}
                                   // required={completeProfileReq}
-                                  disabled={currentUserData.role !== 'superuser'}
+                                  disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                                 />
                               </FloatingLabel>
                             </div>
@@ -552,7 +555,7 @@ function UserDetails() {
                                   value={userData?.studentProfile?.SGPA?.sem5}
                                   onChange={handleDataChangeForSGPA}
                                   // required={completeProfileReq}
-                                  disabled={currentUserData.role !== 'superuser'}
+                                  disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                                 />
                               </FloatingLabel>
                               <FloatingLabel controlId="floatingSem6" label="Sem 6">
@@ -563,7 +566,7 @@ function UserDetails() {
                                   value={userData?.studentProfile?.SGPA?.sem6}
                                   onChange={handleDataChangeForSGPA}
                                   // required={completeProfileReq}
-                                  disabled={currentUserData.role !== 'superuser'}
+                                  disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                                 />
                               </FloatingLabel>
                               <FloatingLabel controlId="floatingSem7" label="Sem 7">
@@ -574,7 +577,7 @@ function UserDetails() {
                                   value={userData?.studentProfile?.SGPA?.sem7}
                                   onChange={handleDataChangeForSGPA}
                                   // required={completeProfileReq}
-                                  disabled={currentUserData.role !== 'superuser'}
+                                  disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                                 />
                               </FloatingLabel>
                               <FloatingLabel controlId="floatingSem8" label="Sem 8">
@@ -585,7 +588,7 @@ function UserDetails() {
                                   value={userData?.studentProfile?.SGPA?.sem8}
                                   onChange={handleDataChangeForSGPA}
                                   // required={completeProfileReq}
-                                  disabled={currentUserData.role !== 'superuser'}
+                                  disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                                 />
                               </FloatingLabel>
                             </div>
@@ -621,7 +624,7 @@ function UserDetails() {
                                   });
                                 }}
                                 required={completeProfileReq}
-                                disabled={currentUserData.role !== 'superuser'}
+                                disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                               >
                                 <option disabled value="undefined" className='text-gray-400'>Enter Your SSC Board Name</option>
                                 <option value="Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)">Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)</option>
@@ -652,7 +655,7 @@ function UserDetails() {
                                   });
                                 }}
                                 required={completeProfileReq}
-                                disabled={currentUserData.role !== 'superuser'}
+                                disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                               />
                             </FloatingLabel>
                             <FloatingLabel controlId="floatingSelectSSCPassingYear" label="SSC Passing Year">
@@ -677,7 +680,7 @@ function UserDetails() {
                                   });
                                 }}
                                 required={completeProfileReq}
-                                disabled={currentUserData.role !== 'superuser'}
+                                disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                               />
                             </FloatingLabel>
                           </div>
@@ -705,7 +708,7 @@ function UserDetails() {
                                   });
                                 }}
                                 // required={completeProfileReq}
-                                disabled={currentUserData.role !== 'superuser'}
+                                disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                               >
                                 <option disabled value="undefined" className='text-gray-400'>Enter Your SSC Board Name</option>
                                 <option value="Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)">Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)</option>
@@ -736,7 +739,7 @@ function UserDetails() {
                                   });
                                 }}
                                 // required={completeProfileReq}
-                                disabled={currentUserData.role !== 'superuser'}
+                                disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                               />
                             </FloatingLabel>
                             <FloatingLabel controlId="floatingSelectHSCPassingYear" label="HSC Passing Year">
@@ -761,7 +764,7 @@ function UserDetails() {
                                   });
                                 }}
                                 // required={completeProfileReq}
-                                disabled={currentUserData.role !== 'superuser'}
+                                disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                               />
                             </FloatingLabel>
                           </div>
@@ -789,7 +792,7 @@ function UserDetails() {
                                   });
                                 }}
                                 // required={completeProfileReq}
-                                disabled={currentUserData.role !== 'superuser'}
+                                disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                               >
                                 <option disabled value="undefined" className='text-gray-400'>Enter Your Diploma University Name</option>
                                 <option value="Mumbai University">Mumbai University</option>
@@ -818,7 +821,7 @@ function UserDetails() {
                                   });
                                 }}
                                 // required={completeProfileReq}
-                                disabled={currentUserData.role !== 'superuser'}
+                                disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                               />
                             </FloatingLabel>
                             <FloatingLabel controlId="floatingSelectDiplomaPassingYear" label="Diploma Passing Year">
@@ -843,7 +846,7 @@ function UserDetails() {
                                   });
                                 }}
                                 // required={completeProfileReq}
-                                disabled={currentUserData.role !== 'superuser'}
+                                disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                               />
                             </FloatingLabel>
                           </div>
@@ -853,7 +856,7 @@ function UserDetails() {
                   )
                 }
                 {
-                  currentUserData.role === 'superuser' && (
+                  (completeProfileReq || currentUserData.role === 'superuser') && (
                     <div className="flex flex-col justify-center items-center gap-2">
                       <Button variant="primary" type='submit' size='lg'>Save</Button>
                     </div>
