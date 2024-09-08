@@ -1,0 +1,6 @@
+1. make different pages for add tpo & list all tpo
+2. list all student 
+3. company data page
+4. list all jobs listings
+
+5. placement data

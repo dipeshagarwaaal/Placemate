@@ -5,6 +5,8 @@ const router = express.Router();
 
 // import multer for student resume upadate 
 const uploadResume = require('../config/MulterResume.js');
+// import multer for student offer letter 
+const uploadOfferLetter = require('../config/MulterOfferLetter.js');
 
 const authenticateToken = require('../middleware/auth.middleware');
 
@@ -14,6 +16,12 @@ const Signup = require('../controllers/Student/signup.controller.js');
 const Login = require('../controllers/Student/login.controller.js');
 
 const UploadResume = require('../controllers/Student/resume.controller.js');
+const UploadOfferLetter = require('../controllers/Student/offer-letter.controller.js');
+
+const { AppliedToJob, CheckAlreadyApplied } = require('../controllers/Student/apply-job.controller.js');
+
+const { UpdateJobStatus } = require('../controllers/Student/update-job-status.controller.js');
+
 
 // signup post request for student
 router.post('/signup', Signup);
@@ -24,7 +32,17 @@ router.post('/login', Login);
 
 // Route to upload resume
 router.post('/upload-resume', uploadResume.single('resume'), UploadResume);
+// Route to upload offer letter
+router.post('/upload-offer-letter', uploadOfferLetter.single('offerLetter'), UploadOfferLetter);
 
+// apply to job
+router.put('/job/:jobId/:studentId', AppliedToJob);
+
+// check applied or not to job
+router.get('/check-applied/:jobId/:studentId', CheckAlreadyApplied);
+
+// update job status
+router.post('/update-status/:jobId/:studentId', UpdateJobStatus);
 
 
 

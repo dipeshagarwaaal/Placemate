@@ -3,7 +3,7 @@ import axios from 'axios';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 
-const UploadResume = () => {
+const UploadResume = ({ jobId }) => {
   const [uploadStatus, setUploadStatus] = useState('');
 
   // useState for load data
@@ -42,11 +42,12 @@ const UploadResume = () => {
     }
 
     const formData = new FormData();
-    formData.append('resume', e.target.files[0]);
-    formData.append('userId', currentUser.id); 
+    formData.append('offerLetter', e.target.files[0]);
+    formData.append('studentId', currentUser.id);
+    formData.append('jobId', jobId);
 
     try {
-      const response = await axios.post('http://localhost:4518/student/upload-resume',
+      const response = await axios.post('http://localhost:4518/student/upload-offer-letter',
         formData,
         {
           headers: {
@@ -55,22 +56,22 @@ const UploadResume = () => {
         }
       );
       // console.log(response.data)
-      setUploadStatus('Resume uploaded successfully');
+      setUploadStatus('Offer letter uploaded successfully');
     } catch (error) {
-      console.error('Error uploading the resume', error);
-      setUploadStatus('Error uploading the resume');
+      console.error('Error uploading the offer letter', error);
+      setUploadStatus('Error uploading the offer letter');
     }
   };
 
   return (
     <>
       {/* <input type="file" accept=".pdf,.doc,.docx" onChange={handleFileChange} /> */}
-      <FloatingLabel controlId="floatingResume" label="Update Resume">
+      <FloatingLabel controlId="floatingOfferLetter" label="Upload Offer Letter">
         <Form.Control
           type="file"
           accept='.pdf, .doc, .docx'
-          placeholder="Upload Resume"
-          name='resume'
+          placeholder="Upload Offer Letter"
+          name='offerLetter'
           onChange={handleSubmit}
         />
         {uploadStatus && <p className='text-sm text-gray-300 mt-1'>{uploadStatus}</p>}

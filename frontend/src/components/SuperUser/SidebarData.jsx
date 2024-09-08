@@ -1,46 +1,44 @@
-// Filename - components/SidebarData.js
-
 import React from "react";
-import * as FaIcons from "react-icons/fa";
-import * as AiIcons from "react-icons/ai";
-import * as IoIcons from "react-icons/io";
-import * as RiIcons from "react-icons/ri";
+import { FaCheckSquare, FaUsers } from "react-icons/fa";
+import { AiFillHome } from "react-icons/ai";
+import { PiStudentDuotone } from "react-icons/pi";
+import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
+import { GrUserManager, GrUserWorker } from "react-icons/gr";
 
 export const SidebarData = [
   {
     title: "Dashboard",
     path: "/admin/dashboard",
-    icon: <AiIcons.AiFillHome />
+    icon: <AiFillHome />
   },
   {
     title: "Users",
-    // path: "",
-    icon: <IoIcons.IoIosPaper />,
-    iconClosed: <RiIcons.RiArrowDownSFill />,
-    iconOpened: <RiIcons.RiArrowUpSFill />,
+    icon: <FaUsers />,
+    iconClosed: <RiArrowDownSFill />,
+    iconOpened: <RiArrowUpSFill />,
     subNav: [
       {
         title: "Management",
         path: "/admin/management",
-        icon: <IoIcons.IoIosPaper />,
+        icon: <GrUserManager />,
         cName: "sub-nav",
       },
       {
         title: "TPO",
         path: "/admin/tpo",
-        icon: <IoIcons.IoIosPaper />,
+        icon: <GrUserWorker />,
         cName: "sub-nav",
       },
       {
         title: "Student",
         path: "/admin/student",
-        icon: <IoIcons.IoIosPaper />,
+        icon: <PiStudentDuotone />,
       },
     ],
   },
   {
     title: "Approve Student",
     path: "/admin/approve-student",
-    icon: <FaIcons.FaEnvelopeOpenText />,
+    icon: <FaCheckSquare />,
   },
 ];

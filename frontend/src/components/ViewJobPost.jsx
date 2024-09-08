@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Accordion from 'react-bootstrap/Accordion';
-import { useParams } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
+import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import Table from 'react-bootstrap/Table';
 import Toast from './Toast';
+import Button from 'react-bootstrap/Button';
 import ModalBox from './Modal';
 
 
@@ -19,15 +19,30 @@ function ViewJobPost() {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
-  // useState for Modal display
-  const [showModal, setShowModal] = useState(false);
 
   // useState for load data
-  const [currentUser, setCurrentUser] = useState({
-    name: 'Not Found',
-    email: 'Not Found'
-  });
+  const [currentUser, setCurrentUser] = useState({});
 
+
+  // check applied to a job
+  const [applied, setApplied] = useState(false);
+
+  // check applied to a job
+  const fetchApplied = async () => {
+    try {
+      const response = await axios.get(`http://localhost:4518/student/check-applied/${jobId}/${currentUser.id}`);
+      // console.log(response.data);
+      if (response?.data?.applied) {
+        setApplied(response?.data?.applied)
+      }
+    } catch (error) {
+      if (error?.response?.data?.msg) {
+        setToastMessage(response?.data?.msg);
+        setShowToast(true);
+      }
+      console.log("error while fetching student applied or not => ", error);
+    }
+  }
 
   // checking for authentication
   useEffect(() => {
@@ -39,6 +54,7 @@ function ViewJobPost() {
     })
       .then(res => {
         setCurrentUser({
+          id: res.data.id,
           email: res.data.email,
           role: res.data.role,
         });
@@ -50,13 +66,9 @@ function ViewJobPost() {
       });
   }, []);
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
-
   const fetchJobDetail = async () => {
     try {
-      const response = await axios.get(`http://localhost:4518/tpo/${jobId}`,
+      const response = await axios.get(`http://localhost:4518/tpo/job/${jobId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -86,12 +98,59 @@ function ViewJobPost() {
     }
   }
 
-  useEffect(() => {
-    fetchJobDetail();
-    if (data?.company) {
-      fetchCompanyData();
+  // handle apply and its modal
+  const [showModal, setShowModal] = useState(false);
+  const [modalBody, setModalBody] = useState();
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  const handleApply = () => {
+    setModalBody("Do you really want to apply this job? Make sure your profile is updated to lastest that increase placement chances.");
+    setShowModal(true);
+    // console.log(currentUser)
+  }
+
+  const handleConfirmApply = async () => {
+    try {
+      const response = await axios.put(`http://localhost:4518/student/job/${jobId}/${currentUser.id}`);
+      // console.log(response.data);
+      if (response?.data?.msg) {
+        setToastMessage(response?.data?.msg);
+        setShowToast(true);
+      }
+      setShowModal(false);
+      fetchApplied();
+      // setCompany(response.data.company);
+    } catch (error) {
+      setShowModal(false);
+      if (error?.response?.data?.msg) {
+        setToastMessage(response?.data?.msg);
+        setShowToast(true);
+      }
+      console.log("error while fetching apply to job => ", error);
     }
-  }, [loading])
+  }
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await fetchApplied();
+        if (data?.company) {
+          await fetchCompanyData();
+        }
+        if (currentUser.id) {
+          await fetchJobDetail();
+        }
+      } catch (error) {
+        console.error("Error during fetching and applying job:", error);
+      }
+    };
+
+    fetchData();
+  }, [currentUser.id, data?.company, jobId]);
 
 
 
@@ -127,6 +186,9 @@ function ViewJobPost() {
                           <h3 className='text-3xl text-center border-b-2 py-4 mb-4'>
                             {company?.companyName}
                           </h3>
+                          <div className="border-b-2 px-2 pb-4 text-gray-500 text-justify leading-5">
+                            {company?.companyDescription}
+                          </div>
                           <div className="flex justify-between p-2 border-b-2 my-2">
                             {/* company website  */}
                             <span>Website</span>
@@ -279,11 +341,22 @@ function ViewJobPost() {
                           </span>
                           <span className='py-3' dangerouslySetInnerHTML={{ __html: data?.howToApply }} />
                         </div>
-                        <div className="flex justify-center ">
-                          <Button variant="warning">
-                            <i className="fa-solid fa-check px-2" />
-                            Check & Update Status
-                          </Button>
+                        <div className="flex justify-center">
+                          {
+                            applied === false ? (
+                              <Button variant="warning" onClick={handleApply}>
+                                <i className="fa-solid fa-check px-2" />
+                                Apply Now
+                              </Button>
+                            ) : (
+                              <Link to={`/student/status/${jobId}`}>
+                                <Button variant="warning">
+                                  <i className="fa-solid fa-check px-2" />
+                                  Update Status
+                                </Button>
+                              </Link>
+                            )
+                          }
                         </div>
                       </div>
                     </Accordion.Body>
@@ -296,15 +369,17 @@ function ViewJobPost() {
         )
       }
 
+
       {/* ModalBox Component for Delete Confirmation */}
       <ModalBox
         show={showModal}
         close={closeModal}
         header={"Confirmation"}
-        // body={``}
-        btn={"Post"}
-      // confirmAction={}
+        body={modalBody}
+        btn={"Apply"}
+        confirmAction={handleConfirmApply}
       />
+
     </>
   )
 }

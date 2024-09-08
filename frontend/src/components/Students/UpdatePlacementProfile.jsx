@@ -9,6 +9,8 @@ import Image from 'react-bootstrap/Image';
 import Toast from '../Toast';
 import FormCheck from 'react-bootstrap/FormCheck'
 import UploadResume from './UploadResume';
+
+
 function UpdatePlacementProfile() {
   const navigate = useNavigate();
   const BASE_URL = "http://localhost:4518";
@@ -44,6 +46,7 @@ function UpdatePlacementProfile() {
 
   useEffect(() => {
     fetchCurrentUserData();
+    calcCGPA();
   }, [loading])
 
   // console.log(userData)
@@ -58,7 +61,8 @@ function UpdatePlacementProfile() {
           [e.target.name]: e.target.value
         }
       }
-    })
+    });
+    calcCGPA();
   }
 
 
@@ -90,7 +94,47 @@ function UpdatePlacementProfile() {
     }
   }
 
-  console.log(userData);
+  // console.log(userData);
+
+  const [cgpa, setCgpa] = useState(0);
+
+  const calcCGPA = () => {
+    let sum = 0, sem = 0;
+    if (userData?.studentProfile?.SGPA?.sem1 !== '0' || 0) {
+      sum += Number(userData?.studentProfile?.SGPA?.sem1);
+      sem += 1;
+    }
+    if (userData?.studentProfile?.SGPA?.sem2 !== '0' || 0) {
+      sum += Number(userData?.studentProfile?.SGPA?.sem2);
+      sem += 1;
+    }
+    if (userData?.studentProfile?.SGPA?.sem3 !== '0' || 0) {
+      sum += Number(userData?.studentProfile?.SGPA?.sem3);
+      sem += 1;
+    }
+    if (userData?.studentProfile?.SGPA?.sem4 !== '0' || 0) {
+      sum += Number(userData?.studentProfile?.SGPA?.sem4);
+      sem += 1;
+    }
+    if (userData?.studentProfile?.SGPA?.sem5 !== '0' || 0) {
+      sum += Number(userData?.studentProfile?.SGPA?.sem5);
+      sem += 1;
+    }
+    if (userData?.studentProfile?.SGPA?.sem6 !== '0' || 0) {
+      sum += Number(userData?.studentProfile?.SGPA?.sem6);
+      sem += 1;
+    }
+    if (userData?.studentProfile?.SGPA?.sem7 !== '0' || 0) {
+      sum += Number(userData?.studentProfile?.SGPA?.sem7);
+      sem += 1;
+    }
+    if (userData?.studentProfile?.SGPA?.sem8 !== '0' || 0) {
+      sum += Number(userData?.studentProfile?.SGPA?.sem8);
+      sem += 1;
+    }
+    setCgpa((sum / sem).toFixed(2));
+  }
+
 
   return (
     <>
@@ -164,15 +208,19 @@ function UpdatePlacementProfile() {
                       <div className="grid grid-cols-2">
                         {/* resume upload  */}
                         <UploadResume />
-                        <div className="py-2 px-2">
-                          <span className='bg-blue-500 py-1 pr-2 rounded cursor-pointer hover:bg-blue-700'>
-                            <a href={BASE_URL + userData?.studentProfile?.resume?.filepath} target='_blanck' className='no-underline text-white'>
-                              <i class="fa-regular fa-eye px-2" />
-                              View Resume
-                            </a>
-                          </span>
-                          <p>{userData?.studentProfile?.resume?.filename}</p>
-                        </div>
+                        {
+                          (userData?.studentProfile?.resume?.filepath !== "undefined") && (
+                            <div className="py-2 px-2">
+                              <span className='bg-blue-500 py-1 pr-2 rounded cursor-pointer hover:bg-blue-700'>
+                                <a href={BASE_URL + userData?.studentProfile?.resume?.filepath} target='_blanck' className='no-underline text-white'>
+                                  <i className="fa-regular fa-eye px-2" />
+                                  View Resume
+                                </a>
+                              </span>
+                              <p className='text-sm text-gray-500 mt-1'>{userData?.studentProfile?.resume?.filename}</p>
+                            </div>
+                          )
+                        }
                       </div>
                     </div>
                   </div>
@@ -181,65 +229,7 @@ function UpdatePlacementProfile() {
                   <div className="backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6">
                     <span className='text-2xl'>College Information</span>
                     <div className="grid grid-cols-2">
-                      <div className="px-2 py-3 flex flex-col gap-3">
-                        <FloatingLabel controlId="floatingSelectYear" label="Current Year">
-                          <Form.Select
-                            aria-label="Floating label select year"
-                            className='cursor-pointer'
-                            name='year'
-                            value={userData?.studentProfile?.year || "undefined"}
-                            onChange={(e) => {
-                              setUserData({
-                                ...userData,
-                                studentProfile: {
-                                  ...userData?.studentProfile,
-                                  year: e.target.value
-                                }
-                              });
-                            }}
-                          >
-                            <option disabled value="undefined" className='text-gray-400'>Enter Current Year</option>
-                            <option value="1">1st</option>
-                            <option value="2">2nd</option>
-                            <option value="3">3rd</option>
-                            <option value="4">4th</option>
-                          </Form.Select>
-                        </FloatingLabel>
-                        <FloatingLabel controlId="floatingLiveKT" label="Live KT's">
-                          <Form.Control
-                            type="number"
-                            placeholder="Live KT's"
-                            name='liveKT'
-                            value={userData?.studentProfile?.liveKT || 0}
-                            onChange={(e) => {
-                              setUserData({
-                                ...userData,
-                                studentProfile: {
-                                  ...userData?.studentProfile,
-                                  liveKT: e.target.value
-                                }
-                              });
-                            }}
-                          />
-                        </FloatingLabel>
-                        <Form.Check
-                          type="switch"
-                          id="gap"
-                          checked={userData?.studentProfile?.gap === "true" || userData?.studentProfile?.gap === true}
-                          onChange={(e) => {
-                            setUserData({
-                              ...userData,
-                              studentProfile: {
-                                ...userData?.studentProfile,
-                                gap: e.target.checked
-                              }
-                            });
-                          }}
-                          name='gap'
-                          label="Any Gap"
-                        />
-                      </div>
-
+                      {/* semester sgpa  */}
                       <div className="grid grid-cols-2 gap-2">
                         <div className=" py-3 flex flex-wrap gap-2">
                           <FloatingLabel controlId="floatingSem1" label="Sem 1">
@@ -327,6 +317,74 @@ function UpdatePlacementProfile() {
                         </div>
                       </div>
 
+                      {/* current year, live kt and any gap  */}
+                      <div className="px-2 py-3 flex flex-col gap-3">
+                        <FloatingLabel controlId="floatingSelectYear" label="Current Year">
+                          <Form.Select
+                            aria-label="Floating label select year"
+                            className='cursor-pointer'
+                            name='year'
+                            value={userData?.studentProfile?.year || "undefined"}
+                            onChange={(e) => {
+                              setUserData({
+                                ...userData,
+                                studentProfile: {
+                                  ...userData?.studentProfile,
+                                  year: e.target.value
+                                }
+                              });
+                            }}
+                          >
+                            <option disabled value="undefined" className='text-gray-400'>Enter Current Year</option>
+                            <option value="1">1st</option>
+                            <option value="2">2nd</option>
+                            <option value="3">3rd</option>
+                            <option value="4">4th</option>
+                          </Form.Select>
+                        </FloatingLabel>
+                        <FloatingLabel controlId="floatingLiveKT" label="Live KT's">
+                          <Form.Control
+                            type="number"
+                            placeholder="Live KT's"
+                            name='liveKT'
+                            value={userData?.studentProfile?.liveKT || 0}
+                            onChange={(e) => {
+                              setUserData({
+                                ...userData,
+                                studentProfile: {
+                                  ...userData?.studentProfile,
+                                  liveKT: e.target.value
+                                }
+                              });
+                            }}
+                          />
+                        </FloatingLabel>
+                        <Form.Check
+                          type="switch"
+                          id="gap"
+                          checked={userData?.studentProfile?.gap === "true" || userData?.studentProfile?.gap === true}
+                          onChange={(e) => {
+                            setUserData({
+                              ...userData,
+                              studentProfile: {
+                                ...userData?.studentProfile,
+                                gap: e.target.checked
+                              }
+                            });
+                          }}
+                          name='gap'
+                          label="Any Gap"
+                        />
+                        {
+                          cgpa !== "NaN" &&
+                          <div className='mt-4 text-2xl text-green-500 font-bold'>
+                            <span className=''>CGPA: </span>
+                            <span className=''>
+                              {cgpa}
+                            </span>
+                          </div>
+                        }
+                      </div>
                     </div>
                   </div>
 

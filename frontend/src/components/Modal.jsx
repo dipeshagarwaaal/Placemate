@@ -5,7 +5,12 @@ import Modal from 'react-bootstrap/Modal';
 function ModalBox({ show, close, header, body, btn, confirmAction }) {
   return (
     <>
-      <Modal show={show} onHide={close}>
+      <Modal
+        show={show}
+        onHide={close}
+        backdrop="static"
+        keyboard={false}
+      >
         <Modal.Header closeButton>
           <Modal.Title>{header}</Modal.Title>
         </Modal.Header>

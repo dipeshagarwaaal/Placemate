@@ -25,7 +25,7 @@ router.get('/jobs', AllJobs);
 router.post('/delete-job', DeleteJob);
 
 // view job 
-router.get('/:jobId', authenticateToken, JobData);
+router.get('/job/:jobId', authenticateToken, JobData);
 
 
 module.exports = router;

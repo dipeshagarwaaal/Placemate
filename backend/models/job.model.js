@@ -14,12 +14,12 @@ const jobSchema = new mongoose.Schema({
   // applicants details
   applicants: [
     {
-      studentId: { type: Schema.Types.ObjectId, ref: 'Student User' },
+      studentId: { type: Schema.Types.ObjectId, ref: 'Student User', unique: true },
       currentRound: {
         type: String,
-        enum: ['Aptitude Test', 'Technical Interview', 'HR Interview', 'Group Discussion', 'Other']
+        enum: ['Aptitude Test', 'Technical Interview', 'HR Interview', 'Group Discussion']
       },
-      roundStatus: { type: String, enum: ['pending', 'passed', 'failed'], default: 'pending' },
+      roundStatus: { type: String, enum: ['pending', 'passed', 'failed'] },
       selectionDate: { type: Date },
       joiningDate: { type: Date },
       offerLetter: { type: String },

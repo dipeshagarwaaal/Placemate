@@ -7,8 +7,8 @@ import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Students/Login.jsx";
 import Signup from "./pages/students/Signup";
 import StudentHome from './pages/students/Home.jsx';
-import Navbar from './components/Navbar.jsx';
 import UpdatePlacementProfile from "./components/Students/UpdatePlacementProfile.jsx";
+import UpdateJobStatus from "./components/Students/UpdateJobStatus.jsx";
 // TPO pages
 import LoginTPO from "./pages/TPO/Login.jsx";
 import StudentsTPO from "./components/TPO/Students.jsx";
@@ -28,9 +28,11 @@ import ApproveStudent from "./components/ApproveStudent.jsx";
 
 // common users
 // for admin, tpo to edit or view user details 
-import UserDetails from "./components/UserDetails.jsx";
+import Navbar from './components/Navbar.jsx';
 import Sidebar from './components/Sidebar.jsx';
+import Footer from "./components/Footer.jsx";
 import Account from "./components/Account.jsx";
+import UserDetails from "./components/UserDetails.jsx";
 import ViewJobPost from "./components/ViewJobPost.jsx";
 import ViewUserData from "./components/ViewUserData.jsx";
 import AllJobPost from "./components/AllJobPost.jsx";
@@ -46,7 +48,6 @@ import './style/index.css';
 import { UserProvider } from "./context/userContext.jsx";
 import ProtectedRoute from "./components/protectedRoute.jsx";
 import { useState, useEffect } from "react";
-import UploadResume from "./components/Students/UploadResume.jsx";
 
 
 function Layout({ header }) {
@@ -72,15 +73,16 @@ function Layout({ header }) {
 
   return (
     <>
-      <div className="">
+      <div className="flex flex-col min-h-screen">
         <Navbar isSidebarVisible={isSidebarVisible} toggleSidebar={toggleSidebar} />
-        <div className="flex">
+        <div className="flex flex-grow">
           <Sidebar isSidebarVisible={isSidebarVisible} />
           <div className={`content flex-grow p-4 transition-all duration-300 ${isSidebarVisible ? 'ml-64' : 'ml-0'}`}>
             <BreadcrumbExp header={header} />
             <Outlet />
           </div>
         </div>
+        <Footer isSidebarVisible={isSidebarVisible} />
       </div>
     </>
   );
@@ -127,6 +129,10 @@ function App() {
             {/* placement profile update */}
             <Route element={<Layout header="Placement Profile" />}>
               <Route path="/student/placement-profile" element={<UpdatePlacementProfile />} />
+            </Route>
+            {/* update status of job */}
+            <Route element={<Layout header="Update Job Application Status" />}>
+              <Route path="/student/status/:jobId" element={<UpdateJobStatus />} />
             </Route>
           </Route>
 

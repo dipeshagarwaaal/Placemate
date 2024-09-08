@@ -1,97 +1,71 @@
 // Filename - components/SidebarData.js
 
 import React from "react";
-import * as FaIcons from "react-icons/fa";
-import * as AiIcons from "react-icons/ai";
-import * as IoIcons from "react-icons/io";
-import * as RiIcons from "react-icons/ri";
+import { FaListUl, FaCheckSquare } from "react-icons/fa";
+import { AiFillHome } from "react-icons/ai";
+import { RiArrowDownSFill, RiArrowUpSFill, RiPlayListAddLine } from "react-icons/ri";
+import { PiStudentDuotone } from "react-icons/pi";
+import { FaIndustry } from "react-icons/fa6";
+import { LiaIndustrySolid } from "react-icons/lia";
+
 
 export const SidebarData = [
   {
     title: "Dashboard",
     path: "/tpo/dashboard",
-    icon: <AiIcons.AiFillHome />
-
-    // subNav: [
-    //   {
-    //     title: "Our Aim",
-    //     path: "/about-us/aim",
-    //     icon: <IoIcons.IoIosPaper />,
-    //   },
-    //   {
-    //     title: "Our Vision",
-    //     path: "/about-us/vision",
-    //     icon: <IoIcons.IoIosPaper />,
-    //   },
-    // ],
+    icon: <AiFillHome />
   },
   {
     title: "Students",
-    // path: "",
-    icon: <IoIcons.IoIosPaper />,
-    iconClosed: <RiIcons.RiArrowDownSFill />,
-    iconOpened: <RiIcons.RiArrowUpSFill />,
+    icon: <PiStudentDuotone />,
+    iconClosed: <RiArrowDownSFill />,
+    iconOpened: <RiArrowUpSFill />,
 
     subNav: [
       {
         title: "Approve Students",
         path: "/tpo/approve-student",
-        icon: <IoIcons.IoIosPaper />,
+        icon: <FaCheckSquare />,
         cName: "sub-nav",
       },
-      //   {
-      //     title: "Service 2",
-      //     path: "/services/services2",
-      //     icon: <IoIcons.IoIosPaper />,
-      //     cName: "sub-nav",
-      //   },
-      //   {
-      //     title: "Service 3",
-      //     path: "/services/services3",
-      //     icon: <IoIcons.IoIosPaper />,
-      //   },
     ],
   },
   {
     title: "Job Listings",
-    // path: "/tpo/post-job",
-    icon: <FaIcons.FaEnvelopeOpenText />,
-
-    iconClosed: <RiIcons.RiArrowDownSFill />,
-    iconOpened: <RiIcons.RiArrowUpSFill />,
+    icon: <FaIndustry />,
+    iconClosed: <RiArrowDownSFill />,
+    iconOpened: <RiArrowUpSFill />,
 
     subNav: [
       {
-        title: "All Jobs",
+        title: "List All",
         path: "/tpo/job-listings",
-        icon: <IoIcons.IoIosPaper />,
+        icon: <FaListUl />,
         cName: "sub-nav",
       },
       {
-        title: "Post Job",
+        title: "Add New",
         path: "/tpo/post-job",
-        icon: <IoIcons.IoIosPaper />,
+        icon: <RiPlayListAddLine />,
       },
     ],
   },
   {
     title: "Company",
-    // path: "/tpo/post-job",
-    icon: <FaIcons.FaEnvelopeOpenText />,
-
-    iconClosed: <RiIcons.RiArrowDownSFill />,
-    iconOpened: <RiIcons.RiArrowUpSFill />,
+    icon: <LiaIndustrySolid />,
+    iconClosed: <RiArrowDownSFill />,
+    iconOpened: <RiArrowUpSFill />,
     subNav: [
       {
-        title: "All Companys",
+        title: "List All",
         path: "/tpo/companys",
-        icon: <IoIcons.IoIosPaper />,
+        icon: <FaListUl />,
         cName: "sub-nav",
       },
       {
-        title: "Add Company",
+        title: "Add New",
         path: "/tpo/add-company",
-        icon: <IoIcons.IoIosPaper />,
+        icon: <RiPlayListAddLine />,
       },
     ],
   },

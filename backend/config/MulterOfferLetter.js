@@ -1,18 +1,18 @@
 const multer = require('multer');
 const path = require('path');
 
-// Configure multer for resume uploads
-const resumeStorage = multer.diskStorage({
+// Configure multer for offer letter uploads
+const offerLetterStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'public/resumes/'); // Folder to save resumes
+    cb(null, 'public/offerLetter/'); // Folder to save offerLetter
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname));
   }
 });
 
-const uploadResume = multer({
-  storage: resumeStorage,
+const uploadOfferLetter = multer({
+  storage: offerLetterStorage,
   limits: { fileSize: 10 * 1024 * 1024 }, // Set file size limit (e.g., 10MB)
   fileFilter: (req, file, cb) => {
     // Only accept PDF, DOC, DOCX file formats
@@ -28,4 +28,4 @@ const uploadResume = multer({
   }
 });
 
-module.exports = uploadResume;
+module.exports = uploadOfferLetter;

@@ -284,7 +284,7 @@ function PostJob() {
         show={showModal}
         close={closeModal}
         header={"Confirmation"}
-        body={`Do you want to post job for ${data?.jobTitle} by ${data?.companyDetails?.companyName}?`}
+        body={`Do you want to post job for ${data?.jobTitle}?`}
         btn={"Post"}
         confirmAction={confirmSubmit}
       />
