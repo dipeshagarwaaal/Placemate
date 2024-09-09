@@ -855,10 +855,11 @@ function UserDetails() {
                     </>
                   )
                 }
+                
                 {
                   (completeProfileReq || currentUserData.role === 'superuser') && (
                     <div className="flex flex-col justify-center items-center gap-2">
-                      <Button variant="primary" type='submit' size='lg'>Save</Button>
+                      <Button variant="primary" type='submit' size='lg'>Update</Button>
                     </div>
                   )
                 }

@@ -82,8 +82,20 @@ const UserSchema = new mongoose.Schema({
         status: { type: String, enum: ['applied', 'interview', 'hired', 'rejected'] },
         appliedAt: { type: Date, default: Date.now }
       }
-    ]
-
+    ],
+    internships: [
+      {
+        type: { type: String, enum: ['Full Time', "Part Time", "On-Site", "Work From Home", "Other"] },
+        companyName: { type: String },
+        companyAddress: { type: String },
+        companyWebsite: { type: String },
+        internshipDuration: { type: Number },
+        startDate: { type: Date },
+        endDate: { type: Date },
+        monthlyStipend: { type: Number },
+        description: { type: String },
+      }
+    ],
   },
 
   // TPO Admin specific fields

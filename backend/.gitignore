@@ -22,6 +22,8 @@ public/offerLetter/*
 # But don't ignore the default directory and its contents
 !public/profileImgs/default/
 !public/profileImgs/default/*
+!public/resumes/
+!public/offerLetter/
 
 # Editor directories and files
 .vscode/*

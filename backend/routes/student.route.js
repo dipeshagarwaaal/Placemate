@@ -16,11 +16,13 @@ const Signup = require('../controllers/Student/signup.controller.js');
 const Login = require('../controllers/Student/login.controller.js');
 
 const UploadResume = require('../controllers/Student/resume.controller.js');
-const UploadOfferLetter = require('../controllers/Student/offer-letter.controller.js');
+const { UploadOfferLetter, DeleteOfferLetter } = require('../controllers/Student/offer-letter.controller.js');
 
 const { AppliedToJob, CheckAlreadyApplied } = require('../controllers/Student/apply-job.controller.js');
 
 const { UpdateJobStatus } = require('../controllers/Student/update-job-status.controller.js');
+
+const { GetInternships, UpdateInternship } = require('../controllers/Student/internship.controller.js');
 
 
 // signup post request for student
@@ -32,8 +34,11 @@ router.post('/login', Login);
 
 // Route to upload resume
 router.post('/upload-resume', uploadResume.single('resume'), UploadResume);
+
 // Route to upload offer letter
 router.post('/upload-offer-letter', uploadOfferLetter.single('offerLetter'), UploadOfferLetter);
+// Route to delete offer letter
+router.post('/delete-offer-letter/:jobId/:studentId', DeleteOfferLetter);
 
 // apply to job
 router.put('/job/:jobId/:studentId', AppliedToJob);
@@ -43,6 +48,11 @@ router.get('/check-applied/:jobId/:studentId', CheckAlreadyApplied);
 
 // update job status
 router.post('/update-status/:jobId/:studentId', UpdateJobStatus);
+
+// get all internship of a student
+router.get('/internship', GetInternships);
+// update internship of a student
+router.post('/update-internship', UpdateInternship);
 
 
 

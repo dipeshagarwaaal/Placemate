@@ -5,7 +5,7 @@ const JobSchema = require("../../models/job.model");
 const UpdateJobStatus = async (req, res) => {
   try {
     // console.log(req.params.studentId);
-    console.log(req.body.applicant);
+    // console.log(req.body.applicant);
     const job = await JobSchema.findById(req.params.jobId);
 
     job.applicants.some(app => {
@@ -17,7 +17,6 @@ const UpdateJobStatus = async (req, res) => {
         if (req.body.applicant.offerLetter) app.offerLetter = req.body.applicant.offerLetter;
         if (req.body.applicant.status) app.status = req.body.applicant.status;
       }
-      console.log(app);
     });
 
     await job.save();

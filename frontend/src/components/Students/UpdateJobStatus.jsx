@@ -7,6 +7,9 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import { Button } from 'react-bootstrap';
 import UploadOfferLetter from './UploadOfferLetter';
 import Toast from '../Toast';
+import ModalBox from '../Modal';
+import { LiaEye } from "react-icons/lia";
+import { PiEyeClosed } from "react-icons/pi";
 
 function UpdateJobStatus() {
   const BASE_URL = "http://localhost:4518";
@@ -26,6 +29,14 @@ function UpdateJobStatus() {
   // useState for toast display
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+
+  // for hovering on eye
+  const [eyeIsHover, setEyeIsHover] = useState(false);
+
+  // useState for Modal display
+  const [showModal, setShowModal] = useState(false);
+
+  const closeModal = () => setShowModal(false);
 
   // checking for authentication
   useEffect(() => {
@@ -88,7 +99,7 @@ function UpdateJobStatus() {
     if (data?.applicants?.length !== 0) {
       // Find if the student user has applied
       const appliedApplicant = await data.applicants.find(app => app.studentId === currentUser.id);
-      
+
       if (appliedApplicant) setApplicant(appliedApplicant) // If no applicant found, navigate to 404
       else navigate('../404');
     } else {
@@ -96,6 +107,7 @@ function UpdateJobStatus() {
       navigate('../404');
     }
   }
+  // console.log(applicant);
 
   const handleSubmit = async () => {
     try {
@@ -104,6 +116,9 @@ function UpdateJobStatus() {
       if (response?.data?.msg) {
         setToastMessage(response?.data?.msg);
         setShowToast(true);
+        // Fetch updated applicant data to ensure state is current
+        await fetchJobDetail();
+        await fetchJobDetailsOfApplicant();
       }
     } catch (error) {
       if (error?.response?.data?.msg) {
@@ -122,7 +137,7 @@ function UpdateJobStatus() {
           await fetchCompanyData();
         }
         if (data?.applicants && currentUser?.id) {
-          fetchJobDetailsOfApplicant();
+          await fetchJobDetailsOfApplicant();
         }
         setLoading(false);
       } catch (error) {
@@ -133,7 +148,7 @@ function UpdateJobStatus() {
     };
 
     fetchData();
-  }, [currentUser?.id, data?.company, jobId]);
+  }, [currentUser?.id, data?.company, jobId, applicant, showToast]);
 
   const handleApplicantChange = (e) => {
     setApplicant({
@@ -150,6 +165,30 @@ function UpdateJobStatus() {
   };
 
   // console.log(applicant);
+
+  const handleDelete = () => setShowModal(true);
+
+  const confirmDelete = async () => {
+    try {
+      const response = await axios.post(`http://localhost:4518/student/delete-offer-letter/${jobId}/${currentUser.id}`, { applicant });
+      // console.log(response.data);
+      if (response?.data?.msg) {
+        setToastMessage(response?.data?.msg);
+        setShowToast(true);
+        setShowModal(false);
+        // Fetch updated applicant data to ensure state is current
+        await fetchJobDetail();
+        await fetchJobDetailsOfApplicant();
+      }
+    } catch (error) {
+      if (error?.response?.data?.msg) {
+        setToastMessage(error?.response?.data?.msg);
+        setShowToast(true);
+      }
+      setShowModal(false);
+      console.log("Error while update job status => ", error);
+    }
+  }
 
   return (
     <>
@@ -302,19 +341,50 @@ function UpdateJobStatus() {
                           <div className="flex flex-col gap-2 justify-center items-center">
 
                             {/* offer letter upload */}
-                            <UploadOfferLetter jobId={jobId} />
+                            {/* sending jobId and function update applicant useState  */}
+                            <UploadOfferLetter jobId={jobId} fetchJobDetailsOfApplicant={fetchJobDetailsOfApplicant} />
                             {
                               applicant?.offerLetter &&
-                              <div className="cursor-pointer w-fit">
-                                <span className='bg-blue-500 px-3 py-1 rounded transition-colors duration-200 hover:bg-blue-700 '>
+                              <div className="cursor-pointer w-fit flex gap-1 justify-between items-center">
+                                <span
+                                  className='bg-blue-500 px-3 py-1 rounded transition duration-300 ease-in-out hover:bg-blue-700'
+                                  onMouseEnter={() => setEyeIsHover(true)}
+                                  onMouseLeave={() => setEyeIsHover(false)}
+                                >
                                   <a
-                                    className='text-white no-underline'
+                                    className='text-white no-underline flex justify-center items-center'
                                     target="_blanck"
                                     href={BASE_URL + applicant?.offerLetter}
                                   >
-                                    <i className="fa-regular fa-eye pr-2" />
-                                    View Offer Letter
+                                    {
+                                      eyeIsHover ? (
+                                        <PiEyeClosed className='pr-2 text-3xl' />
+                                      ) : (
+                                        <LiaEye className='pr-2 text-3xl' />
+                                      )
+                                    }
+                                    View Now
                                   </a>
+                                </span>
+                                {/* delete offer letter  */}
+                                <span
+                                  className='text-white bg-red-500 px-3 py-1 rounded transition-all duration-200 hover:bg-red-700'
+                                  onClick={handleDelete}
+                                  onMouseEnter={(e) => {
+                                    const icon = e.target.querySelector('i');
+                                    icon.classList.remove('fa-regular');
+                                    icon.classList.add('fa-solid');
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    const icon = e.target.querySelector('i');
+                                    icon.classList.add('fa-regular');
+                                    icon.classList.remove('fa-solid');
+                                  }}
+                                >
+                                  <i
+                                    className="fa-regular fa-trash-can pr-2 py-1 text-lg"
+                                  />
+                                  Delete
                                 </span>
                               </div>
                             }
@@ -336,8 +406,8 @@ function UpdateJobStatus() {
                             </Form.Select>
                           </FloatingLabel>
                         </div>
-                        <div className="mb-2 mt-3" onClick={handleSubmit}>
-                          <Button variant="primary">
+                        <div className="mb-2 mt-3">
+                          <Button variant="primary" onClick={handleSubmit}>
                             <i className="fa-solid fa-floppy-disk pr-2" />
                             Update
                           </Button>
@@ -347,11 +417,20 @@ function UpdateJobStatus() {
                   </Accordion.Item>
                 </Accordion>
               </div>
-
             </div>
           </>
         )
       }
+
+      {/* ModalBox Component for Delete Confirmation */}
+      <ModalBox
+        show={showModal}
+        close={closeModal}
+        header={"Confirmation"}
+        body={`Do you want to delete offer letter?`}
+        btn={"Delete"}
+        confirmAction={confirmDelete}
+      />
     </>
   )
 }

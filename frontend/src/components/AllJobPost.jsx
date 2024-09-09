@@ -406,7 +406,7 @@ function AllJobPost() {
                         {job?.salary}
                       </td>
                       <td>
-                        {new Date(job?.applicationDeadline).toLocaleDateString()}
+                        {new Date(job?.applicationDeadline).toLocaleDateString('en-In')}
                       </td>
                       <td>
                         {job?.applicants?.length}
@@ -423,7 +423,7 @@ function AllJobPost() {
                               overlay={renderTooltipViewPost}
                             >
                               <i
-                                className="fa-solid fa-circle-info text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-green-500"
+                                className="fa-solid fa-circle-info text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-blue-500"
                                 onClick={() => {
                                   if (currentUser.role === 'tpo_admin') navigate(`../tpo/job/${job?._id}`)
                                   else if (currentUser.role === 'student') navigate(`../student/job/${job?._id}`)
@@ -443,7 +443,7 @@ function AllJobPost() {
                                     overlay={renderTooltipEditPost}
                                   >
                                     <i
-                                      className="fa-regular fa-pen-to-square text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-blue-500"
+                                      className="fa-regular fa-pen-to-square text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-green-500"
                                       onClick={() => navigate(`../tpo/post-job/${job._id}`)}
                                       onMouseEnter={(e) => {
                                         e.target.classList.add('fa-solid');

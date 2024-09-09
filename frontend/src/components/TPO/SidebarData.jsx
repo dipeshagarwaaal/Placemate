@@ -31,6 +31,25 @@ export const SidebarData = [
     ],
   },
   {
+    title: "Company",
+    icon: <LiaIndustrySolid />,
+    iconClosed: <RiArrowDownSFill />,
+    iconOpened: <RiArrowUpSFill />,
+    subNav: [
+      {
+        title: "List All",
+        path: "/tpo/companys",
+        icon: <FaListUl />,
+        cName: "sub-nav",
+      },
+      {
+        title: "Add New",
+        path: "/tpo/add-company",
+        icon: <RiPlayListAddLine />,
+      },
+    ],
+  },
+  {
     title: "Job Listings",
     icon: <FaIndustry />,
     iconClosed: <RiArrowDownSFill />,
@@ -46,25 +65,6 @@ export const SidebarData = [
       {
         title: "Add New",
         path: "/tpo/post-job",
-        icon: <RiPlayListAddLine />,
-      },
-    ],
-  },
-  {
-    title: "Company",
-    icon: <LiaIndustrySolid />,
-    iconClosed: <RiArrowDownSFill />,
-    iconOpened: <RiArrowUpSFill />,
-    subNav: [
-      {
-        title: "List All",
-        path: "/tpo/companys",
-        icon: <FaListUl />,
-        cName: "sub-nav",
-      },
-      {
-        title: "Add New",
-        path: "/tpo/add-company",
         icon: <RiPlayListAddLine />,
       },
     ],

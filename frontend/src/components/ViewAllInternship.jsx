@@ -8,17 +8,12 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import ModalBox from './Modal';
 import Toast from './Toast';
 
-function AllCompany() {
+function AddInternship() {
   const navigate = useNavigate();
   const location = useLocation();
 
   const [loading, setLoading] = useState(true);
-  const [companys, setCompanys] = useState({});
-
-  const [modalBody, setModalBody] = useState({
-    companyName: "",
-    companyId: ""
-  });
+  const [internships, setInternships] = useState([]);
 
   // useState for toast display
   const [showToast, setShowToast] = useState(false);
@@ -26,17 +21,49 @@ function AllCompany() {
 
   // useState for Modal display
   const [showModal, setShowModal] = useState(false);
+  const [modalBody, setModalBody] = useState({});
+  // const [modalBtn, setModalBtn] = useState('');
 
-  const fetchCompanys = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:4518/company/company-detail', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        }
+  // useState for load data
+  const [currentUser, setCurrentUser] = useState({});
+
+  // checking for authentication
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    axios.get('http://localhost:4518/user/detail', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then(res => {
+        setCurrentUser({
+          id: res.data.id,
+          email: res.data.email,
+          role: res.data.role,
+        });
+        setLoading(false);
+      })
+      .catch(err => {
+        console.log("AddUserTable.jsx => ", err);
+        setToastMessage(err);
+        setShowToast(true);
       });
-      setCompanys(response.data.companys);
+
+    // calling function fetch jobs
+    fetchInternships();
+  }, []);
+
+  const fetchInternships = async () => {
+    try {
+      if (!currentUser?.id) return;
+      const response = await axios.get(`http://localhost:4518/student/internship?studentId=${currentUser?.id}`);
+      setInternships(response.data.internships);
       setLoading(false);
+      // console.log(response.data);
+      if (response?.data?.msg) {
+        setToastMessage(response?.data?.msg);
+        setShowToast(true);
+      }
     } catch (error) {
       console.log("Error fetching jobs ", error);
       if (error?.response?.data?.msg) {
@@ -46,53 +73,54 @@ function AllCompany() {
     }
   }
 
-  const handleDeleteCompany = (companyName, companyId) => {
-    setModalBody({ companyId: companyId, companyName: companyName });
-    setShowModal(true);
-  }
+  useEffect(() => {
+    fetchInternships();
+  }, [currentUser?.id]);
 
-  const confirmDelete = async (companyId) => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:4518/company/delete-company',
-        { companyId },
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          }
-        },
-      );
+  // const handleDeletePost = (jobId, cmpName, jbTitle) => {
+  //   setDataToParasModal(jobId);
+  //   setModalBody({
+  //     cmpName: cmpName,
+  //     jbTitle: jbTitle
+  //   });
+  //   setShowModal(true);
+  // }
 
-      setShowModal(false);
-      fetchCompanys();
-      if (response?.data?.msg) {
-        setToastMessage(response?.data?.msg);
-        setShowToast(true);
-      }
-      setLoading(false);
-    } catch (error) {
-      if (error?.response?.data?.msg) {
-        setToastMessage(error?.response?.data?.msg);
-        setShowToast(true);
-      }
-      console.log("Error deleting job ", error);
-    }
-  }
+  // const confirmDelete = async (jobId) => {
+  //   try {
+  //     const response = await axios.post('http://localhost:4518/tpo/delete-job', { jobId });
 
-  const renderTooltipDeleteCompany = (props) => (
+  //     setShowModal(false);
+  //     fetchJobs();
+  //     if (response?.data?.msg) {
+  //       setToastMessage(response?.data?.msg);
+  //       setShowToast(true);
+  //     }
+  //     // setLoading(false);
+  //   } catch (error) {
+  //     if (error?.response?.data?.msg) {
+  //       setToastMessage(error?.response?.data?.msg);
+  //       setShowToast(true);
+  //     }
+  //     console.log("Error deleting job ", error);
+  //   }
+  // }
+
+
+  const renderTooltipEditInternship = (props) => (
     <Tooltip id="button-tooltip" {...props}>
-      Delete Company
+      Edit Internship Detail
     </Tooltip>
   );
 
-  const renderTooltipEditCompany = (props) => (
+  const renderTooltipDeleteInternship = (props) => (
     <Tooltip id="button-tooltip" {...props}>
-      Edit Company
+      Delete Internship
     </Tooltip>
   );
-
 
   const closeModal = () => setShowModal(false);
+
 
   const { showToastPass, toastMessagePass } = location.state || { showToastPass: false, toastMessagePass: '' };
 
@@ -103,8 +131,9 @@ function AllCompany() {
       // Clear the state after the toast is shown
       navigate('.', { replace: true, state: {} });
     }
-    fetchCompanys()
   }, []);
+
+
   return (
     <>
       <>
@@ -323,70 +352,57 @@ function AllCompany() {
                 {/* <i className="fa-solid fa-spinner fa-spin text-3xl" /> */}
               </div>
             ) : (
-              <Table striped bordered hover className='bg-white my-6 rounded-lg shadow w-full text-base'>
+              <Table striped bordered hover className='bg-white my-6 rounded-lg shadow w-full'>
                 <thead>
                   <tr>
-                    <th style={{ width: '5%' }}>Sr. No.</th>
-                    <th style={{ width: '15%' }}><b>Company Name</b></th>
-                    <th style={{ width: '15%' }}>Company Website</th>
-                    <th style={{ width: '15%' }}>Company Location</th>
-                    <th style={{ width: '15%' }}>Company Difficulty Level</th>
-                    <th style={{ width: '15%' }}>Action</th>
+                    <th style={{ width: '6%' }}>Sr. No.</th>
+                    <th style={{ width: '16%' }}><b>Company Name</b></th>
+                    <th style={{ width: '13%' }}>Company Website</th>
+                    <th style={{ width: '14%' }}>Internship Start Date</th>
+                    <th style={{ width: '14%' }}>Internship End Date</th>
+                    <th style={{ width: '13%' }}>Internship Duration</th>
+                    <th style={{ width: '11%' }}>Monthly Stipend</th>
+                    <th style={{ width: '13%' }}>Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {companys?.length > 0 ? (
-                    companys?.map((company, index) => (
-                      <tr key={company?._id}>
+                  {internships?.length > 0 ? (
+                    internships?.map((internship, index) => (
+                      <tr key={internship?._id}>
                         <td>{index + 1}</td>
                         <td>
                           <b>
-                            {company?.companyName}
+                            {internship?.companyName || '-'}
                           </b>
                         </td>
                         <td>
-                          <a 
-                          href={company?.companyWebsite} 
-                          target="_blank" 
-                          className='text-blue-500 no-underline'
-                          rel="noopener noreferrer"
-                          >
-                            {company?.companyWebsite}
-                          </a>
+                          {internship?.companyWebsite || '-'}
                         </td>
                         <td>
-                          {company?.companyLocation}
+                          {new Date(internship?.startDate).toLocaleDateString('en-IN') || '-'}
                         </td>
                         <td>
-                          {
-                            company?.companyDifficulty === "Easy" && (
-                              <span className='bg-green-500 text-white px-2 py-1 rounded'>{company?.companyDifficulty}</span>
-                            )
-                          }
-                          {
-                            company?.companyDifficulty === "Moderate" && (
-                              <span className='bg-orange-500 text-white px-2 py-1 rounded'>{company?.companyDifficulty}</span>
-                            )
-                          }
-                          {
-                            company?.companyDifficulty === "Hard" && (
-                              <span className='bg-red-500 text-white px-2 py-1 rounded'>{company?.companyDifficulty}</span>
-                            )
-                          }
+                          {new Date(internship?.endDate).toLocaleDateString('en-IN') || '-'}
+                        </td>
+                        <td>
+                          {internship?.internshipDuration || '-'}
+                        </td>
+                        <td>
+                          {internship?.monthlyStipend || '-'}
                         </td>
                         <td>
                           {/* for hover label effect  */}
                           <div className="flex justify-around items-center">
                             <div className="px-0.5">
-                              {/* edit company  */}
+                              {/* edit internship  */}
                               <OverlayTrigger
                                 placement="top"
                                 delay={{ show: 250, hide: 400 }}
-                                overlay={renderTooltipEditCompany}
+                                overlay={renderTooltipEditInternship}
                               >
                                 <i
                                   className="fa-regular fa-pen-to-square text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-blue-500"
-                                  onClick={() => navigate(`../tpo/add-company/${company._id}`)}
+                                  onClick={() => navigate(`../student/add-internship/${internship._id}`)}
                                   onMouseEnter={(e) => {
                                     e.target.classList.add('fa-solid');
                                     e.target.classList.remove('fa-regular');
@@ -399,15 +415,15 @@ function AllCompany() {
                               </OverlayTrigger>
                             </div>
                             <div className="px-0.5">
-                              {/* delete company  */}
+                              {/* delete internship  */}
                               <OverlayTrigger
                                 placement="top"
                                 delay={{ show: 250, hide: 400 }}
-                                overlay={renderTooltipDeleteCompany}
+                                overlay={renderTooltipDeleteInternship}
                               >
                                 <i
                                   className="fa-regular fa-trash-can text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-red-500"
-                                  onClick={() => handleDeleteCompany(company?.companyName, company?._id)}
+                                  // onClick={() => handleDeletePost(internship?._id, companies[internship?.company], job?.jobTitle)}
                                   onMouseEnter={(e) => {
                                     e.target.classList.add('fa-solid');
                                     e.target.classList.remove('fa-regular');
@@ -425,7 +441,7 @@ function AllCompany() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="7">No Jobs found</td>
+                      <td colSpan="8">Internship Not Added Yet!</td>
                     </tr>
                   )}
                 </tbody>
@@ -440,13 +456,13 @@ function AllCompany() {
           show={showModal}
           close={closeModal}
           header={"Confirmation"}
-          body={`Do you want to delete company ${modalBody.companyName}?`}
+          body={`Do you want to delete internship?`}
           btn={"Delete"}
-          confirmAction={() => confirmDelete(modalBody.companyId)}
+        // confirmAction={() => confirmDelete()}
         />
       </>
     </>
   )
 }
 
-export default AllCompany
+export default AddInternship

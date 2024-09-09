@@ -3,14 +3,34 @@
 import React from "react";
 import { AiFillHome } from "react-icons/ai";
 import { ImProfile } from "react-icons/im";
-import { RiArrowDownSFill, RiArrowUpSFill } from "react-icons/ri";
-import { FaIndustry, FaListCheck } from "react-icons/fa6";
+import { RiArrowDownSFill, RiArrowUpSFill, RiPlayListAddLine } from "react-icons/ri";
+import { FaIndustry, FaListCheck, FaBuildingColumns, FaListUl } from "react-icons/fa6";
 
 export const SidebarData = [
   {
     title: "Dashboard",
     path: "/student/dashboard",
     icon: <AiFillHome />
+  },
+  {
+    title: "My Internship",
+    icon: <FaBuildingColumns />,
+    iconClosed: <RiArrowDownSFill />,
+    iconOpened: <RiArrowUpSFill />,
+
+    subNav: [
+      {
+        title: "List All",
+        path: "/student/internship",
+        icon: <FaListUl />,
+        cName: "sub-nav",
+      },
+      {
+        title: "Add New",
+        path: "/student/add-internship",
+        icon: <RiPlayListAddLine />,
+      },
+    ],
   },
   {
     title: "Placements",

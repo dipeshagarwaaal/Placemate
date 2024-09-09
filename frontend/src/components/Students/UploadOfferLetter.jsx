@@ -3,7 +3,7 @@ import axios from 'axios';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 
-const UploadResume = ({ jobId }) => {
+const UploadResume = ({ jobId, fetchJobDetailsOfApplicant }) => {
   const [uploadStatus, setUploadStatus] = useState('');
 
   // useState for load data
@@ -57,6 +57,7 @@ const UploadResume = ({ jobId }) => {
       );
       // console.log(response.data)
       setUploadStatus('Offer letter uploaded successfully');
+      if (fetchJobDetailsOfApplicant) fetchJobDetailsOfApplicant();
     } catch (error) {
       console.error('Error uploading the offer letter', error);
       setUploadStatus('Error uploading the offer letter');

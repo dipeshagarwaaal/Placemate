@@ -9,6 +9,7 @@ import Signup from "./pages/students/Signup";
 import StudentHome from './pages/students/Home.jsx';
 import UpdatePlacementProfile from "./components/Students/UpdatePlacementProfile.jsx";
 import UpdateJobStatus from "./components/Students/UpdateJobStatus.jsx";
+import AddInternship from "./components/Students/AddInternship.jsx";
 // TPO pages
 import LoginTPO from "./pages/TPO/Login.jsx";
 import StudentsTPO from "./components/TPO/Students.jsx";
@@ -37,6 +38,7 @@ import ViewJobPost from "./components/ViewJobPost.jsx";
 import ViewUserData from "./components/ViewUserData.jsx";
 import AllJobPost from "./components/AllJobPost.jsx";
 import AllCompany from "./components/AllCompany.jsx";
+import ViewAllInternship from "./components/ViewAllInternship.jsx";
 
 // Page not found 
 import PageNotFound from "./pages/PageNotFound.jsx";
@@ -133,6 +135,18 @@ function App() {
             {/* update status of job */}
             <Route element={<Layout header="Update Job Application Status" />}>
               <Route path="/student/status/:jobId" element={<UpdateJobStatus />} />
+            </Route>
+            {/* view all internships */}
+            <Route element={<Layout header="My Internships" />}>
+              <Route path="/student/internship" element={<ViewAllInternship />} />
+            </Route>
+            {/* add internships */}
+            <Route element={<Layout header="Add New Internship" />}>
+              <Route path="/student/add-internship" element={<AddInternship />} />
+            </Route>
+            {/* add internships */}
+            <Route element={<Layout header="Update Internship Details" />}>
+              <Route path="/student/add-internship/:internshipId" element={<AddInternship />} />
             </Route>
           </Route>
 

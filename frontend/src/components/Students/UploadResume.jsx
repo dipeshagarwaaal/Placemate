@@ -3,7 +3,7 @@ import axios from 'axios';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 
-const UploadResume = () => {
+const UploadResume = ({ fetchCurrentUserData }) => {
   const [uploadStatus, setUploadStatus] = useState('');
 
   // useState for load data
@@ -43,7 +43,7 @@ const UploadResume = () => {
 
     const formData = new FormData();
     formData.append('resume', e.target.files[0]);
-    formData.append('userId', currentUser.id); 
+    formData.append('userId', currentUser.id);
 
     try {
       const response = await axios.post('http://localhost:4518/student/upload-resume',
@@ -55,6 +55,8 @@ const UploadResume = () => {
         }
       );
       // console.log(response.data)
+      // update userData in UpdatePlacementProfile
+      if (fetchCurrentUserData) fetchCurrentUserData();
       setUploadStatus('Resume uploaded successfully');
     } catch (error) {
       console.error('Error uploading the resume', error);

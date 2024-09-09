@@ -47,7 +47,7 @@ function UpdatePlacementProfile() {
   useEffect(() => {
     fetchCurrentUserData();
     calcCGPA();
-  }, [loading])
+  }, [loading]);
 
   // console.log(userData)
 
@@ -135,7 +135,6 @@ function UpdatePlacementProfile() {
     setCgpa((sum / sem).toFixed(2));
   }
 
-
   return (
     <>
       {
@@ -207,7 +206,7 @@ function UpdatePlacementProfile() {
                       </div>
                       <div className="grid grid-cols-2">
                         {/* resume upload  */}
-                        <UploadResume />
+                        <UploadResume fetchCurrentUserData={fetchCurrentUserData} /> {/* passing function to update userData */}
                         {
                           (userData?.studentProfile?.resume?.filepath !== "undefined") && (
                             <div className="py-2 px-2">
