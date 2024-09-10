@@ -32,7 +32,7 @@ function PostJob() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(data)
+    // console.log(data)
     setShowModal(true);
   }
 
@@ -75,7 +75,7 @@ function PostJob() {
 
   const fetchJobDetail = async () => {
     try {
-      const response = await axios.get(`http://localhost:4518/tpo/${jobId}`,
+      const response = await axios.get(`http://localhost:4518/tpo/job/${jobId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

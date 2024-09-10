@@ -124,7 +124,7 @@ function UserDetails() {
         }
       );
       // console.log(response.data);
-      console.log(response.data.msg)
+      // console.log(response.data.msg)
       if (response.data) {
         if (response.data.msg) {
           setToastMessage(response.data.msg);
@@ -710,7 +710,7 @@ function UserDetails() {
                                 // required={completeProfileReq}
                                 disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                               >
-                                <option disabled value="undefined" className='text-gray-400'>Enter Your SSC Board Name</option>
+                                <option disabled value="undefined" className='text-gray-400'>Enter Your HSC Board Name</option>
                                 <option value="Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)">Maharashtra State Board of Secondary and Higher Secondary Education (MSBSHSE)</option>
                                 <option value="Central Board of Secondary Education (CBSE)">Central Board of Secondary Education (CBSE)</option>
                                 <option value="Council for the Indian School Certificate Examinations (CISCE)">Council for the Indian School Certificate Examinations (CISCE)</option>
@@ -775,7 +775,7 @@ function UserDetails() {
                                 aria-label="Floating label select Diploma Board"
                                 className='cursor-pointer'
                                 name='diplomaBoard'
-                                value={userData?.studentProfile?.pastQualification?.diploma?.board || "undefined"}
+                                value={userData?.studentProfile?.pastQualification?.diploma?.department || "undefined"}
                                 onChange={(e) => {
                                   setUserData({
                                     ...userData,
@@ -785,7 +785,7 @@ function UserDetails() {
                                         ...userData?.studentProfile?.pastQualification,
                                         diploma: {
                                           ...userData?.studentProfile?.pastQualification?.diploma,
-                                          board: e.target.value
+                                          department: e.target.value
                                         }
                                       }
                                     }
@@ -795,7 +795,11 @@ function UserDetails() {
                                 disabled={!completeProfileReq && currentUserData.role !== 'superuser'}
                               >
                                 <option disabled value="undefined" className='text-gray-400'>Enter Your Diploma University Name</option>
-                                <option value="Mumbai University">Mumbai University</option>
+                                <option value="Computer">Computer</option>
+                                <option value="Civil">Civil</option>
+                                <option value="Mechanical">Mechanical</option>
+                                <option value="ECS">ECS</option>
+                                <option value="AIDS">AIDS</option>
                                 <option value="Other">Other</option>
                               </Form.Select>
                             </FloatingLabel>

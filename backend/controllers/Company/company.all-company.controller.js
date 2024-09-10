@@ -1,18 +1,6 @@
 const CompanySchema = require("../../models/company.model");
 
 
-// const AllJobs = async (req, res) => {
-//   try {
-//     const jobs = await JobSchema.find();
-//     res.json({ data: jobs });
-//   } catch (error) {
-//     console.log("user.all-jobs.controller.js => ", error);
-//     res.status(500).json({ msg: 'Server Error' });
-//   }
-// }
-
-
-
 const AddCompany = async (req, res) => {
   try {
     const companyName = req.body.companyName;
@@ -69,6 +57,7 @@ const AllCompanyDetail = async (req, res) => {
 const DeleteCompany = async (req, res) => {
   try {
     await CompanySchema.findByIdAndDelete(req.body.companyId);
+    await CompanySchema.findOneAndDelete(req.body.companyId);
     res.json({ msg: "Company Deleted Successfully!" });
   } catch (error) {
     console.log("company.all-company.controller.js = DeleteCompany => ", error);

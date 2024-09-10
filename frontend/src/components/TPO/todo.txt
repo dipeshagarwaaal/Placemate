@@ -1,6 +1,9 @@
-TPO
+#TPO
 
 1. List All Students year > branch wise
 2. student user profile update internship, resume, placement status, offer letter, etc.
+
+* serach bar when post job and select company name
+
 3. get notices from management 
 4. send notices for student

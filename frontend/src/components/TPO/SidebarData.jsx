@@ -23,7 +23,13 @@ export const SidebarData = [
 
     subNav: [
       {
-        title: "Approve Students",
+        title: "List All",
+        path: "/tpo/students",
+        icon: <FaListUl />,
+        cName: "sub-nav",
+      },
+      {
+        title: "Approve",
         path: "/tpo/approve-student",
         icon: <FaCheckSquare />,
         cName: "sub-nav",

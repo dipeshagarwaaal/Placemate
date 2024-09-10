@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const JobSchema = require('./job.model');
 
 const UserSchema = new mongoose.Schema({
   first_name: { type: String, trim: true },
@@ -77,7 +78,7 @@ const UserSchema = new mongoose.Schema({
     appliedJobs: [
       {
         // Reference to job posting
-        jobId: { type: mongoose.Schema.Types.ObjectId, ref: 'Job', unique: true },
+        jobId: { type: mongoose.Schema.Types.ObjectId, ref: 'Job' },
         // Track application status
         status: { type: String, enum: ['applied', 'interview', 'hired', 'rejected'] },
         appliedAt: { type: Date, default: Date.now }
@@ -109,5 +110,28 @@ const UserSchema = new mongoose.Schema({
     // more for management
   }
 });
+
+// Middleware to remove the studentId from all jobs when the student is deleted
+UserSchema.pre('findOneAndDelete', async function (next) {
+  try {
+    // Get the user being deleted
+    const user = await this.model.findOne(this.getFilter()).exec();
+
+    // Check if the user exists
+    if (!user) return next(); // Proceed without error if user is not found
+
+    // Find all jobs where the studentId is in the applicants array and remove the studentId from the array
+    await JobSchema.updateMany(
+      { 'applicants.studentId': user._id }, // Match jobs where this student applied
+      { $pull: { applicants: { studentId: user._id } } } // Remove the studentId from applicants
+    );
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+
 
 module.exports = mongoose.model("Users", UserSchema);

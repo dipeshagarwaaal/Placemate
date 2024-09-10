@@ -1,7 +1,7 @@
 const User = require("../../models/user.model");
 
 
-const AllUsers = async (req, res) => {
+const AllUsersLen = async (req, res) => {
   try {
     const studentUsers = (await User.find({ role: "student" })).length;
     const studentApprovalPendingUsers = (await User.find({ role: "student" })).filter(ele => !ele.studentProfile.isApproved).length;
@@ -17,4 +17,4 @@ const AllUsers = async (req, res) => {
 }
 
 
-module.exports = AllUsers;
+module.exports = AllUsersLen;

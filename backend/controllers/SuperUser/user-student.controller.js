@@ -38,6 +38,7 @@ const studentAddUsers = async (req, res) => {
 const studentDeleteUsers = async (req, res) => {
   // const user = await Users.find({email: req.body.email});
   const ress = await User.deleteOne({ email: req.body.email });
+  await User.findOneAndDelete({ email: req.body.email });
   if (ress.acknowledged) {
     res.json({ msg: "User Deleted Successfully!" });
   } else {

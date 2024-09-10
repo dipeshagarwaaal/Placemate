@@ -22,7 +22,7 @@ function AddInternship() {
   // useState for Modal display
   const [showModal, setShowModal] = useState(false);
   const [modalBody, setModalBody] = useState({});
-  // const [modalBtn, setModalBtn] = useState('');
+  const [dataToParasModal, setDataToParasModal] = useState('');
 
   // useState for load data
   const [currentUser, setCurrentUser] = useState({});
@@ -77,34 +77,33 @@ function AddInternship() {
     fetchInternships();
   }, [currentUser?.id]);
 
-  // const handleDeletePost = (jobId, cmpName, jbTitle) => {
-  //   setDataToParasModal(jobId);
-  //   setModalBody({
-  //     cmpName: cmpName,
-  //     jbTitle: jbTitle
-  //   });
-  //   setShowModal(true);
-  // }
+  const handleDeleteInternship = (internshipId, cmpName) => {
+    setDataToParasModal(internshipId);
+    setModalBody({
+      cmpName: cmpName,
+    });
+    setShowModal(true);
+  }
 
-  // const confirmDelete = async (jobId) => {
-  //   try {
-  //     const response = await axios.post('http://localhost:4518/tpo/delete-job', { jobId });
+  const confirmDelete = async (internshipId) => {
+    try {
+      const response = await axios.post('http://localhost:4518/student/delete-internship', { internshipId, studentId: currentUser.id });
 
-  //     setShowModal(false);
-  //     fetchJobs();
-  //     if (response?.data?.msg) {
-  //       setToastMessage(response?.data?.msg);
-  //       setShowToast(true);
-  //     }
-  //     // setLoading(false);
-  //   } catch (error) {
-  //     if (error?.response?.data?.msg) {
-  //       setToastMessage(error?.response?.data?.msg);
-  //       setShowToast(true);
-  //     }
-  //     console.log("Error deleting job ", error);
-  //   }
-  // }
+      setShowModal(false);
+      fetchInternships();
+      if (response?.data?.msg) {
+        setToastMessage(response?.data?.msg);
+        setShowToast(true);
+      }
+      // setLoading(false);
+    } catch (error) {
+      if (error?.response?.data?.msg) {
+        setToastMessage(error?.response?.data?.msg);
+        setShowToast(true);
+      }
+      console.log("Error deleting job ", error);
+    }
+  }
 
 
   const renderTooltipEditInternship = (props) => (
@@ -423,7 +422,7 @@ function AddInternship() {
                               >
                                 <i
                                   className="fa-regular fa-trash-can text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-red-500"
-                                  // onClick={() => handleDeletePost(internship?._id, companies[internship?.company], job?.jobTitle)}
+                                  onClick={() => handleDeleteInternship(internship?._id, internship?.companyName)}
                                   onMouseEnter={(e) => {
                                     e.target.classList.add('fa-solid');
                                     e.target.classList.remove('fa-regular');
@@ -456,9 +455,9 @@ function AddInternship() {
           show={showModal}
           close={closeModal}
           header={"Confirmation"}
-          body={`Do you want to delete internship?`}
+          body={`Do you want to delete internship of ${modalBody.cmpName}?`}
           btn={"Delete"}
-        // confirmAction={() => confirmDelete()}
+          confirmAction={() => confirmDelete(dataToParasModal)}
         />
       </>
     </>

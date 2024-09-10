@@ -13,7 +13,7 @@ import AddInternship from "./components/Students/AddInternship.jsx";
 // TPO pages
 import LoginTPO from "./pages/TPO/Login.jsx";
 import StudentsTPO from "./components/TPO/Students.jsx";
-import StudentAccYearTPO from "./components/TPO/StudentYear.jsx";
+import StudentAccYearTPO from "./components/TPO/StudentYearAndBranchView.jsx";
 import PostJobTPO from "./components/TPO/PostJob.jsx";
 import AddCompany from "./components/TPO/AddCompany.jsx";
 // Management pages

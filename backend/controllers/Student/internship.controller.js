@@ -1,5 +1,4 @@
 const User = require("../../models/user.model");
-const JobSchema = require("../../models/job.model");
 
 
 const GetInternships = async (req, res) => {
@@ -12,6 +11,8 @@ const GetInternships = async (req, res) => {
 
     const internship = student?.studentProfile?.internships?.find(intern => { if (intern._id == req.query.internshipId) return intern });
 
+    // console.log(internship);
+
     res.json({ internships: student?.studentProfile?.internships, internship: internship });
   } catch (error) {
     console.log("internship.controller.js => ", error);
@@ -22,9 +23,9 @@ const GetInternships = async (req, res) => {
 const UpdateInternship = async (req, res) => {
   try {
     const student = await User.findById(req.query.studentId);
-
+    // console.log(student);
     if (!req.body.internship) return res.json({ msg: "No Data received to update!" });
-    if (student === undefined) return res.json({ msg: "Student Not Found!" });
+    if (!student) return res.json({ msg: "Student Not Found!" });
 
 
     // destructure to store requested val
@@ -48,12 +49,15 @@ const UpdateInternship = async (req, res) => {
 
 
     // if new internship to save or else update existing internship
-    if (req.query.internshipId === undefined) {
+
+
+    if (req.query.internshipId === "undefined") {
       // Push the new internship object to the student's internships array
       student.studentProfile.internships.push(newInternship);
     } else {
       // if user is updating existing data 
-      const internship = student.studentProfile.internships.find(intern => { if (intern._id == req.body.internshipId) return intern })
+
+      const internship = student.studentProfile.internships.find(intern => { if (intern._id == req.query.internshipId) return intern })
 
       if (companyName) internship.companyName = companyName;
       if (companyAddress) internship.companyAddress = companyAddress;
@@ -76,8 +80,33 @@ const UpdateInternship = async (req, res) => {
   }
 }
 
+const DeleteInternship = async (req, res) => {
+  // console.log(req.query);
+  try {
+    const student = await User.findById(req.body.studentId);
+    // console.log(req.body);
+    if (!student) return res.json({ msg: "Student Not Found!" });
+
+    // Find the internship index
+    const internshipIndex = student.studentProfile.internships.findIndex(intern => intern._id.toString() === req.body.internshipId);
+    if (internshipIndex === -1) return res.json({ msg: "No Internship Found!" });
+
+    // Remove the internship from the array
+    student.studentProfile.internships.splice(internshipIndex, 1);
+
+    // Save the updated student document
+    await student.save();
+
+    return res.json({ msg: "Internship deleted successfully!" });
+  } catch (error) {
+    console.log("internship.controller.js => ", error);
+    return res.status(500).json({ msg: "Internal Server Error!" });
+  }
+}
+
 
 module.exports = {
   GetInternships,
   UpdateInternship,
+  DeleteInternship
 };

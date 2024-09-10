@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import Button from 'react-bootstrap/Button';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import Toast from './Toast';
@@ -72,7 +69,7 @@ function ViewUserData() {
     fetchStudentData();
   }, [userId]);
 
-  console.log(userData);
+  // console.log(userData);
   return (
     <>
       {

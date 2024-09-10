@@ -15,6 +15,7 @@ const DeleteJob = async (req, res) => {
   try {
     if (req.body.jobId) {
       await JobSchema.deleteOne({ _id: req.body.jobId });
+      await JobSchema.findOneAndDelete(req.body.jobId)
       res.status(200).json({ msg: 'Job deleted successfully!' });
     }
   } catch (error) {
