@@ -6,11 +6,18 @@ const userData = async (req, res) => {
   try {
     // Fetch user details from the database
     // console.log(userId)
-    const user = await User.findById(userId);
+    const user = await User.findById(userId)
+      .populate({
+        path: 'studentProfile.appliedJobs.jobId',
+        populate: { path: 'company', select: 'companyName' } // Populates companyName from the Company model
+      });
+
+      console.log(user)
 
     // Check if user exists
     if (!user)
       return res.status(404).json({ msg: 'Student not found' });
+
 
     // Return the user details
     res.json(user);

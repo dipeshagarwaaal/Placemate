@@ -54,7 +54,7 @@ import { useState, useEffect } from "react";
 
 function Layout({ header }) {
   // Get sidebar state from localStorage or default to false
-  const isSidebarOpenFromStorage = localStorage.getItem('isSidebarOpen') === 'true';
+  const isSidebarOpenFromStorage = localStorage.getItem('isSidebarOpen') === 'true' || true;
 
   // State to control sidebar visibility
   const [isSidebarVisible, setSidebarVisible] = useState(isSidebarOpenFromStorage);

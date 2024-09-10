@@ -4,11 +4,17 @@ const JobSchema = require("../../models/job.model");
 
 const UpdateJobStatus = async (req, res) => {
   try {
-    // console.log(req.params.studentId);
-    // console.log(req.body.applicant);
-    const job = await JobSchema.findById(req.params.jobId);
+    console.log(req.params.studentId);
+    console.log(req.params.jobId);
+    console.log(req.body.applicant);
 
-    job.applicants.some(app => {
+
+    const job = await JobSchema.findById(req.params.jobId);
+    const student = await User.findById(req.params.studentId)
+
+    if (!job || !student) res.json({ msg: "Student or Job Not Found!" })
+
+    job.applicants.find(app => {
       if (app.studentId == req.params.studentId) {
         if (req.body.applicant.currentRound) app.currentRound = req.body.applicant.currentRound;
         if (req.body.applicant.roundStatus) app.roundStatus = req.body.applicant.roundStatus;
@@ -19,6 +25,14 @@ const UpdateJobStatus = async (req, res) => {
       }
     });
 
+    student?.studentProfile?.appliedJobs?.find(app => {
+      if (app.jobId == req.params.jobId) {
+        if (req.body.applicant.status) app.status = req.body.applicant.status;
+        if (req.body.applicant.package) app.package = req.body.applicant.package;
+      }
+    })
+
+    await student.save();
     await job.save();
     res.json({ msg: "Job Status Updated Successfully!" });
   } catch (error) {

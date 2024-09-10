@@ -30,27 +30,4 @@ const jobSchema = new mongoose.Schema({
   ]
 });
 
-// Middleware to remove the jobId from students' appliedJobs when a job is deleted
-jobSchema.pre('findOneAndDelete', async function (next) {
-  try {
-    // Get the job being deleted
-    const job = await this.model.findOne(this.getFilter()).exec();
-
-    // Check if the job exists
-    if (!job) return next(); // Proceed without error if job is not found
-
-    // Find all users who applied to this job and remove the jobId from their appliedJobs array
-    await User.updateMany(
-      { 'studentProfile.appliedJobs.jobId': job._id }, // Match users with this jobId in appliedJobs
-      { $pull: { 'studentProfile.appliedJobs': { jobId: job._id } } } // Remove the jobId from appliedJobs
-    );
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
-
-
-
-
 module.exports = mongoose.model('Job', jobSchema);

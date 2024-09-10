@@ -7,7 +7,6 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import Toast from '../Toast';
-import FormCheck from 'react-bootstrap/FormCheck'
 import UploadResume from './UploadResume';
 
 

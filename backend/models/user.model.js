@@ -80,7 +80,8 @@ const UserSchema = new mongoose.Schema({
         // Reference to job posting
         jobId: { type: mongoose.Schema.Types.ObjectId, ref: 'Job' },
         // Track application status
-        status: { type: String, enum: ['applied', 'interview', 'hired', 'rejected'] },
+        status: { type: String, enum: ['applied', 'interview', 'hired', 'rejected'], default: 'applied' },
+        package: { type: Number },
         appliedAt: { type: Date, default: Date.now }
       }
     ],
@@ -108,27 +109,6 @@ const UserSchema = new mongoose.Schema({
   managementProfile: {
     position: { type: String, trim: true },
     // more for management
-  }
-});
-
-// Middleware to remove the studentId from all jobs when the student is deleted
-UserSchema.pre('findOneAndDelete', async function (next) {
-  try {
-    // Get the user being deleted
-    const user = await this.model.findOne(this.getFilter()).exec();
-
-    // Check if the user exists
-    if (!user) return next(); // Proceed without error if user is not found
-
-    // Find all jobs where the studentId is in the applicants array and remove the studentId from the array
-    await JobSchema.updateMany(
-      { 'applicants.studentId': user._id }, // Match jobs where this student applied
-      { $pull: { applicants: { studentId: user._id } } } // Remove the studentId from applicants
-    );
-
-    next();
-  } catch (error) {
-    next(error);
   }
 });
 

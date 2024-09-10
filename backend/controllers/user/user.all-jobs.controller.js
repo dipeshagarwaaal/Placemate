@@ -14,8 +14,10 @@ const AllJobs = async (req, res) => {
 const DeleteJob = async (req, res) => {
   try {
     if (req.body.jobId) {
-      await JobSchema.deleteOne({ _id: req.body.jobId });
-      await JobSchema.findOneAndDelete(req.body.jobId)
+      // console.log(req.body.jobId)
+      const job = await JobSchema.findById(req.body.jobId);
+
+      await job.deleteOne();
       res.status(200).json({ msg: 'Job deleted successfully!' });
     }
   } catch (error) {

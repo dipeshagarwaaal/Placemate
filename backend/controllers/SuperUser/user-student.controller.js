@@ -1,4 +1,5 @@
 const User = require("../../models/user.model");
+const JobSchema = require("../../models/job.model");
 const bcrypt = require("bcrypt");
 
 
@@ -37,12 +38,12 @@ const studentAddUsers = async (req, res) => {
 
 const studentDeleteUsers = async (req, res) => {
   // const user = await Users.find({email: req.body.email});
-  const ress = await User.deleteOne({ email: req.body.email });
-  await User.findOneAndDelete({ email: req.body.email });
-  if (ress.acknowledged) {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    // delete user and releted data
+    await user.deleteOne({ _id: user._id });
     res.json({ msg: "User Deleted Successfully!" });
-  } else {
-    res.json({ msg: "Error While Deleting User!" });
+  } catch (error) {
     res.status(500).json({ msg: 'Server error' });
   }
 }
@@ -50,8 +51,8 @@ const studentDeleteUsers = async (req, res) => {
 const studentApprove = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
-    console.log(req.body)
-    console.log(user)
+    // console.log(req.body)
+    // console.log(user)
 
     if (!user)
       return res.status(404).json({ msg: 'Student not found' });

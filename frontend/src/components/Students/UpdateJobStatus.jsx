@@ -36,6 +36,9 @@ function UpdateJobStatus() {
   // useState for Modal display
   const [showModal, setShowModal] = useState(false);
 
+  // check if hired 
+  const [isHired, setHired] = useState(false);
+
   const closeModal = () => setShowModal(false);
 
   // checking for authentication
@@ -75,6 +78,7 @@ function UpdateJobStatus() {
         }
       )
       setData(response.data);
+      console.log(response.data)
     } catch (error) {
       if (error.response) {
         if (error?.response.data?.msg) setToastMessage(error.response.data.msg)
@@ -98,27 +102,28 @@ function UpdateJobStatus() {
   const fetchJobDetailsOfApplicant = async () => {
     if (data?.applicants?.length !== 0) {
       // Find if the student user has applied
-      const appliedApplicant = await data.applicants.find(app => app.studentId === currentUser.id);
 
+      const appliedApplicant = await data.applicants.find(app => app.studentId === currentUser.id);
+      // console.log(appliedApplicant)
       if (appliedApplicant) setApplicant(appliedApplicant) // If no applicant found, navigate to 404
       else navigate('../404');
-    } else {
-      // no data in applicants
-      navigate('../404');
+
+      // if status is hired then set hired and show package input
+      if (appliedApplicant.status === 'hired') setHired(true);
     }
   }
-  // console.log(applicant);
 
   const handleSubmit = async () => {
     try {
+      // console.log(applicant);
       const response = await axios.post(`http://localhost:4518/student/update-status/${jobId}/${currentUser.id}`, { applicant });
       // console.log(response.data);
       if (response?.data?.msg) {
         setToastMessage(response?.data?.msg);
         setShowToast(true);
         // Fetch updated applicant data to ensure state is current
-        await fetchJobDetail();
-        await fetchJobDetailsOfApplicant();
+        // await fetchJobDetail();
+        // await fetchJobDetailsOfApplicant();
       }
     } catch (error) {
       if (error?.response?.data?.msg) {
@@ -139,6 +144,7 @@ function UpdateJobStatus() {
         if (data?.applicants && currentUser?.id) {
           await fetchJobDetailsOfApplicant();
         }
+        if (applicant.status === 'hired') setHired(true);
         setLoading(false);
       } catch (error) {
         setToastMessage("Error during fetching and applying job");
@@ -148,14 +154,20 @@ function UpdateJobStatus() {
     };
 
     fetchData();
-  }, [currentUser?.id, data?.company, jobId, applicant, showToast]);
+  }, [currentUser?.id, data?.company, jobId]);
+
+  // console.log(applicant)
 
   const handleApplicantChange = (e) => {
     setApplicant({
       ...applicant,
       [e.target.name]: e.target.value
     });
+
+    if (e.target.name === 'status' && e.target.value === 'hired') setHired(true)
+    if (e.target.name === 'status' && e.target.value !== 'hired') setHired(false)
   }
+
 
   // for formating date of birth
   const formatDate = (isoString) => {
@@ -164,10 +176,10 @@ function UpdateJobStatus() {
     return date.toISOString().split('T')[0]; // Returns YYYY-MM-DD
   };
 
-  // console.log(applicant);
 
   const handleDelete = () => setShowModal(true);
 
+  // delete offer letter 
   const confirmDelete = async () => {
     try {
       const response = await axios.post(`http://localhost:4518/student/delete-offer-letter/${jobId}/${currentUser.id}`, { applicant });
@@ -405,6 +417,24 @@ function UpdateJobStatus() {
                               <option value="rejected">Rejected</option>
                             </Form.Select>
                           </FloatingLabel>
+                          {
+                            isHired === true && (
+                              <div className="col-span-2">
+                                {/* selection date */}
+                                <FloatingLabel controlId="floatingPackage" label="Enter Package Offered">
+                                  <Form.Control
+                                    type="number"
+                                    step={0.01}
+                                    placeholder="Enter Package Offered"
+                                    name='package'
+                                    value={applicant?.package}
+                                    onChange={handleApplicantChange}
+                                    required
+                                  />
+                                </FloatingLabel>
+                              </div>
+                            )
+                          }
                         </div>
                         <div className="mb-2 mt-3">
                           <Button variant="primary" onClick={handleSubmit}>

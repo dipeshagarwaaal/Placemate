@@ -1,5 +1,3 @@
-// Filename - components/SidebarData.js
-
 import React from "react";
 import { FaListUl, FaCheckSquare } from "react-icons/fa";
 import { AiFillHome } from "react-icons/ai";
