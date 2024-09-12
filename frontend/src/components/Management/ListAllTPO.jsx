@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Toast from '../../components/Toast';
-import ModalBox from '../../components/Modal';
-import AddUserTable from '../../components/AddUserTable';
+import Toast from '../Toast';
+import ModalBox from '../Modal';
+import AddUserTable from '../AddUserTable';
 
 function AddTPO() {
   // tpo users store here
@@ -37,12 +37,13 @@ function AddTPO() {
       setLoading(false);
     }
   };
-
+  
 
   useEffect(() => {
     fetchUserDetails();
+    setLoading(false);
   }, []);
-
+  
   const [formOpen, setFormOpen] = useState(false);
   const [data, setData] = useState({
     first_name: "",
@@ -50,15 +51,15 @@ function AddTPO() {
     number: "",
     password: ""
   });
-
+  
   const handleDataChange = (e) => setData({ ...data, [e.target.name]: e.target.value });
 
   const handleDeleteUser = (email) => {
     setUserToDelete(email);
     setShowModal(true);
   }
-
-  const confirmDelete = async (email) => {
+  
+  const confirmDelete = async () => {
     try {
       const response = await axios.post("http://localhost:4518/management/deletetpo",
         { email: userToDelete },
@@ -83,7 +84,7 @@ function AddTPO() {
     setShowModal(false);
     setUserToDelete(null);
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -105,7 +106,7 @@ function AddTPO() {
     }
   }
 
-
+  
   return (
     <>
       {/*  any message here  */}

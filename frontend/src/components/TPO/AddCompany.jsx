@@ -47,7 +47,7 @@ function AddCompany() {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           }
         }
-      )      
+      )
       if (response?.data?.msg === "Company Created Successfully!") {
         setShowModal(false);
         setToastMessage(response?.data?.msg);

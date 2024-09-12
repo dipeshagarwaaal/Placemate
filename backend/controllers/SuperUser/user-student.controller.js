@@ -41,7 +41,7 @@ const studentDeleteUsers = async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     // delete user and releted data
-    await user.deleteOne({ _id: user._id });
+    await user.deleteOne();
     res.json({ msg: "User Deleted Successfully!" });
   } catch (error) {
     res.status(500).json({ msg: 'Server error' });

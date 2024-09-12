@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
-import Table from 'react-bootstrap/Table';
 import axios from 'axios';
 import StudentTable from './StudentTableTemplate';
 

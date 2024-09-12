@@ -59,7 +59,7 @@ const DeleteCompany = async (req, res) => {
     // await CompanySchema.findByIdAndDelete(req.body.companyId);
     const company = await CompanySchema.findById(req.body.companyId);
     // company and related jobs removed
-    await company.findOneAndDelete({ _id: req.body.companyId });
+    await company.deleteOne();
     res.json({ msg: "Company Deleted Successfully!" });
   } catch (error) {
     console.log("company.all-company.controller.js = DeleteCompany => ", error);

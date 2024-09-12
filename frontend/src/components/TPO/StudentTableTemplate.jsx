@@ -1,10 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import Table from 'react-bootstrap/Table';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const StudentTable = ({ branchName, studentData }) => {
   const BASE_URL = 'http://localhost:4518';
+
+  // useState for load data
+  const [currentUser, setCurrentUser] = useState({
+    role: '',
+  });
+
+  // checking for authentication
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    axios.get('http://localhost:4518/user/detail', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+      .then(res => {
+        setCurrentUser({
+          role: res.data.role,
+        });
+      })
+      .catch(err => {
+        console.log("AddUserTable.jsx => ", err);
+        setToastMessage(err);
+        setShowToast(true);
+      });
+  }, []);
+
+
   return (
     <Accordion.Item eventKey={branchName} className='shadow-md'>
       <Accordion.Header>{branchName}</Accordion.Header>
@@ -12,14 +40,14 @@ const StudentTable = ({ branchName, studentData }) => {
         <Table striped borderless hover className='w-fit'>
           <thead>
             <tr>
-              <th style={{ width: "9%" }}>Roll Number</th>
+              <th style={{ width: "6%" }}>Roll No.</th>
               <th style={{ width: "15%" }}>Full Name</th>
               <th style={{ width: "10%" }}>UIN</th>
               <th style={{ width: "15%" }}>Email</th>
               <th style={{ width: "11%" }}>Phone Number</th>
               <th style={{ width: "10%" }}>Resume</th>
-              <th style={{ width: "10%" }}>No. of Internships</th>
-              <th style={{ width: "10%" }}>No. of Applied Jobs</th>
+              <th style={{ width: "11%" }}>No. of Internships</th>
+              <th style={{ width: "11%" }}>No. of Applied Jobs</th>
             </tr>
           </thead>
           <tbody>
@@ -35,9 +63,18 @@ const StudentTable = ({ branchName, studentData }) => {
                     <tr key={index}>
                       <td>{student?.studentProfile?.rollNumber}</td>
                       <td>
-                        <Link to={`/tpo/user/${student?._id}`} className='no-underline text-blue-500 hover:text-blue-700'>
-                          {student?.first_name + " " + student?.middle_name + " " + student?.last_name}
-                        </Link>
+                        {
+                          currentUser.role === 'tpo_admin' &&
+                          <Link to={`/tpo/user/${student?._id}`} className='no-underline text-blue-500 hover:text-blue-700'>
+                            {student?.first_name + " " + student?.middle_name + " " + student?.last_name}
+                          </Link>
+                        }
+                        {
+                          currentUser.role === 'management_admin' &&
+                          <Link to={`/management/user/${student?._id}`} className='no-underline text-blue-500 hover:text-blue-700'>
+                            {student?.first_name + " " + student?.middle_name + " " + student?.last_name}
+                          </Link>
+                        }
                       </td>
                       <td>{student?.studentProfile?.UIN}</td>
                       <td>
@@ -61,7 +98,7 @@ const StudentTable = ({ branchName, studentData }) => {
                           View Resume
                         </a>
                       </td>
-                      <td>{student?.studentProfile?.internship?.length || 0}</td>
+                      <td>{student?.studentProfile?.internships?.length || 0}</td>
                       <td>{student?.studentProfile?.appliedJobs?.length || 0}</td>
                     </tr>
                   ))
@@ -71,7 +108,6 @@ const StudentTable = ({ branchName, studentData }) => {
                 </tr>
               )
             }
-
           </tbody>
         </Table>
       </Accordion.Body>

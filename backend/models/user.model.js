@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const JobSchema = require('./job.model');
 
 const UserSchema = new mongoose.Schema({
   first_name: { type: String, trim: true },
@@ -109,6 +108,32 @@ const UserSchema = new mongoose.Schema({
   managementProfile: {
     position: { type: String, trim: true },
     // more for management
+  }
+});
+
+
+// Middleware to delete job applicants before deleting the user
+UserSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
+  try {
+    const userId = this._id; // Get the current user's ID
+
+    const Job = mongoose.model('jobSchema');
+    const Notice = mongoose.model('NoticeSchema');
+
+    // Remove the studentId from any jobs where the user is listed as an applicant
+    await Job.updateMany(
+      { 'applicants.studentId': userId }, // Find jobs with the user as an applicant
+      { $pull: { applicants: { studentId: userId } } } // Remove the user from the applicants array
+    );
+
+    await Notice.updateMany(
+      { "sender": userId }, // Find jobs with the user as an applicant
+      { $pull: { sender: userId } } // Remove the user from the applicants array
+    );
+
+    next(); // Proceed with the user deletion
+  } catch (error) {
+    next(error); // Pass any errors to the next middleware
   }
 });
 

@@ -7,6 +7,7 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import ModalBox from './Modal';
 import Toast from './Toast';
+import TablePlaceholder from './TablePlaceholder';
 
 function AllJobPost() {
   const navigate = useNavigate();
@@ -174,204 +175,7 @@ function AllJobPost() {
           loading ? (
             // fake table loading animation 
             <div>
-              <Table striped bordered hover className='bg-white my-6 rounded-lg shadow w-full'>
-                <thead>
-                  <tr>
-                    <th>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </th>
-                    <th>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </th>
-                    <th>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </th>
-                    <th>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </th>
-                    <th>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </th>
-                    <th>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                  </tr>
-                </tbody>
-              </Table>
+              <TablePlaceholder />
               {/* <i className="fa-solid fa-spinner fa-spin text-3xl" /> */}
             </div>
           ) : (
@@ -379,9 +183,9 @@ function AllJobPost() {
               <thead>
                 <tr>
                   <th style={{ width: '5%' }}>Sr. No.</th>
-                  <th style={{ width: '15%' }}><b>Company Name</b></th>
-                  <th style={{ width: '15%' }}>Job Title</th>
-                  <th style={{ width: '15%' }}>Annual CTC</th>
+                  <th style={{ width: '18%' }}><b>Company Name</b></th>
+                  <th style={{ width: '18%' }}>Job Title</th>
+                  <th style={{ width: '10%' }}>Annual CTC</th>
                   <th style={{ width: '15%' }}>Last date of Application</th>
                   <th style={{ width: '15%' }}>No. of Students Applied</th>
                   <th style={{ width: '15%' }}>Action</th>
@@ -426,15 +230,15 @@ function AllJobPost() {
                                 className="fa-solid fa-circle-info text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-blue-500"
                                 onClick={() => {
                                   if (currentUser.role === 'tpo_admin') navigate(`../tpo/job/${job?._id}`)
+                                  else if (currentUser.role === 'management_admin') navigate(`../management/job/${job?._id}`)
                                   else if (currentUser.role === 'student') navigate(`../student/job/${job?._id}`)
                                 }}
                               />
                             </OverlayTrigger>
                           </div>
                           {
-                            currentUser.role === 'tpo_admin' && (
+                            (currentUser.role === 'tpo_admin' || currentUser.role === 'management_admin') && (
                               <>
-
                                 <div className="px-0.5">
                                   {/* edit post  */}
                                   <OverlayTrigger
@@ -444,7 +248,10 @@ function AllJobPost() {
                                   >
                                     <i
                                       className="fa-regular fa-pen-to-square text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-green-500"
-                                      onClick={() => navigate(`../tpo/post-job/${job._id}`)}
+                                      onClick={() => {
+                                        if (currentUser.role === 'tpo_admin') navigate(`../tpo/post-job/${job._id}`)
+                                        else if (currentUser.role === 'management_admin') navigate(`../management/post-job/${job._id}`)
+                                      }}
                                       onMouseEnter={(e) => {
                                         e.target.classList.add('fa-solid');
                                         e.target.classList.remove('fa-regular');

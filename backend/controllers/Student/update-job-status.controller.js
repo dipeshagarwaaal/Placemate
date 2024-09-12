@@ -4,11 +4,6 @@ const JobSchema = require("../../models/job.model");
 
 const UpdateJobStatus = async (req, res) => {
   try {
-    console.log(req.params.studentId);
-    console.log(req.params.jobId);
-    console.log(req.body.applicant);
-
-
     const job = await JobSchema.findById(req.params.jobId);
     const student = await User.findById(req.params.studentId)
 

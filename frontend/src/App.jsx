@@ -10,15 +10,17 @@ import StudentHome from './pages/students/Home.jsx';
 import UpdatePlacementProfile from "./components/Students/UpdatePlacementProfile.jsx";
 import UpdateJobStatus from "./components/Students/UpdateJobStatus.jsx";
 import AddInternship from "./components/Students/AddInternship.jsx";
+import MyAppliedJobs from "./components/Students/MyApplied.jsx";
 // TPO pages
 import LoginTPO from "./pages/TPO/Login.jsx";
 import StudentsTPO from "./components/TPO/Students.jsx";
 import StudentAccYearTPO from "./components/TPO/StudentYearAndBranchView.jsx";
 import PostJobTPO from "./components/TPO/PostJob.jsx";
+import AddNewUser from "./components/Management/AddNewUser.jsx";
 import AddCompany from "./components/TPO/AddCompany.jsx";
 // Management pages
 import LoginManagement from "./pages/Management/Login.jsx";
-import AddTPO from "./pages/Management/AddTPO.jsx";
+import ListAllTPO from "./components/Management/ListAllTPO.jsx";
 // super user
 import LoginSuperUser from "./components/SuperUser/Login.jsx";
 import ManagementSuperUser from "./components/SuperUser/AddManagement.jsx";
@@ -39,6 +41,8 @@ import ViewUserData from "./components/ViewUserData.jsx";
 import AllJobPost from "./components/AllJobPost.jsx";
 import AllCompany from "./components/AllCompany.jsx";
 import ViewAllInternship from "./components/ViewAllInternship.jsx";
+import SendNotice from "./components/SendNotice.jsx";
+import ViewlAllNotice from "./pages/ViewlAllNotice.jsx";
 
 // Page not found 
 import PageNotFound from "./pages/PageNotFound.jsx";
@@ -50,6 +54,7 @@ import './style/index.css';
 import { UserProvider } from "./context/userContext.jsx";
 import ProtectedRoute from "./components/protectedRoute.jsx";
 import { useState, useEffect } from "react";
+import ViewNotice from "./components/ViewNotice.jsx";
 
 
 function Layout({ header }) {
@@ -128,6 +133,10 @@ function App() {
             <Route element={<Layout header="Job Listing" />}>
               <Route path="/student/job/:jobId" element={<ViewJobPost />} />
             </Route>
+            {/* my applied jobs */}
+            <Route element={<Layout header="Applied Jobs" />}>
+              <Route path="/student/myjob" element={<MyAppliedJobs />} />
+            </Route>
             {/* placement profile update */}
             <Route element={<Layout header="Placement Profile" />}>
               <Route path="/student/placement-profile" element={<UpdatePlacementProfile />} />
@@ -147,6 +156,14 @@ function App() {
             {/* add internships */}
             <Route element={<Layout header="Update Internship Details" />}>
               <Route path="/student/add-internship/:internshipId" element={<AddInternship />} />
+            </Route>
+            {/* view notice */}
+            <Route element={<Layout header="Notice" />}>
+              <Route path="/student/notice/:noticeId" element={<ViewNotice />} />
+            </Route>
+            {/* all notice */}
+            <Route element={<Layout header="All Notices" />}>
+              <Route path="/student/all-notice" element={<ViewlAllNotice />} />
             </Route>
           </Route>
 
@@ -194,33 +211,102 @@ function App() {
             <Route element={<Layout header="Add Company Detail" />}>
               <Route path="/tpo/add-company" element={<AddCompany />} />
             </Route>
-            {/* company */}
+            {/* update particular company */}
             <Route element={<Layout header="Edit Company Detail" />}>
               <Route path="/tpo/add-company/:companyId" element={<AddCompany />} />
+            </Route>
+            {/* all notice */}
+            <Route element={<Layout header="All Notices" />}>
+              <Route path="/tpo/all-notice" element={<ViewlAllNotice />} />
+            </Route>
+            {/* view notice */}
+            <Route element={<Layout header="Notice" />}>
+              <Route path="/tpo/notice/:noticeId" element={<ViewNotice />} />
+            </Route>
+            {/* send notice */}
+            <Route element={<Layout header="Send Notice" />}>
+              <Route path="/tpo/send-notice" element={<SendNotice />} />
             </Route>
           </Route>
 
 
           {/* All management routes  */}
           <Route element={<UserProvider><ProtectedRoute allowedRoles={['management_admin']} /></UserProvider>}>
+
+            <Route path="/management/complete-profile/:userId" element={<UserDetails />} />
+
             <Route element={<Layout header="Dashboard" />}>
               <Route path="/management/dashboard" element={<StudentHome />} />
             </Route>
             <Route element={<Layout header="Account Details" />}>
               <Route path="/management/account" element={<Account />} />
             </Route>
+            {/* list all tpo  */}
             <Route element={<Layout header="TPO Admins" />}>
-              <Route path="/management/tpoadmin" element={<AddTPO />} />
+              <Route path="/management/tpo-admin" element={<ListAllTPO />} />
+            </Route>
+            {/* add new tpo */}
+            <Route element={<Layout header="Create New TPO Admin" />}>
+              <Route path="/management/add-tpo-admin" element={<AddNewUser />} />
+            </Route>
+            <Route element={<Layout header="Approve Students" />}>
+              <Route path="/management/approve-student" element={<ApproveStudent />} />
             </Route>
             <Route element={<Layout header="Approve Student User" />}>
               <Route path="/management/approve-student" element={<ApproveStudent />} />
             </Route>
+            {/* all student  */}
+            <Route element={<Layout header="Students" />}>
+              <Route path="/management/students" element={<StudentAccYearTPO />} />
+            </Route>
             {/* to view student data  */}
             <Route element={<Layout header="User" />}>
-              <Route path="/management/user/:userId" element={<UserDetails />} />
+              <Route path="/management/user/:userId" element={<ViewUserData />} />
             </Route>
-            <Route path="/management/complete-profile/:userId" element={<UserDetails />} />
+            {/* all company */}
+            <Route element={<Layout header="All Companys" />}>
+              <Route path="/management/companys" element={<AllCompany />} />
+            </Route>
+            {/* add company */}
+            <Route element={<Layout header="Add Company Detail" />}>
+              <Route path="/management/add-company" element={<AddCompany />} />
+            </Route>
+            {/* update particular company */}
+            <Route element={<Layout header="Edit Company Detail" />}>
+              <Route path="/management/add-company/:companyId" element={<AddCompany />} />
+            </Route>
+
+            {/* all jobs post */}
+            <Route element={<Layout header="Placement Listings" />}>
+              <Route path="/management/job-listings" element={<AllJobPost />} />
+            </Route>
+
+            {/* view a job post */}
+            <Route element={<Layout header="Job Listing" />}>
+              <Route path="/management/job/:jobId" element={<ViewJobPost />} />
+            </Route>
+            {/* post jobs */}
+            <Route element={<Layout header="Post New Job" />}>
+              <Route path="/management/post-job" element={<PostJobTPO />} />
+            </Route>
+            {/* edit post jobs */}
+            <Route element={<Layout header="Edit Job Detail" />}>
+              <Route path="/management/post-job/:jobId" element={<PostJobTPO />} />
+            </Route>
+            {/* all notice */}
+            <Route element={<Layout header="All Notices" />}>
+              <Route path="/management/all-notice" element={<ViewlAllNotice />} />
+            </Route>
+            {/* view notice */}
+            <Route element={<Layout header="Notice" />}>
+              <Route path="/management/notice/:noticeId" element={<ViewNotice />} />
+            </Route>
+            {/* send notice */}
+            <Route element={<Layout header="Send Notice" />}>
+              <Route path="/management/send-notice" element={<SendNotice />} />
+            </Route>
           </Route>
+
 
 
           {/* all admin routes  */}

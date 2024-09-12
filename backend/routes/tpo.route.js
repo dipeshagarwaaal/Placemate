@@ -11,7 +11,7 @@ const Login = require('../controllers/TPO/tpo.login.controller');
 
 const PostJob = require('../controllers/TPO/tpo.post-job.controller');
 
-const { AllJobs, DeleteJob, JobData } = require('../controllers/user/user.all-jobs.controller');
+const { AllJobs, DeleteJob, JobData, JobWithApplicants, StudentJobsApplied } = require('../controllers/user/user.all-jobs.controller');
 
 // login post request for student
 router.post('/login', Login);
@@ -26,6 +26,10 @@ router.post('/delete-job', DeleteJob);
 
 // view job 
 router.get('/job/:jobId', authenticateToken, JobData);
+
+router.get('/job/applicants/:jobId', authenticateToken, JobWithApplicants)
+
+router.get('/myjob/:studentId', authenticateToken, StudentJobsApplied)
 
 
 module.exports = router;

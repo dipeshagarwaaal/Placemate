@@ -4,11 +4,11 @@ import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import Placeholder from 'react-bootstrap/Placeholder';
 import { GrFormAdd } from "react-icons/gr";
 import { Link } from 'react-router-dom';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
+import TablePlaceholder from './TablePlaceholder';
 
 function AddUserTable({
   users,
@@ -69,204 +69,7 @@ function AddUserTable({
           loading ? (
             // fake table loading animation 
             <div>
-              <Table striped bordered hover className='bg-white my-6 rounded-lg shadow w-full'>
-                <thead>
-                  <tr>
-                    <th>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </th>
-                    <th>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </th>
-                    <th>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </th>
-                    <th>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </th>
-                    <th>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </th>
-                    <th>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                    <td>
-                      <Placeholder as="p" animation="glow">
-                        <Placeholder xs={12} />
-                      </Placeholder>
-                    </td>
-                  </tr>
-                </tbody>
-              </Table>
+              <TablePlaceholder />
               {/* <i className="fa-solid fa-spinner fa-spin text-3xl" /> */}
             </div>
           ) : (
@@ -292,7 +95,7 @@ function AddUserTable({
                           // for super user 
                           // checking if user is superuser && checking if page is of approve student user 
                           currentUser.role === "superuser" && (
-                            <Link to={`/admin/user/${user?._id}`}>
+                            <Link to={`/admin/user/${user?._id}`} className='text-blue-500 no-underline hover:text-blue-700'>
                               {user?.first_name + " "}
                               {user?.last_name !== undefined && user?.last_name}
                             </Link>
@@ -301,7 +104,7 @@ function AddUserTable({
                         {
                           // for management user
                           currentUser.role === "management_admin" && (
-                            <Link to={`/management/user/${user?._id}`}>
+                            <Link to={`/management/user/${user?._id}`} className='text-blue-500 no-underline hover:text-blue-700'>
                               {user?.first_name + " "}
                               {user?.last_name !== undefined && user?.last_name}
                             </Link>
@@ -310,7 +113,7 @@ function AddUserTable({
                         {
                           // for tpo user
                           currentUser.role === "tpo_admin" && (
-                            <Link to={`/tpo/user/${user?._id}`}>
+                            <Link to={`/tpo/user/${user?._id}`} className='text-blue-500 no-underline hover:text-blue-700'>
                               {user?.first_name + " "}
                               {user?.last_name !== undefined && user?.last_name}
                             </Link>
@@ -411,7 +214,7 @@ function AddUserTable({
         }
 
         {/* checking if approve student user page is open or not */}
-        {
+        {/* {
           userToAdd !== "approve-student" && (
             <Button variant="dark" size="lg" onClick={() => setFormOpen(true)}>
               <i className="fa-solid fa-person-circle-plus px-1" /> Add {userToAdd}
@@ -447,7 +250,7 @@ function AddUserTable({
               </div>
             </div>
           </>
-        }
+        } */}
       </div >
     </>
   )

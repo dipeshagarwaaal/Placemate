@@ -1,5 +1,5 @@
 import React from "react";
-import { FaListUl, FaCheckSquare } from "react-icons/fa";
+import { FaListUl, FaCheckSquare, FaEnvelopeOpenText } from "react-icons/fa";
 import { AiFillHome } from "react-icons/ai";
 import { RiArrowDownSFill, RiArrowUpSFill, RiPlayListAddLine } from "react-icons/ri";
 import { PiStudentDuotone } from "react-icons/pi";
@@ -69,6 +69,26 @@ export const SidebarData = [
       {
         title: "Add New",
         path: "/tpo/post-job",
+        icon: <RiPlayListAddLine />,
+      },
+    ],
+  },
+  {
+    title: "Notice",
+    icon: <FaEnvelopeOpenText />,
+    iconClosed: <RiArrowDownSFill />,
+    iconOpened: <RiArrowUpSFill />,
+
+    subNav: [
+      {
+        title: "List All",
+        path: "/tpo/all-notice",
+        icon: <FaListUl />,
+        cName: "sub-nav",
+      },
+      {
+        title: "Send New",
+        path: "/tpo/send-notice",
         icon: <RiPlayListAddLine />,
       },
     ],

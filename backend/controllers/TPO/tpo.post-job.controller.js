@@ -18,8 +18,6 @@ const PostJob = async (req, res) => {
     }
 
     const job = await JobSchema.findById(req.body._id);
-    console.log(req.body._id)
-
 
     if (job) {
       await job.updateOne({

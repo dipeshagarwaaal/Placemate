@@ -27,6 +27,8 @@ function ViewJobPost() {
   // check applied to a job
   const [applied, setApplied] = useState(false);
 
+  const [applicant, setApplicant] = useState([]);
+
   // check applied to a job
   const fetchApplied = async () => {
     try {
@@ -133,6 +135,22 @@ function ViewJobPost() {
     }
   }
 
+  const fetchApplicant = async () => {
+    if (!jobId) return
+    await axios.get(`http://localhost:4518/tpo/job/applicants/${jobId}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+      .then(res => {
+        if (res?.data?.msg) setToastMessage(res.data.msg)
+        else setApplicant(res?.data?.applicantsList);
+      })
+      .catch(err => {
+        console.log(err);
+        if (err?.response?.data?.msg) setToastMessage(err.response.data.msg)
+      })
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -144,6 +162,8 @@ function ViewJobPost() {
         if (currentUser.id) {
           await fetchJobDetail();
         }
+        if (jobId)
+          await fetchApplicant();
       } catch (error) {
         console.error("Error during fetching and applying job:", error);
       }
@@ -251,24 +271,55 @@ function ViewJobPost() {
                           <Accordion.Item eventKey="3">
                             <Accordion.Header>Applicants Applied</Accordion.Header>
                             <Accordion.Body>
-                              <Table striped borderless hover>
+                              <Table striped borderless hover size='sm'>
                                 <thead>
                                   <tr>
                                     <th style={{ width: '10%' }}>#</th>
-                                    <th style={{ width: '25%' }}>Name</th>
-                                    <th style={{ width: '25%' }}>Email</th>
-                                    <th style={{ width: '20%' }}>UIN</th>
-                                    <th style={{ width: '20%' }}>Status</th>
+                                    <th style={{ width: '20%' }}>Name</th>
+                                    <th style={{ width: '15%' }}>Email</th>
+                                    <th style={{ width: '20%' }}>Current Round</th>
+                                    <th style={{ width: '15%' }}>Status</th>
+                                    <th style={{ width: '20%' }}>Applied On</th>
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  <tr>
-                                    <td>1</td>
-                                    <td>Mark</td>
-                                    <td>Otto</td>
-                                    <td>@mdo</td>
-                                    <td>@mdo</td>
-                                  </tr>
+                                  {
+                                    applicant?.length > 0 ? (
+                                      <>
+                                        {
+                                          applicant.map((app, index) => (
+                                            <tr key={index}>
+                                              <td>{index + 1}</td>
+                                              <td>
+                                                {
+                                                  currentUser.role === 'tpo_admin' && (
+                                                    <Link to={`/tpo/user/${app.id}`} target='_blanck' className='text-blue-500 no-underline hover:text-blue-700'>
+                                                      {app.name}
+                                                    </Link>
+                                                  )
+                                                }
+                                                {
+                                                  currentUser.role === 'management_admin' && (
+                                                    <Link to={`/management/user/${app.id}`} target='_blanck' className='text-blue-500 no-underline hover:text-blue-700'>
+                                                      {app.name}
+                                                    </Link>
+                                                  )
+                                                }
+                                              </td>
+                                              <td>{app.email}</td>
+                                              <td>{app.currentRound}</td>
+                                              <td>{app.status}</td>
+                                              <td>{new Date(app.appliedAt).toLocaleString('en-IN')}</td>
+                                            </tr>
+                                          ))
+                                        }
+                                      </>
+                                    ) : (
+                                      <tr>
+                                        <td colSpan={5}>No Student Yet Applied!</td>
+                                      </tr>
+                                    )
+                                  }
                                 </tbody>
                               </Table>
                             </Accordion.Body>
@@ -341,23 +392,27 @@ function ViewJobPost() {
                           </span>
                           <span className='py-3' dangerouslySetInnerHTML={{ __html: data?.howToApply }} />
                         </div>
-                        <div className="flex justify-center">
-                          {
-                            applied === false ? (
-                              <Button variant="warning" onClick={handleApply}>
-                                <i className="fa-solid fa-check px-2" />
-                                Apply Now
-                              </Button>
-                            ) : (
-                              <Link to={`/student/status/${jobId}`}>
-                                <Button variant="warning">
-                                  <i className="fa-solid fa-check px-2" />
-                                  Update Status
-                                </Button>
-                              </Link>
-                            )
-                          }
-                        </div>
+                        {
+                          currentUser.role === 'student' && (
+                            <div className="flex justify-center">
+                              {
+                                applied === false ? (
+                                  <Button variant="warning" onClick={handleApply}>
+                                    <i className="fa-solid fa-check px-2" />
+                                    Apply Now
+                                  </Button>
+                                ) : (
+                                  <Link to={`/student/status/${jobId}`}>
+                                    <Button variant="warning">
+                                      <i className="fa-solid fa-check px-2" />
+                                      Update Status
+                                    </Button>
+                                  </Link>
+                                )
+                              }
+                            </div>
+                          )
+                        }
                       </div>
                     </Accordion.Body>
                   </Accordion.Item>

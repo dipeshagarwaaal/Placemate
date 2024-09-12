@@ -12,7 +12,7 @@ const Login = async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, user.password);
     
-    console.log(user.password)
+    
     if (!isMatch || user.role !== "superuser")
       return res.status(400).json({ msg: 'Credentials Not Matched!' });
 

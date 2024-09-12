@@ -5,5 +5,4 @@ Done But 1 pending =>> 1. List All Students year > branch wise  ===> serach bar 
 * serach bar when post job and select company name
 
 3. get notices from management
-
 4. send notices for student

@@ -375,7 +375,13 @@ function AddInternship() {
                           </b>
                         </td>
                         <td>
-                          {internship?.companyWebsite || '-'}
+                          {
+                            internship?.companyWebsite ? (
+                              <a href={internship?.companyWebsite} target='_blanck' className='no-underline text-blue-500 hover:text-blue-700'>
+                                {internship?.companyWebsite}
+                              </a>
+                            ) : '-'
+                          }
                         </td>
                         <td>
                           {new Date(internship?.startDate).toLocaleDateString('en-IN') || '-'}
@@ -384,10 +390,10 @@ function AddInternship() {
                           {new Date(internship?.endDate).toLocaleDateString('en-IN') || '-'}
                         </td>
                         <td>
-                          {internship?.internshipDuration || '-'}
+                          {internship?.internshipDuration ? internship?.internshipDuration + " days" : '-'}
                         </td>
                         <td>
-                          {internship?.monthlyStipend || '-'}
+                          {internship?.monthlyStipend ? "Rs. " + internship?.monthlyStipend : '-'}
                         </td>
                         <td>
                           {/* for hover label effect  */}

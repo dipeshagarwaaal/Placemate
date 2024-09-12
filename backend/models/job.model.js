@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const User = require('./user.model')
 
 const jobSchema = new mongoose.Schema({
   jobTitle: { type: String, required: true },
@@ -15,7 +14,7 @@ const jobSchema = new mongoose.Schema({
   // applicants details
   applicants: [
     {
-      studentId: { type: Schema.Types.ObjectId, ref: 'Student User' },
+      studentId: { type: Schema.Types.ObjectId, ref: 'Users' },
       currentRound: {
         type: String,
         enum: ['Aptitude Test', 'Technical Interview', 'HR Interview', 'Group Discussion']
@@ -29,5 +28,26 @@ const jobSchema = new mongoose.Schema({
     }
   ]
 });
+
+
+// Middleware to delete the jobId from user's appliedJobs array before deleting the job
+jobSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
+  try {
+    const jobId = this._id; // Get the current job's ID
+
+    const User = mongoose.model('Users');
+
+    // Remove the jobId from all users' appliedJobs array
+    await User.updateMany(
+      { 'studentProfile.appliedJobs.jobId': jobId }, // Find users who applied to this job
+      { $pull: { 'studentProfile.appliedJobs': { jobId: jobId } } } // Remove the jobId from appliedJobs array
+    );
+
+    next(); // Proceed with the job deletion
+  } catch (error) {
+    next(error); // Pass any errors to the next middleware
+  }
+});
+
 
 module.exports = mongoose.model('Job', jobSchema);

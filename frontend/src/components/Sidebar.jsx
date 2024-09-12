@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { FaUser, FaTachometerAlt, FaCog, FaSignOutAlt } from 'react-icons/fa';
-import { FaClipboardCheck } from 'react-icons/fa6';
-import { IoIosArrowDropdown, IoIosArrowDropupCircle } from 'react-icons/io';
+import { FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { IoIosArrowDropdown, IoIosArrowDropdownCircle } from 'react-icons/io';
 import axios from 'axios';
 import Logo from '../assets/CPMS.png';
 import SubMenu from './Submenu';
@@ -90,19 +89,32 @@ const Sidebar = ({ isSidebarVisible }) => {
 
 
   return (
-    <nav className={`bg-[#f2f2f2] w-[260px] h-screen z-20 flex justify-center fixed top-0 transition-transform duration-300 ${sidebar ? 'translate-x-0' : '-translate-x-full'} shadow-md`}>
-      <div className="w-full">
-        {/* Main Sidebar Logo and Name */}
-        <div className="flex items-center px-4 py-6 gap-3 bg-blue-50">
-          <img className="rounded-xl shadow-md" src={Logo} alt="Logo Image" width="75" height="75" />
-          <h1 className="text-xl font-bold text-white">
-            <Link to="/admin/dashboard" className="no-underline text-black">
-              CPMS
-            </Link>
-          </h1>
-        </div>
+    <nav className={`bg-[#f2f2f2] w-[260px] h-screen z-20 flex flex-col fixed top-0 transition-transform duration-300 ${sidebar ? 'translate-x-0' : '-translate-x-full'} shadow-md navbar-container`}>
+      {/* Main Sidebar Logo and Name */}
+      <div className="flex items-center px-4 py-6 gap-3 bg-blue-50">
+        <img className="rounded-xl shadow-md" src={Logo} alt="Logo Image" width="75" height="75" />
+        <h1 className="text-xl font-bold text-white">
+          {
+            loadData.role === 'superuser' &&
+            <Link to="/admin/dashboard" className="no-underline text-black">CPMS</Link>
+          }
+          {
+            loadData.role === 'management_admin' &&
+            <Link to="/management/dashboard" className="no-underline text-black">CPMS</Link>
+          }
+          {
+            loadData.role === 'tpo_admin' &&
+            <Link to="/tpo/dashboard" className="no-underline text-black">CPMS</Link>
+          }
+          {
+            loadData.role === 'student' &&
+            <Link to="/student/dashboard" className="no-underline text-black">CPMS</Link>
+          }
+        </h1>
+      </div>
 
-        {/* Main body */}
+      {/* Main body */}
+      <div className="flex-grow overflow-y-auto sidebar-content pb-24">
         <div className="flex flex-col justify-center w-full">
           {SidebarData.length > 0 ? (
             SidebarData.map((item, index) => (
@@ -114,27 +126,36 @@ const Sidebar = ({ isSidebarVisible }) => {
         </div>
       </div>
 
+      {/* Bottom Menu */}
       <div className="bottom-0 absolute w-full transition-all duration-300">
         {/* Dropdown Menu */}
         {dropdownOpen && (
           <div className={`w-full rounded-t-md bg-blue-200 ${dropdownOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-5'}`}>
+            {/* Conditional rendering based on role */}
             {
-              loadData.role === "student" && (
-                <Link to="../student/account" className="flex items-center rounded-t-md no-underline text-black p-3 hover:bg-blue-300">
+              loadData.role === 'student' && (
+                <Link to={`../student/account`} className="flex items-center rounded-t-md no-underline text-black p-3 hover:bg-blue-300">
                   <FaCog className="mr-2" /> <span>Account Details</span>
                 </Link>
               )
             }
             {
-              loadData.role === "tpo_admin" && (
-                <Link to="../tpo/account" className="flex items-center rounded-t-md no-underline text-black p-3 hover:bg-blue-300">
+              loadData.role === 'tpo_admin' && (
+                <Link to={`../tpo/account`} className="flex items-center rounded-t-md no-underline text-black p-3 hover:bg-blue-300">
                   <FaCog className="mr-2" /> <span>Account Details</span>
                 </Link>
               )
             }
             {
-              loadData.role === "management_admin" && (
-                <Link to="../management/account" className="flex items-center rounded-t-md no-underline text-black p-3 hover:bg-blue-300">
+              loadData.role === 'management_admin' && (
+                <Link to={`../management/account`} className="flex items-center rounded-t-md no-underline text-black p-3 hover:bg-blue-300">
+                  <FaCog className="mr-2" /> <span>Account Details</span>
+                </Link>
+              )
+            }
+            {
+              loadData.role === 'superuser' && (
+                <Link to={`../admin/account`} className="flex items-center rounded-t-md no-underline text-black p-3 hover:bg-blue-300">
                   <FaCog className="mr-2" /> <span>Account Details</span>
                 </Link>
               )
@@ -142,28 +163,28 @@ const Sidebar = ({ isSidebarVisible }) => {
             <button onClick={handleLogout} className="flex items-center rounded-t-md w-full p-3 text-red-700 hover:bg-blue-300">
               <FaSignOutAlt className="mr-2" /> Logout
             </button>
-
           </div>
         )}
 
         {/* User Profile */}
-        <div className="flex justify-center items-center gap-1 cursor-pointer bg-blue-100" onClick={toggleDropdown}>
-          <img src={`${BASE_URL}${loadData.profile}`} alt="Profile Img" width="36px" className="mx-2 my-2 rounded-2xl transition-all duration-300" />
+        <div className="flex justify-center items-center cursor-pointer bg-blue-100" onClick={toggleDropdown}>
+          <img src={`${BASE_URL}${loadData.profile}`} alt="Profile Img" width="45px" className="mx-2 my-2 rounded-2xl transition-all duration-300 shadow-md" />
           <div className="w-full">
-            <div className="flex flex-col justify-center py-2">
+            <div className="flex flex-col justify-center py-1">
               <h2 className="text-base font-semibold">{loadData.name}</h2>
               <p className="text-sm text-gray-600">{loadData.email}</p>
             </div>
           </div>
           <div className="px-1">
-            {dropdownOpen
-              ? <IoIosArrowDropupCircle size={24} />
-              : <IoIosArrowDropdown size={24} />
-            }
+            <IoIosArrowDropdownCircle size={24} className={`transition-transform duration-300 ${dropdownOpen ? 'rotate-180' : 'rotate-0'}`} />
           </div>
         </div>
       </div>
     </nav>
+
+
+
+
   );
 };
 

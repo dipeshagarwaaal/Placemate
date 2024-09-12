@@ -14,6 +14,7 @@ function AllCompany() {
 
   const [loading, setLoading] = useState(true);
   const [companys, setCompanys] = useState({});
+  const [jobs, setJobs] = useState({});
 
   const [modalBody, setModalBody] = useState({
     companyName: "",
@@ -26,6 +27,23 @@ function AllCompany() {
 
   // useState for Modal display
   const [showModal, setShowModal] = useState(false);
+
+  // stores only user role
+  const [currentUser, setCurrentUser] = useState('');
+
+  const fetchCurrentUserData = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('http://localhost:4518/user/detail', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        }
+      });
+      if (response?.data) setCurrentUser(response?.data?.role);
+    } catch (error) {
+      console.log("Account.jsx => ", error);
+    }
+  }
 
   const fetchCompanys = async () => {
     try {
@@ -79,6 +97,19 @@ function AllCompany() {
     }
   }
 
+  const fetchJobs = async () => {
+    try {
+      const response = await axios.get('http://localhost:4518/tpo/jobs');
+      setJobs(response.data.data);
+    } catch (error) {
+      console.log("Error fetching jobs ", error);
+      if (error?.response?.data?.msg) {
+        setToastMessage(error.response.data.msg);
+        setShowToast(true);
+      }
+    }
+  }
+
   const renderTooltipDeleteCompany = (props) => (
     <Tooltip id="button-tooltip" {...props}>
       Delete Company
@@ -103,8 +134,13 @@ function AllCompany() {
       // Clear the state after the toast is shown
       navigate('.', { replace: true, state: {} });
     }
-    fetchCompanys()
+    fetchCurrentUserData();
+    fetchCompanys();
+    fetchJobs();
   }, []);
+  console.log(jobs)
+
+
   return (
     <>
       <>
@@ -326,11 +362,12 @@ function AllCompany() {
               <Table striped bordered hover className='bg-white my-6 rounded-lg shadow w-full text-base'>
                 <thead>
                   <tr>
-                    <th style={{ width: '5%' }}>Sr. No.</th>
-                    <th style={{ width: '15%' }}><b>Company Name</b></th>
+                    <th style={{ width: '7%' }}>Sr. No.</th>
+                    <th style={{ width: '18%' }}><b>Company Name</b></th>
                     <th style={{ width: '15%' }}>Company Website</th>
                     <th style={{ width: '15%' }}>Company Location</th>
-                    <th style={{ width: '15%' }}>Company Difficulty Level</th>
+                    <th style={{ width: '17%' }}>Company Difficulty Level</th>
+                    <th style={{ width: '13%' }}>No. of Jobs Posted</th>
                     <th style={{ width: '15%' }}>Action</th>
                   </tr>
                 </thead>
@@ -345,11 +382,11 @@ function AllCompany() {
                           </b>
                         </td>
                         <td>
-                          <a 
-                          href={company?.companyWebsite} 
-                          target="_blank" 
-                          className='text-blue-500 no-underline'
-                          rel="noopener noreferrer"
+                          <a
+                            href={company?.companyWebsite}
+                            target="_blank"
+                            className='text-blue-500 no-underline'
+                            rel="noopener noreferrer"
                           >
                             {company?.companyWebsite}
                           </a>
@@ -375,6 +412,11 @@ function AllCompany() {
                           }
                         </td>
                         <td>
+                          {
+                            jobs.filter(job => job?.company == company?._id).length
+                          }
+                        </td>
+                        <td>
                           {/* for hover label effect  */}
                           <div className="flex justify-around items-center">
                             <div className="px-0.5">
@@ -386,7 +428,10 @@ function AllCompany() {
                               >
                                 <i
                                   className="fa-regular fa-pen-to-square text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-blue-500"
-                                  onClick={() => navigate(`../tpo/add-company/${company._id}`)}
+                                  onClick={() => {
+                                    if (currentUser === 'tpo_admin') navigate(`../tpo/add-company/${company._id}`)
+                                    else if (currentUser === 'management_admin') navigate(`../management/add-company/${company._id}`);
+                                  }}
                                   onMouseEnter={(e) => {
                                     e.target.classList.add('fa-solid');
                                     e.target.classList.remove('fa-regular');

@@ -12,8 +12,6 @@ const userData = async (req, res) => {
         populate: { path: 'company', select: 'companyName' } // Populates companyName from the Company model
       });
 
-      console.log(user)
-
     // Check if user exists
     if (!user)
       return res.status(404).json({ msg: 'Student not found' });

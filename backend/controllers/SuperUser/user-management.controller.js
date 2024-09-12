@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 // get management user
 const managementUsers = async (req, res) => {
   const managementUsers = await User.find({ role: "management_admin" });
-  res.json({ managementUsers })
+  res.json({ managementUsers });
 }
 
 const managementAddUsers = async (req, res) => {

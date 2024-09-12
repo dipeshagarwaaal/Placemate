@@ -114,7 +114,7 @@ function ViewUserData() {
     fetchAllData();
   }, [userId, placement.jobId, placement.companyId]);
 
-  // console.log(userData)
+  // console.log(typeof(userData?.studentProfile?.interships?.length))
 
   return (
     <>
@@ -139,7 +139,6 @@ function ViewUserData() {
             <div className="my-8 grid grid-cols-2 gap-4 text-base">
               <div className="backdrop-blur-md bg-white/30 border border-gray-200 rounded-lg shadow p-6 h-fit">
                 <h3 className="text-2xl font-semibold text-gray-800 mb-4">Personal Details</h3>
-
                 <div className="grid grid-cols-2">
                   {/* Personal Info */}
                   <div className="space-y-4">
@@ -221,7 +220,7 @@ function ViewUserData() {
                       <Image src={BASE_URL + userData?.profile} thumbnail />
                     </Col>
                     {
-                      (userData?.studentProfile?.resume?.filepath !== "undefined") && (
+                      (userData?.studentProfile?.resume?.filepath !== "undefined" && userData?.role === 'student') && (
                         <div className="py-2 px-2">
                           <span className='bg-blue-500 py-1 pr-2 rounded cursor-pointer hover:bg-blue-700'>
                             <a href={BASE_URL + userData?.studentProfile?.resume?.filepath} target='_blanck' className='no-underline text-white'>
@@ -237,147 +236,157 @@ function ViewUserData() {
                 </div>
               </div>
 
-              {/* placement status  */}
-              <div className={`backdrop-blur-md bg-white/30 border border-gray-200 rounded-lg shadow p-6 h-fit ${placement?.isPlaced === true ? 'bg-green-100' : 'bg-red-100'}`}>
-                <div className=''>
-                  <h3 className="text-2xl font-semibold text-gray-800 mb-4">Placement Status</h3>
-                  <div className="grid gap-1">
+
+              {
+                userData?.role === "student" && (
+                  <>
                     {/* placement status  */}
-                    <div className="grid">
-                      <div className="grid grid-flow-col">
-                        <div className="space-y-4">
-                          <div>
-                            {/* No. of jobs applied  */}
-                            <span className="text-gray-700 font-bold">No. of Jobs Applied: </span>
-                            <span className="text-gray-800">
-                              {userData?.studentProfile?.appliedJobs?.length}
-                            </span>
-                          </div>
-                          <div>
-                            {/* No. of interview */}
-                            <span className="text-gray-700 font-bold">No. of Interview: </span>
-                            <span className="text-gray-800">
-                              {placement?.interview}
-                            </span>
-                          </div>
-                          <div>
-                            {/* No. of rejection */}
-                            <span className="text-gray-700 font-bold">No. of Rejection: </span>
-                            <span className="text-gray-800">
-                              {placement?.reject}
-                            </span>
-                          </div>
-                        </div>
-                        <div className='space-y-2'>
-                          <div>
-                            {/* Is Placed */}
-                            <span className="text-gray-700 font-bold">Is Placed?: </span>
-                            <span className="text-gray-800">
-                              {placement?.isPlaced === true
-                                ? <b className='text-green-500'>Yes</b>
-                                : <b className='text-red-500'>No</b>}
-                            </span>
-                          </div>
-                          {
-                            placement?.isPlaced === true && (
+                    <div className={`backdrop-blur-md bg-white/30 border border-gray-200 rounded-lg shadow p-6 h-fit ${placement?.isPlaced === true ? 'bg-green-200' : 'bg-red-200'}`}>
+                      <div className=''>
+                        <h3 className="text-2xl font-semibold text-gray-800 mb-4">Placement Status</h3>
+                        <div className="grid gap-1">
+                          {/* placement status  */}
+                          <div className="grid">
+                            <div className="grid grid-flow-col">
+                              <div className="space-y-4">
+                                <div>
+                                  {/* No. of jobs applied  */}
+                                  <span className="text-gray-700 font-bold">No. of Jobs Applied: </span>
+                                  <span className="text-gray-800">
+                                    {userData?.studentProfile?.appliedJobs?.length}
+                                  </span>
+                                </div>
+                                <div>
+                                  {/* No. of interview */}
+                                  <span className="text-gray-700 font-bold">No. of Interview: </span>
+                                  <span className="text-gray-800">
+                                    {placement?.interview}
+                                  </span>
+                                </div>
+                                <div>
+                                  {/* No. of rejection */}
+                                  <span className="text-gray-700 font-bold">No. of Rejection: </span>
+                                  <span className="text-gray-800">
+                                    {placement?.reject}
+                                  </span>
+                                </div>
+                              </div>
+                              <div className='space-y-2'>
+                                <div>
+                                  {/* Is Placed */}
+                                  <span className="text-gray-700 font-bold">Is Placed?: </span>
+                                  <span className="text-gray-800">
+                                    {placement?.isPlaced === true
+                                      ? <b className='text-green-500'>Yes</b>
+                                      : <b className='text-red-500'>No</b>}
+                                  </span>
+                                </div>
+                                {
+                                  placement?.isPlaced === true && (
+                                    <>
+                                      <div>
+                                        {/* If Placed then package? */}
+                                        <span className="text-gray-700 font-bold">Package: </span>
+                                        <span className="text-gray-800">
+                                          {placement?.packageOffered + " LPA"}
+                                        </span>
+                                      </div>
+                                      <div>
+                                        {/* company details */}
+                                        <span className="text-gray-700 font-bold">Company Name: </span>
+                                        <span className="text-gray-800">
+                                          {company?.companyName}
+                                        </span>
+                                      </div>
+                                      <div>
+                                        {/* Job Title */}
+                                        <span className="text-gray-700 font-bold">Job Title: </span>
+                                        <span className="text-gray-800">
+                                          {jobDetail?.jobTitle}
+                                        </span>
+                                      </div>
+                                    </>
+                                  )
+                                }
+                              </div>
+                            </div>
+                            {placement?.isPlaced !== true && (
                               <>
-                                <div>
-                                  {/* If Placed then package? */}
-                                  <span className="text-gray-700 font-bold">Package: </span>
-                                  <span className="text-gray-800">
-                                    {placement?.packageOffered + " LPA"}
-                                  </span>
-                                </div>
-                                <div>
-                                  {/* company details */}
-                                  <span className="text-gray-700 font-bold">Company Name: </span>
-                                  <span className="text-gray-800">
-                                    {company?.companyName}
-                                  </span>
-                                </div>
-                                <div>
-                                  {/* Job Title */}
-                                  <span className="text-gray-700 font-bold">Job Title: </span>
-                                  <span className="text-gray-800">
-                                    {jobDetail?.jobTitle}
-                                  </span>
+                                <div className="my-2">
+                                  <Accordion flush className='flex flex-col gap-4'>
+                                    <Accordion.Item eventKey={'0'} className='shadow-md'>
+                                      <Accordion.Header>Job Applied Detail</Accordion.Header>
+                                      <Accordion.Body>
+                                        <Table striped borderless hover sixe='sm'>
+                                          <thead>
+                                            <tr>
+                                              <th style={{ width: "5%" }}>#</th>
+                                              <th style={{ width: "20%" }}>Company Name</th>
+                                              <th style={{ width: "20%" }}>Job Title</th>
+                                              <th style={{ width: "20%" }}>Current Round</th>
+                                              <th style={{ width: "15%" }}>Round Status</th>
+                                              <th style={{ width: "10%" }}>Status</th>
+                                              <th style={{ width: "10%" }}>Applied On</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            {
+                                              userData?.studentProfile?.appliedJobs?.length > 0 ? (
+                                                userData?.studentProfile?.appliedJobs?.map((job, index) => {
+                                                  const applicant = job.jobId?.applicants?.find(applicant => applicant.studentId === userData._id);
+                                                  return (
+                                                    <>
+                                                      <tr key={index}>
+                                                        <td>{index + 1}</td>
+                                                        <td>{job?.jobId?.company?.companyName || '-'}</td>
+                                                        <td>{job?.jobId?.jobTitle || '-'}</td>
+                                                        <td>
+                                                          {applicant?.currentRound
+                                                            ? applicant.currentRound.charAt(0).toUpperCase() + applicant.currentRound.slice(1)
+                                                            : '-'}
+                                                        </td>
+                                                        <td>
+                                                          {applicant?.roundStatus
+                                                            ? applicant.roundStatus.charAt(0).toUpperCase() + applicant.roundStatus.slice(1)
+                                                            : '-'}
+                                                        </td>
+                                                        <td>{job?.status ? job?.status.charAt(0).toUpperCase() + job?.status.slice(1) : '-'}</td>
+                                                        <td>
+                                                          {new Date(job?.appliedAt.split('T')[0]).toLocaleDateString('en-IN') || '-'}
+                                                        </td>
+                                                      </tr>
+                                                    </>
+                                                  )
+                                                })
+                                              ) : (
+                                                <tr>
+                                                  <td colSpan={7}>Not Yet Applied Any Job!</td>
+                                                </tr>
+                                              )
+                                            }
+
+                                          </tbody>
+                                        </Table>
+                                      </Accordion.Body>
+                                    </Accordion.Item>
+                                  </Accordion>
                                 </div>
                               </>
                             )
-                          }
+                            }
+                          </div>
                         </div>
                       </div>
-                      {placement?.isPlaced !== true && (
-                        <>
-                          <div className="my-2">
-                            <Accordion flush className='flex flex-col gap-4'>
-                              <Accordion.Item eventKey={'0'} className='shadow-md'>
-                                <Accordion.Header>Job Applied Detail</Accordion.Header>
-                                <Accordion.Body>
-                                  <Table striped borderless hover sixe='sm'>
-                                    <thead>
-                                      <tr>
-                                        <th style={{ width: "5%" }}>#</th>
-                                        <th style={{ width: "20%" }}>Company Name</th>
-                                        <th style={{ width: "20%" }}>Job Title</th>
-                                        <th style={{ width: "20%" }}>Current Round</th>
-                                        <th style={{ width: "15%" }}>Round Status</th>
-                                        <th style={{ width: "10%" }}>Status</th>
-                                        <th style={{ width: "10%" }}>Applied On</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      {
-                                        userData?.studentProfile?.appliedJobs?.length > 0 ? (
-                                          userData?.studentProfile?.appliedJobs?.map((job, index) => {
-                                            const applicant = job.jobId?.applicants?.find(applicant => applicant.studentId === userData._id);
-                                            return (
-                                              <>
-                                                <tr key={index}>
-                                                  <td>{index + 1}</td>
-                                                  <td>{job?.jobId?.company?.companyName || '-'}</td>
-                                                  <td>{job?.jobId?.jobTitle || '-'}</td>
-                                                  <td>
-                                                    {applicant?.currentRound
-                                                      ? applicant.currentRound.charAt(0).toUpperCase() + applicant.currentRound.slice(1)
-                                                      : '-'}
-                                                  </td>
-                                                  <td>
-                                                    {applicant?.roundStatus
-                                                      ? applicant.roundStatus.charAt(0).toUpperCase() + applicant.roundStatus.slice(1)
-                                                      : '-'}
-                                                  </td>
-                                                  <td>{job?.status ? job?.status.charAt(0).toUpperCase() + job?.status.slice(1) : '-'}</td>
-                                                  <td>
-                                                    {new Date(job?.appliedAt.split('T')[0]).toLocaleDateString('en-IN') || '-'}
-                                                  </td>
-                                                </tr>
-                                              </>
-                                            )
-                                          })
-                                        ) : (
-                                          <tr>
-                                            <td colSpan={7}>Not Yet Applied Any Job!</td>
-                                          </tr>
-                                        )
-                                      }
-
-                                    </tbody>
-                                  </Table>
-                                </Accordion.Body>
-                              </Accordion.Item>
-                            </Accordion>
-                          </div>
-                        </>
-                      )
-                      }
                     </div>
-                  </div>
-                </div>
-              </div>
+                  </>
+                )
+              }
+
+
 
               {
-                userData?.isProfileCompleted === true && (
+                // if user profile completed and role is of student only 
+                (userData?.isProfileCompleted === true && userData?.role === 'student') && (
                   <>
                     <div className="backdrop-blur-md bg-white/30 border border-gray-200 rounded-lg shadow p-6">
                       <div className=''>
@@ -388,7 +397,7 @@ function ViewUserData() {
                           <div className="grid grid-flow-col">
                             <div className="space-y-4">
                               {
-                                userData?.studentProfile?.rollNumber && (
+                                userData?.studentProfile?.UIN && (
                                   <div>
                                     <span className="text-gray-700 font-bold">UIN: </span>
                                     <span className="text-gray-800">
@@ -563,7 +572,7 @@ function ViewUserData() {
 
 
               {
-                userData?.studentProfile?.pastQualification && (
+                (userData?.studentProfile?.pastQualification && userData?.role === 'student') && (
                   <>
                     <div className="backdrop-blur-md bg-white/30 border border-gray-200 rounded-lg shadow p-6 h-fit">
                       <div className=''>
@@ -714,7 +723,7 @@ function ViewUserData() {
 
               {/* Internship details  */}
               {
-                userData?.studentProfile?.interships?.length !== 0 && (
+                (userData?.studentProfile?.internships && userData.studentProfile.internships.length !== 0) && (
                   <div className="col-span-2 backdrop-blur-md bg-white/30 border border-gray-200 rounded-lg shadow p-6 h-fit">
                     <div className=''>
                       <div className="flex justify-between">
