@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FaCog, FaSignOutAlt } from 'react-icons/fa';
-import { IoIosArrowDropdown, IoIosArrowDropdownCircle } from 'react-icons/io';
+import { IoIosArrowDropdownCircle } from 'react-icons/io';
 import axios from 'axios';
 import Logo from '../assets/CPMS.png';
 import SubMenu from './Submenu';
+import { BASE_URL } from '../config/config';
 
 const Sidebar = ({ isSidebarVisible }) => {
   const [sidebar, setSidebar] = useState(isSidebarVisible);
   const location = useLocation();
   const navigate = useNavigate();
-
-  const BASE_URL = 'http://localhost:4518';
 
   useEffect(() => {
     setSidebar(isSidebarVisible);

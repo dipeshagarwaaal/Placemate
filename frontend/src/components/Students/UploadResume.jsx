@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
+import { BASE_URL } from '../../config/config';
 
 const UploadResume = ({ fetchCurrentUserData }) => {
   const [uploadStatus, setUploadStatus] = useState('');
@@ -15,7 +16,7 @@ const UploadResume = ({ fetchCurrentUserData }) => {
   // checking for authentication
   useEffect(() => {
     const token = localStorage.getItem('token');
-    axios.get('http://localhost:4518/user/detail', {
+    axios.get(`${BASE_URL}/user/detail`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -46,7 +47,7 @@ const UploadResume = ({ fetchCurrentUserData }) => {
     formData.append('userId', currentUser.id);
 
     try {
-      const response = await axios.post('http://localhost:4518/student/upload-resume',
+      const response = await axios.post(`${BASE_URL}/student/upload-resume`,
         formData,
         {
           headers: {

@@ -6,6 +6,7 @@ import Badge from 'react-bootstrap/Badge';
 import TablePlaceholder from '../components/TablePlaceholder';
 import Toast from '../components/Toast';
 import ModalBox from '../components/Modal';
+import { BASE_URL } from '../config/config';
 
 
 function ViewlAllNotice() {
@@ -33,7 +34,7 @@ function ViewlAllNotice() {
     const fetchCurrentUser = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:4518/user/detail', {
+        const response = await axios.get(`${BASE_URL}/user/detail`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -60,7 +61,7 @@ function ViewlAllNotice() {
 
   const confirmDelete = async (noticeId) => {
     try {
-      const response = await axios.post(`http://localhost:4518/management/delete-notice?noticeId=${noticeId}`);
+      const response = await axios.post(`${BASE_URL}/management/delete-notice?noticeId=${noticeId}`);
       if (response?.data?.msg) {
         fetchNotices();
         setToastMessage(response.data.msg);
@@ -74,7 +75,7 @@ function ViewlAllNotice() {
 
   const fetchNotices = async () => {
     try {
-      const response = await axios.get('http://localhost:4518/management/get-all-notices', {
+      const response = await axios.get(`${BASE_URL}/management/get-all-notices`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         }

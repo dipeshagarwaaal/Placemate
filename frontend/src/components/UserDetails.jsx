@@ -7,12 +7,11 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import Toast from './Toast';
+import { BASE_URL } from '../config/config';
 
 function UserDetails() {
   const navigate = useNavigate();
   const location = useLocation();
-  const BASE_URL = "http://localhost:4518";
-
 
   // userId but its userId
   const { userId } = useParams();
@@ -33,7 +32,7 @@ function UserDetails() {
   const fetchCurrentUserData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:4518/user/detail', {
+      const response = await axios.get(`${BASE_URL}/user/detail`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         }
@@ -69,7 +68,7 @@ function UserDetails() {
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
-        const response = await axios.get(`http://localhost:4518/user/${userId}`, {
+        const response = await axios.get(`${BASE_URL}/user/${userId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           }
@@ -114,7 +113,7 @@ function UserDetails() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:4518/user/update-profile',
+      const response = await axios.post(`${BASE_URL}/user/update-profile`,
         // for sending to backend is user is completing profile
         userData,
         {
@@ -154,7 +153,7 @@ function UserDetails() {
       formData.append('userId', userData._id);
 
       try {
-        const response = await axios.post("http://localhost:4518/user/upload-photo", formData);
+        const response = await axios.post(`${BASE_URL}/user/upload-photo`, formData);
         setUserData({ ...userData, profile: response.data.file });
         if (response.data) {
           if (response.data.msg) {

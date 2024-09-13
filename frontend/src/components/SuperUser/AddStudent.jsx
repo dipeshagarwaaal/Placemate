@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Toast from '../Toast';
 import ModalBox from '../Modal';
-
 import AddUserTable from '../AddUserTable';
+import { BASE_URL } from '../../config/config';
 
 function AddStudent() {
 
@@ -21,7 +21,7 @@ function AddStudent() {
 
   const fetchUserDetails = async () => {
     try {
-      const response = await axios.get("http://localhost:4518/admin/student-users", {
+      const response = await axios.get(`${BASE_URL}/admin/student-users`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`, 
         }
@@ -60,7 +60,7 @@ function AddStudent() {
 
   const confirmDelete = async (email) => {
     try {
-      const response = await axios.post("http://localhost:4518/admin/student-delete-user",
+      const response = await axios.post(`${BASE_URL}/admin/student-delete-user`,
         { email: userToDelete },
         {
           headers: {
@@ -87,7 +87,7 @@ function AddStudent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4518/admin/student-add-user",
+      const response = await axios.post(`${BASE_URL}/admin/student-add-user`,
         data,
         {
           headers: {

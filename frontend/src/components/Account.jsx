@@ -7,10 +7,10 @@ import { FaMapLocationDot } from "react-icons/fa6";
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Toast from './Toast';
+import { BASE_URL } from '../config/config';
 
 function Account() {
   document.title = 'CPMS | Account';
-  const BASE_URL = "http://localhost:4518";
 
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
@@ -20,7 +20,7 @@ function Account() {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:4518/user/detail', {
+        const response = await axios.get(`${BASE_URL}/user/detail`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -42,7 +42,7 @@ function Account() {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post("http://localhost:4518/user/update-profile",
+      const response = await axios.post(`${BASE_URL}/user/update-profile`,
         data,
         {
           headers: {
@@ -71,7 +71,7 @@ function Account() {
 
       try {
         // const token = localStorage.getItem('token');
-        const response = await axios.post("http://localhost:4518/user/upload-photo", formData
+        const response = await axios.post(`${BASE_URL}/user/upload-photo`, formData
           // , {
           // headers: {
           //   'Authorization': `Bearer ${token}`,
@@ -115,7 +115,7 @@ function Account() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = axios.post("http://localhost:4518/user/change-password",
+      const response = axios.post(`${BASE_URL}/user/change-password`,
         passData,
         {
           headers: {

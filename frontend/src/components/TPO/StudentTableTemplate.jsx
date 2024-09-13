@@ -3,9 +3,9 @@ import Accordion from 'react-bootstrap/Accordion';
 import Table from 'react-bootstrap/Table';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { BASE_URL } from '../../config/config';
 
 const StudentTable = ({ branchName, studentData }) => {
-  const BASE_URL = 'http://localhost:4518';
 
   // useState for load data
   const [currentUser, setCurrentUser] = useState({
@@ -15,7 +15,7 @@ const StudentTable = ({ branchName, studentData }) => {
   // checking for authentication
   useEffect(() => {
     const token = localStorage.getItem('token');
-    axios.get('http://localhost:4518/user/detail', {
+    axios.get(`${BASE_URL}/user/detail`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }

@@ -4,6 +4,7 @@ import Toast from '../Toast';
 import ModalBox from '../Modal';
 
 import AddUserTable from '../AddUserTable';
+import { BASE_URL } from '../../config/config';
 
 function AddTPO() {
 
@@ -21,7 +22,7 @@ function AddTPO() {
 
   const fetchUserDetails = async () => {
     try {
-      const response = await axios.get("http://localhost:4518/admin/tpo-users", {
+      const response = await axios.get(`${BASE_URL}/admin/tpo-users`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming token is stored in localStorage
         }
@@ -60,7 +61,7 @@ function AddTPO() {
 
   const confirmDelete = async (email) => {
     try {
-      const response = await axios.post("http://localhost:4518/admin/tpo-delete-user",
+      const response = await axios.post(`${BASE_URL}/admin/tpo-delete-user`,
         { email: userToDelete },
         {
           headers: {
@@ -87,7 +88,7 @@ function AddTPO() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4518/admin/tpo-add-user",
+      const response = await axios.post(`${BASE_URL}/admin/tpo-add-user`,
         data,
         {
           headers: {

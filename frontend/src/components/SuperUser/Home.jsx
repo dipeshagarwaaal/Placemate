@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Badge from 'react-bootstrap/Badge';
+import { BASE_URL } from '../../config/config';
 
 function Home() {
   const [countUsers, setCountUsers] = useState({});
@@ -10,7 +11,7 @@ function Home() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get("http://localhost:4518/user/all-users");
+        const response = await axios.get(`${BASE_URL}/user/all-users`);
         setCountUsers(response.data);
       } catch (error) {
         console.log("Home.jsx => ", error);

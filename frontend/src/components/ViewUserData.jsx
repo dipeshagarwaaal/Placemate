@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Col from 'react-bootstrap/Col';
 import Accordion from 'react-bootstrap/Accordion';
 import Table from 'react-bootstrap/Table';
 import Image from 'react-bootstrap/Image';
 import Toast from './Toast';
+import { BASE_URL } from '../config/config';
 
 function ViewUserData() {
-
   const navigate = useNavigate();
-  const location = useLocation();
-  const BASE_URL = "http://localhost:4518";
-
 
   // userId but its userId
   const { userId } = useParams();

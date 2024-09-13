@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Badge from 'react-bootstrap/Badge';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { BASE_URL } from '../config/config';
 
 function NoticeBox() {
   const [loading, setLoading] = useState(true);
@@ -13,7 +14,7 @@ function NoticeBox() {
     const fetchCurrentUser = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:4518/user/detail', {
+        const response = await axios.get(`${BASE_URL}/user/detail`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -33,7 +34,7 @@ function NoticeBox() {
 
   const fetchNotices = async () => {
     try {
-      const response = await axios.get('http://localhost:4518/management/get-all-notices', {
+      const response = await axios.get(`${BASE_URL}/management/get-all-notices`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         }

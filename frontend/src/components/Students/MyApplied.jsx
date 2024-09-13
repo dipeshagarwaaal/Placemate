@@ -5,8 +5,7 @@ import { Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
-import ModalBox from '../Modal';
-import Toast from '../Toast';
+import { BASE_URL } from '../../config/config';
 
 function MyApplied() {
   const [loading, setLoading] = useState(true);
@@ -19,7 +18,7 @@ function MyApplied() {
   // checking for authentication
   useEffect(() => {
     const token = localStorage.getItem('token');
-    axios.get('http://localhost:4518/user/detail', {
+    axios.get(`${BASE_URL}/user/detail`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -43,7 +42,7 @@ function MyApplied() {
   const fetchMyJob = async () => {
     if (!currentUser?.id) return;
     try {
-      const response = await axios.get(`http://localhost:4518/tpo/myjob/${currentUser.id}`, {
+      const response = await axios.get(`${BASE_URL}/tpo/myjob/${currentUser.id}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }

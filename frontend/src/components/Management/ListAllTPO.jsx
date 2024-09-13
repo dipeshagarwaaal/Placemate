@@ -3,6 +3,7 @@ import axios from 'axios';
 import Toast from '../Toast';
 import ModalBox from '../Modal';
 import AddUserTable from '../AddUserTable';
+import { BASE_URL } from '../../config/config';
 
 function AddTPO() {
   // tpo users store here
@@ -19,7 +20,7 @@ function AddTPO() {
 
   const fetchUserDetails = async () => {
     try {
-      const response = await axios.get("http://localhost:4518/management/tpo-users", {
+      const response = await axios.get(`${BASE_URL}/management/tpo-users`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming token is stored in localStorage
         }
@@ -37,13 +38,13 @@ function AddTPO() {
       setLoading(false);
     }
   };
-  
+
 
   useEffect(() => {
     fetchUserDetails();
     setLoading(false);
   }, []);
-  
+
   const [formOpen, setFormOpen] = useState(false);
   const [data, setData] = useState({
     first_name: "",
@@ -51,17 +52,17 @@ function AddTPO() {
     number: "",
     password: ""
   });
-  
+
   const handleDataChange = (e) => setData({ ...data, [e.target.name]: e.target.value });
 
   const handleDeleteUser = (email) => {
     setUserToDelete(email);
     setShowModal(true);
   }
-  
+
   const confirmDelete = async () => {
     try {
-      const response = await axios.post("http://localhost:4518/management/deletetpo",
+      const response = await axios.post(`${BASE_URL}/management/deletetpo`,
         { email: userToDelete },
         {
           headers: {
@@ -84,11 +85,11 @@ function AddTPO() {
     setShowModal(false);
     setUserToDelete(null);
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4518/management/addtpo",
+      const response = await axios.post(`${BASE_URL}/management/addtpo`,
         data,
         {
           headers: {
@@ -106,7 +107,7 @@ function AddTPO() {
     }
   }
 
-  
+
   return (
     <>
       {/*  any message here  */}

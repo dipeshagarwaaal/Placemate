@@ -7,6 +7,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel'; ``
 import Form from 'react-bootstrap/Form';
 import Toast from '../Toast';
 import ModalBox from '../Modal';
+import { BASE_URL } from '../../config/config';
 
 function PostJob() {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ function PostJob() {
 
   const confirmSubmit = async () => {
     try {
-      const response = await axios.post('http://localhost:4518/tpo/post-job',
+      const response = await axios.post(`${BASE_URL}/tpo/post-job`,
         data,
         {
           headers: {
@@ -75,7 +76,7 @@ function PostJob() {
 
   const fetchJobDetail = async () => {
     try {
-      const response = await axios.get(`http://localhost:4518/tpo/job/${jobId}`,
+      const response = await axios.get(`${BASE_URL}/tpo/job/${jobId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -98,7 +99,7 @@ function PostJob() {
   const fetchCompanys = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:4518/company/company-detail', {
+      const response = await axios.get(`${BASE_URL}/company/company-detail`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         }

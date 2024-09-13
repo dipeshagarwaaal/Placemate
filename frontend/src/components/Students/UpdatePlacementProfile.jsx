@@ -8,11 +8,11 @@ import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import Toast from '../Toast';
 import UploadResume from './UploadResume';
+import { BASE_URL } from '../../config/config';
 
 
 function UpdatePlacementProfile() {
   const navigate = useNavigate();
-  const BASE_URL = "http://localhost:4518";
 
   // userData to store user data get from userId
   const [userData, setUserData] = useState(null);
@@ -26,7 +26,7 @@ function UpdatePlacementProfile() {
   const fetchCurrentUserData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:4518/user/detail', {
+      const response = await axios.get(`${BASE_URL}/user/detail`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         }
@@ -71,7 +71,7 @@ function UpdatePlacementProfile() {
     try {
       const token = localStorage.getItem('token');
       console.log(userData)
-      const response = await axios.post('http://localhost:4518/user/update-profile',
+      const response = await axios.post(`${BASE_URL}/user/update-profile`,
         // for sending to backend is user is completing profile
         userData,
         {

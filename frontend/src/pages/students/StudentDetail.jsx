@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { BASE_URL } from '../../config/config';
 
 function StudentDetail() {
   const { studentId } = useParams(); 
@@ -10,7 +11,7 @@ function StudentDetail() {
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
-        const response = await axios.get(`http://localhost:4518/admin/student/${studentId}`, {
+        const response = await axios.get(`${BASE_URL}/admin/student/${studentId}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           }

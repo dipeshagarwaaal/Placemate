@@ -4,6 +4,7 @@ import axios from 'axios';
 import Logo from '../../assets/CPMS.png';
 import isAuthenticated from '../../utility/auth.utility';
 import Toast from '../../components/Toast';
+import { BASE_URL } from '../../config/config';
 
 function LoginSuperUser() {
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ function LoginSuperUser() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4518/admin/login', formData);
+      const response = await axios.post(`${BASE_URL}/admin/login`, formData);
       localStorage.setItem('token', response.data.token);
       navigate('../admin/dashboard');
     } catch (error) {

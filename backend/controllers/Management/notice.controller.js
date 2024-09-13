@@ -31,9 +31,9 @@ const GetAllNotice = async (req, res) => {
 
 const GetNotice = async (req, res) => {
   try {
-    console.log(req.query.noticeId)
+    // console.log(req.query.noticeId)
     const notice = await Notice.findById(req.query.noticeId);
-    console.log(notice)
+    // console.log(notice)
     res.json(notice);
   } catch (error) {
     console.log('error in notice.controller.js => ', error);

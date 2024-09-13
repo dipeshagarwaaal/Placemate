@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import Col from 'react-bootstrap/Col';
-import Image from 'react-bootstrap/Image';
 import Toast from '../Toast';
 import ModalBox from '../Modal';
+import { BASE_URL } from '../../config/config';
 
 function AddCompany() {
   const navigate = useNavigate();
@@ -40,7 +39,7 @@ function AddCompany() {
 
   const confirmSubmit = async () => {
     try {
-      const response = await axios.post('http://localhost:4518/company/add-company',
+      const response = await axios.post(`${BASE_URL}/company/add-company`,
         data,
         {
           headers: {
@@ -69,7 +68,7 @@ function AddCompany() {
 
   const fetchCompanyData = async () => {
     try {
-      const response = await axios.get(`http://localhost:4518/company/company-data?companyId=${companyId}`);
+      const response = await axios.get(`${BASE_URL}/company/company-data?companyId=${companyId}`);
       setData(response.data.company);
     } catch (error) {
       console.log("AddCompany error while fetching => ", error);

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Toast from '../Toast';
 import ModalBox from '../Modal';
-
 import AddUserTable from '../AddUserTable';
+import { BASE_URL } from '../../config/config';
 
 
 function Management() {
@@ -21,7 +21,7 @@ function Management() {
 
   const fetchUserDetails = async () => {
     try {
-      const response = await axios.get("http://localhost:4518/admin/management-users", {
+      const response = await axios.get(`${BASE_URL}/admin/management-users`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`, // Assuming token is stored in localStorage
         }
@@ -60,7 +60,7 @@ function Management() {
 
   const confirmDelete = async (email) => {
     try {
-      const response = await axios.post("http://localhost:4518/admin/management-delete-user",
+      const response = await axios.post(`${BASE_URL}/admin/management-delete-user`,
         { email: userToDelete },
         {
           headers: {
@@ -87,7 +87,7 @@ function Management() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:4518/admin/management-add-user",
+      const response = await axios.post(`${BASE_URL}/admin/management-add-user`,
         data,
         {
           headers: {

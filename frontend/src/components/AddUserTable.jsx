@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
-import Button from 'react-bootstrap/Button';
 import axios from 'axios';
-import Form from 'react-bootstrap/Form';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import { GrFormAdd } from "react-icons/gr";
 import { Link } from 'react-router-dom';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
@@ -33,7 +29,7 @@ function AddUserTable({
   // checking for authentication
   useEffect(() => {
     const token = localStorage.getItem('token');
-    axios.get('http://localhost:4518/user/detail', {
+    axios.get(`${BASE_URL}/user/detail`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }

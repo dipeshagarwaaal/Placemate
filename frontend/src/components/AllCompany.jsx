@@ -7,6 +7,7 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import ModalBox from './Modal';
 import Toast from './Toast';
+import { BASE_URL } from '../config/config';
 
 function AllCompany() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ function AllCompany() {
   const fetchCurrentUserData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:4518/user/detail', {
+      const response = await axios.get(`${BASE_URL}/user/detail`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         }
@@ -48,7 +49,7 @@ function AllCompany() {
   const fetchCompanys = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:4518/company/company-detail', {
+      const response = await axios.get(`${BASE_URL}/company/company-detail`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         }
@@ -72,7 +73,7 @@ function AllCompany() {
   const confirmDelete = async (companyId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:4518/company/delete-company',
+      const response = await axios.post(`${BASE_URL}/company/delete-company`,
         { companyId },
         {
           headers: {
@@ -99,7 +100,7 @@ function AllCompany() {
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get('http://localhost:4518/tpo/jobs');
+      const response = await axios.get(`${BASE_URL}/tpo/jobs`);
       setJobs(response.data.data);
     } catch (error) {
       console.log("Error fetching jobs ", error);

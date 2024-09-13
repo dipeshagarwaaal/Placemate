@@ -4,6 +4,7 @@ import axios from 'axios';
 import Logo from '../../assets/CPMS.png';
 import Toast from '../../components/Toast';
 import isAuthenticated from '../../utility/auth.utility';
+import { BASE_URL } from '../../config/config';
 
 function Login() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4518/student/login', formData);
+      const response = await axios.post(`${BASE_URL}/student/login`, formData);
       localStorage.setItem('token', response.data.token);
       navigate('../student/dashboard');
     } catch (error) {

@@ -5,6 +5,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import Toast from './Toast';
 import ModalBox from './Modal';
+import { BASE_URL } from '../config/config';
 
 function SendNotice() {
   const [loading, setLoading] = useState(true);
@@ -27,7 +28,7 @@ function SendNotice() {
   // checking for authentication
   useEffect(() => {
     const token = localStorage.getItem('token');
-    axios.get('http://localhost:4518/user/detail', {
+    axios.get(`${BASE_URL}/user/detail`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -54,7 +55,7 @@ function SendNotice() {
 
   const confirmSubmit = async () => {
     try {
-      const response = await axios.post('http://localhost:4518/management/send-notice',
+      const response = await axios.post(`${BASE_URL}/management/send-notice`,
         data,
         {
           headers: {

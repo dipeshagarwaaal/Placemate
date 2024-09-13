@@ -6,6 +6,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import Toast from '../Toast';
 import ModalBox from '../Modal';
+import { BASE_URL } from '../../config/config';
 
 function AddInternship() {
   const [loading, setLoading] = useState(true);
@@ -31,7 +32,7 @@ function AddInternship() {
     const fetchCurrentUserData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:4518/user/detail', {
+        const response = await axios.get(`${BASE_URL}/user/detail`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -49,7 +50,7 @@ function AddInternship() {
     try {
       // if no studentId or internshipId then return back none 
       if (!currentUserData?.id || !internshipId) return;
-      const response = await axios.get(`http://localhost:4518/student/internship?studentId=${currentUserData?.id}&internshipId=${internshipId}`);
+      const response = await axios.get(`${BASE_URL}/student/internship?studentId=${currentUserData?.id}&internshipId=${internshipId}`);
       // console.log(response?.data);
       setInternship(response.data.internship);
       setModalBody(response.data.internship.companyName);
@@ -85,7 +86,7 @@ function AddInternship() {
 
   const confirmSubmit = async () => {
     try {
-      const response = await axios.post(`http://localhost:4518/student/update-internship?studentId=${currentUserData?.id}&internshipId=${internshipId}`, { internship });
+      const response = await axios.post(`${BASE_URL}/student/update-internship?studentId=${currentUserData?.id}&internshipId=${internshipId}`, { internship });
       // console.log(response?.data);
       if (response?.data?.msg) {
         setToastMessage(response?.data?.msg);

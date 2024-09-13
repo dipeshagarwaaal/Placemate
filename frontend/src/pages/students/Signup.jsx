@@ -4,6 +4,7 @@ import axios from 'axios';
 import Logo from "../../assets/CPMS.png";
 import Toast from '../../components/Toast';
 import isAuthenticated from '../../utility/auth.utility';
+import { BASE_URL } from '../../config/config';
 
 function Signup() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4518/student/signup', formData);
+      const response = await axios.post(`${BASE_URL}/student/signup`, formData);
       // console.log(response.data);
       setToastMessage("User Created Successfully! Now You Can Login.");
       setShowToast(true);

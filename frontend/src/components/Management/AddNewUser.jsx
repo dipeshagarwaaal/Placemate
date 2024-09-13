@@ -4,6 +4,7 @@ import { GrFormAdd } from 'react-icons/gr';
 import axios from 'axios';
 import Toast from '../Toast';
 import ModalBox from '../Modal';
+import { BASE_URL } from '../../config/config';
 
 function AddNewUser() {
   const [data, setData] = useState({
@@ -46,7 +47,7 @@ function AddNewUser() {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post("http://localhost:4518/management/addtpo",
+      const response = await axios.post(`${BASE_URL}/management/addtpo`,
         data,
         {
           headers: {

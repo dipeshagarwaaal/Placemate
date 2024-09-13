@@ -3,6 +3,7 @@ import AddUserTable from './AddUserTable';
 import Toast from './Toast';
 import ModalBox from './Modal';
 import axios from 'axios';
+import { BASE_URL } from '../config/config';
 
 function ApproveStudent() {
   // student users store here
@@ -21,7 +22,7 @@ function ApproveStudent() {
 
   const fetchUserDetails = async () => {
     try {
-      const response = await axios.get("http://localhost:4518/admin/student-users", {
+      const response = await axios.get(`${BASE_URL}/admin/student-users`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
@@ -55,7 +56,7 @@ function ApproveStudent() {
 
   const confirmDelete = async () => {
     try {
-      const response = await axios.post("http://localhost:4518/admin/student-delete-user",
+      const response = await axios.post(`${BASE_URL}/admin/student-delete-user`,
         { email: userEmailToProcess },
         {
           headers: {
@@ -90,7 +91,7 @@ function ApproveStudent() {
 
   const confirmApproveStudent = async () => {
     try {
-      const response = await axios.post('http://localhost:4518/admin/student-approve',
+      const response = await axios.post(`${BASE_URL}/admin/student-approve`,
         { email: userEmailToProcess }, // Use the state `userEmailToProcess` instead of `email`
         {
           headers: {

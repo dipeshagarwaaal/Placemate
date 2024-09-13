@@ -6,6 +6,7 @@ import Table from 'react-bootstrap/Table';
 import Toast from './Toast';
 import Button from 'react-bootstrap/Button';
 import ModalBox from './Modal';
+import { BASE_URL } from '../config/config';
 
 
 function ViewJobPost() {
@@ -32,7 +33,7 @@ function ViewJobPost() {
   // check applied to a job
   const fetchApplied = async () => {
     try {
-      const response = await axios.get(`http://localhost:4518/student/check-applied/${jobId}/${currentUser.id}`);
+      const response = await axios.get(`${BASE_URL}/student/check-applied/${jobId}/${currentUser.id}`);
       // console.log(response.data);
       if (response?.data?.applied) {
         setApplied(response?.data?.applied)
@@ -49,7 +50,7 @@ function ViewJobPost() {
   // checking for authentication
   useEffect(() => {
     const token = localStorage.getItem('token');
-    axios.get('http://localhost:4518/user/detail', {
+    axios.get(`${BASE_URL}/user/detail`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -70,7 +71,7 @@ function ViewJobPost() {
 
   const fetchJobDetail = async () => {
     try {
-      const response = await axios.get(`http://localhost:4518/tpo/job/${jobId}`,
+      const response = await axios.get(`${BASE_URL}/tpo/job/${jobId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -93,7 +94,7 @@ function ViewJobPost() {
 
   const fetchCompanyData = async () => {
     try {
-      const response = await axios.get(`http://localhost:4518/company/company-data?companyId=${data.company}`);
+      const response = await axios.get(`${BASE_URL}/company/company-data?companyId=${data.company}`);
       setCompany(response.data.company);
     } catch (error) {
       console.log("AddCompany error while fetching => ", error);
@@ -116,7 +117,7 @@ function ViewJobPost() {
 
   const handleConfirmApply = async () => {
     try {
-      const response = await axios.put(`http://localhost:4518/student/job/${jobId}/${currentUser.id}`);
+      const response = await axios.put(`${BASE_URL}/student/job/${jobId}/${currentUser.id}`);
       // console.log(response.data);
       if (response?.data?.msg) {
         setToastMessage(response?.data?.msg);
@@ -137,7 +138,7 @@ function ViewJobPost() {
 
   const fetchApplicant = async () => {
     if (!jobId) return
-    await axios.get(`http://localhost:4518/tpo/job/applicants/${jobId}`, {
+    await axios.get(`${BASE_URL}/tpo/job/applicants/${jobId}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`
       }

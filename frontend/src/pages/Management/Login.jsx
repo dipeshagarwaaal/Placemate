@@ -4,6 +4,7 @@ import axios from 'axios';
 import Logo from '../../assets/CPMS.png';
 import Toast from '../../components/Toast';
 import isAuthenticated from '../../utility/auth.utility';
+import { BASE_URL } from '../../config/config';
 
 function LoginManagement() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ function LoginManagement() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4518/management/login', formData);
+      const response = await axios.post(`${BASE_URL}/management/login`, formData);
       localStorage.setItem('token', response.data.token);
       navigate('../management/dashboard');
     } catch (error) {
@@ -45,17 +46,6 @@ function LoginManagement() {
       console.log("Error in Student login.jsx => ", error);
     }
   }
-
-  // if user came from signup page then this toast appears
-  //   const { showToastPass, toastMessagePass } = location.state || { showToastPass: false, toastMessagePass: '' };
-  //   useEffect(() => {
-  //     if (showToastPass) {
-  //       setToastMessage(toastMessagePass);
-  //       setShowToast(showToastPass);
-  //       // Clear the state after the toast is shown
-  //       navigate('.', { replace: true, state: {} });
-  //     }
-  //   }, []);
 
   // toggle eye
   const [isEyeOpen, setEyeOpen] = useState(false);

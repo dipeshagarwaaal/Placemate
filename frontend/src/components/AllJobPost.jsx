@@ -8,6 +8,7 @@ import Tooltip from 'react-bootstrap/Tooltip';
 import ModalBox from './Modal';
 import Toast from './Toast';
 import TablePlaceholder from './TablePlaceholder';
+import { BASE_URL } from '../config/config';
 
 function AllJobPost() {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ function AllJobPost() {
   // checking for authentication
   useEffect(() => {
     const token = localStorage.getItem('token');
-    axios.get('http://localhost:4518/user/detail', {
+    axios.get(`${BASE_URL}/user/detail`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -63,7 +64,7 @@ function AllJobPost() {
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get('http://localhost:4518/tpo/jobs');
+      const response = await axios.get(`${BASE_URL}/tpo/jobs`);
       setJobs(response.data.data)
       fetchCompanies(response.data.data);
       setLoading(false);
@@ -87,7 +88,7 @@ function AllJobPost() {
 
   const confirmDelete = async (jobId) => {
     try {
-      const response = await axios.post('http://localhost:4518/tpo/delete-job', { jobId });
+      const response = await axios.post(`${BASE_URL}/tpo/delete-job`, { jobId });
 
       setShowModal(false);
       fetchJobs();
@@ -110,7 +111,7 @@ function AllJobPost() {
     for (const job of jobs) {
       if (job.company && !companyNames[job.company]) {
         try {
-          const response = await axios.get(`http://localhost:4518/company/company-data?companyId=${job.company}`);
+          const response = await axios.get(`${BASE_URL}/company/company-data?companyId=${job.company}`);
           companyNames[job.company] = response.data.company.companyName;
         } catch (error) {
           console.log("Error fetching company name => ", error);

@@ -7,6 +7,7 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import ModalBox from './Modal';
 import Toast from './Toast';
+import { BASE_URL } from '../config/config';
 
 function AddInternship() {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ function AddInternship() {
   // checking for authentication
   useEffect(() => {
     const token = localStorage.getItem('token');
-    axios.get('http://localhost:4518/user/detail', {
+    axios.get(`${BASE_URL}/user/detail`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -56,7 +57,7 @@ function AddInternship() {
   const fetchInternships = async () => {
     try {
       if (!currentUser?.id) return;
-      const response = await axios.get(`http://localhost:4518/student/internship?studentId=${currentUser?.id}`);
+      const response = await axios.get(`${BASE_URL}/student/internship?studentId=${currentUser?.id}`);
       setInternships(response.data.internships);
       setLoading(false);
       // console.log(response.data);
@@ -87,7 +88,7 @@ function AddInternship() {
 
   const confirmDelete = async (internshipId) => {
     try {
-      const response = await axios.post('http://localhost:4518/student/delete-internship', { internshipId, studentId: currentUser.id });
+      const response = await axios.post(`${BASE_URL}/student/delete-internship`, { internshipId, studentId: currentUser.id });
 
       setShowModal(false);
       fetchInternships();

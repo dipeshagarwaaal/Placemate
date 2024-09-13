@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import axios from 'axios';
 import StudentTable from './StudentTableTemplate';
+import { BASE_URL } from '../../config/config';
 
 function StudentYearAndBranchView() {
   const [firstYearComputer, setFirstYearComputer] = useState([]);
@@ -28,7 +29,7 @@ function StudentYearAndBranchView() {
   const fetchStudentsData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:4518/student/all-students-data-year-and-branch', {
+      const response = await axios.get(`${BASE_URL}/student/all-students-data-year-and-branch`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         }

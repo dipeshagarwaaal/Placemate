@@ -10,9 +10,9 @@ import Toast from '../Toast';
 import ModalBox from '../Modal';
 import { LiaEye } from "react-icons/lia";
 import { PiEyeClosed } from "react-icons/pi";
+import { BASE_URL } from '../../config/config';
 
 function UpdateJobStatus() {
-  const BASE_URL = "http://localhost:4518";
   const navigate = useNavigate();
 
   const { jobId } = useParams();
@@ -44,7 +44,7 @@ function UpdateJobStatus() {
   // checking for authentication
   useEffect(() => {
     const token = localStorage.getItem('token');
-    axios.get('http://localhost:4518/user/detail', {
+    axios.get(`${BASE_URL}/user/detail`, {
       headers: {
         'Authorization': `Bearer ${token}`
       }
@@ -70,7 +70,7 @@ function UpdateJobStatus() {
 
   const fetchJobDetail = async () => {
     try {
-      const response = await axios.get(`http://localhost:4518/tpo/job/${jobId}`,
+      const response = await axios.get(`${BASE_URL}/tpo/job/${jobId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -92,7 +92,7 @@ function UpdateJobStatus() {
 
   const fetchCompanyData = async () => {
     try {
-      const response = await axios.get(`http://localhost:4518/company/company-data?companyId=${data.company}`);
+      const response = await axios.get(`${BASE_URL}/company/company-data?companyId=${data.company}`);
       setCompany(response.data.company);
     } catch (error) {
       console.log("AddCompany error while fetching => ", error);
@@ -116,7 +116,7 @@ function UpdateJobStatus() {
   const handleSubmit = async () => {
     try {
       // console.log(applicant);
-      const response = await axios.post(`http://localhost:4518/student/update-status/${jobId}/${currentUser.id}`, { applicant });
+      const response = await axios.post(`${BASE_URL}/student/update-status/${jobId}/${currentUser.id}`, { applicant });
       // console.log(response.data);
       if (response?.data?.msg) {
         setToastMessage(response?.data?.msg);
@@ -182,7 +182,7 @@ function UpdateJobStatus() {
   // delete offer letter 
   const confirmDelete = async () => {
     try {
-      const response = await axios.post(`http://localhost:4518/student/delete-offer-letter/${jobId}/${currentUser.id}`, { applicant });
+      const response = await axios.post(`${BASE_URL  }/student/delete-offer-letter/${jobId}/${currentUser.id}`, { applicant });
       // console.log(response.data);
       if (response?.data?.msg) {
         setToastMessage(response?.data?.msg);

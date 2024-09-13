@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
+import { BASE_URL } from '../config/config';
 
 function ViewNotice() {
   const noticeId = useParams();
@@ -9,7 +10,7 @@ function ViewNotice() {
   const fetchNotice = async () => {
     try {
       if (!noticeId) return;
-      const response = await axios.get(`http://localhost:4518/management/get-notice?noticeId=${noticeId.noticeId}`);
+      const response = await axios.get(`${BASE_URL}/management/get-notice?noticeId=${noticeId.noticeId}`);
       // console.log(response?.data);
       setNotice(response?.data);
     } catch (error) {

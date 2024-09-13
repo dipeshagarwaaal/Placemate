@@ -3,7 +3,6 @@ import LandingNavbar from '../components/LandingPages/LandNavbar';
 import LandingHeroPage from '../components/LandingPages/LandHeroPage';
 import LandingAbout from '../components/LandingPages/LandAbout';
 import LandFooter from '../components/LandingPages/LandFooter';
-
 import Toast from '../components/Toast';
 import { useLocation, useNavigate } from 'react-router-dom';
 
