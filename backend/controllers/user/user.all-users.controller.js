@@ -10,9 +10,10 @@ const AllUsersLen = async (req, res) => {
     const superUsers = (await User.find({ role: "superuser" })).length;
 
     // console.log(studentUsers.length)
-    res.json({ studentUsers, studentApprovalPendingUsers, tpoUsers, managementUsers, superUsers });
+    return res.json({ studentUsers, studentApprovalPendingUsers, tpoUsers, managementUsers, superUsers });
   } catch (error) {
     console.log("user.route.js => ", error);
+    return res.json({ msg: "Internal Server Error!" });
   }
 }
 

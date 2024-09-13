@@ -272,7 +272,7 @@ function ViewJobPost() {
                           <Accordion.Item eventKey="3">
                             <Accordion.Header>Applicants Applied</Accordion.Header>
                             <Accordion.Body>
-                              <Table striped borderless hover size='sm'>
+                              <Table striped bordered hover size='sm' className='text-center'>
                                 <thead>
                                   <tr>
                                     <th style={{ width: '10%' }}>#</th>
@@ -308,8 +308,8 @@ function ViewJobPost() {
                                                 }
                                               </td>
                                               <td>{app.email}</td>
-                                              <td>{app.currentRound}</td>
-                                              <td>{app.status}</td>
+                                              <td>{(app?.currentRound?.charAt(0)?.toUpperCase() + app?.currentRound?.slice(1)) || '-'}</td>
+                                              <td>{app.status.charAt(0).toUpperCase() + app.status.slice(1)}</td>
                                               <td>{new Date(app.appliedAt).toLocaleString('en-IN')}</td>
                                             </tr>
                                           ))

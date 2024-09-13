@@ -22,7 +22,7 @@ const Signup = async (req, res) => {
       }
     });
     await newUser.save();
-    res.json({ msg: "User Created!" });
+    return res.json({ msg: "User Created!" });
   } catch (error) {
     console.log("student.signup.controller.js => ", error);
     return res.status(500).json({ msg: "Internal Server Error!" });

@@ -33,6 +33,7 @@ function AllJobPost() {
 
   // useState for load data
   const [currentUser, setCurrentUser] = useState({
+    id: '',
     name: 'Not Found',
     email: 'Not Found',
   });
@@ -48,6 +49,7 @@ function AllJobPost() {
     })
       .then(res => {
         setCurrentUser({
+          id: res.data.id,
           email: res.data.email,
           role: res.data.role,
         });
@@ -194,104 +196,111 @@ function AllJobPost() {
               </thead>
               <tbody>
                 {jobs?.length > 0 ? (
-                  jobs?.map((job, index) => (
-                    <tr key={job?._id}>
-                      <td>{index + 1}</td>
-                      <td>
-                        <b>
-                          {companies[job?.company] || <Placeholder as="p" animation="glow">
-                            <Placeholder xs={12} />
-                          </Placeholder>}
-                        </b>
-                      </td>
-                      <td>
-                        {job?.jobTitle}
-                      </td>
-                      <td>
-                        {job?.salary}
-                      </td>
-                      <td>
-                        {new Date(job?.applicationDeadline).toLocaleDateString('en-In')}
-                      </td>
-                      <td>
-                        {job?.applicants?.length}
-                      </td>
-                      <td>
-                        {/* for hover label effect  */}
-                        <div className="flex justify-around items-center">
+                  jobs?.map((job, index) => {
 
-                          <div className="px-0.5">
-                            {/* view post  */}
-                            <OverlayTrigger
-                              placement="top"
-                              delay={{ show: 250, hide: 400 }}
-                              overlay={renderTooltipViewPost}
-                            >
-                              <i
-                                className="fa-solid fa-circle-info text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-blue-500"
-                                onClick={() => {
-                                  if (currentUser.role === 'tpo_admin') navigate(`../tpo/job/${job?._id}`)
-                                  else if (currentUser.role === 'management_admin') navigate(`../management/job/${job?._id}`)
-                                  else if (currentUser.role === 'student') navigate(`../student/job/${job?._id}`)
-                                }}
-                              />
-                            </OverlayTrigger>
+                    const isMatched = job?.applicants?.find(student => student.studentId == currentUser.id)
+                    return (
+                      <tr
+                        key={job?._id}
+                        className={`${isMatched ? 'table-success' : ''}`}
+                      >
+                        <td>{index + 1}</td>
+                        <td>
+                          <b>
+                            {companies[job?.company] || <Placeholder as="p" animation="glow">
+                              <Placeholder xs={12} />
+                            </Placeholder>}
+                          </b>
+                        </td>
+                        <td>
+                          {job?.jobTitle}
+                        </td>
+                        <td>
+                          {job?.salary}
+                        </td>
+                        <td>
+                          {new Date(job?.applicationDeadline).toLocaleDateString('en-In')}
+                        </td>
+                        <td>
+                          {job?.applicants?.length}
+                        </td>
+                        <td>
+                          {/* for hover label effect  */}
+                          <div className="flex justify-around items-center">
+
+                            <div className="px-0.5">
+                              {/* view post  */}
+                              <OverlayTrigger
+                                placement="top"
+                                delay={{ show: 250, hide: 400 }}
+                                overlay={renderTooltipViewPost}
+                              >
+                                <i
+                                  className="fa-solid fa-circle-info text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-blue-500"
+                                  onClick={() => {
+                                    if (currentUser.role === 'tpo_admin') navigate(`../tpo/job/${job?._id}`)
+                                    else if (currentUser.role === 'management_admin') navigate(`../management/job/${job?._id}`)
+                                    else if (currentUser.role === 'student') navigate(`../student/job/${job?._id}`)
+                                  }}
+                                />
+                              </OverlayTrigger>
+                            </div>
+                            {
+                              (currentUser.role === 'tpo_admin' || currentUser.role === 'management_admin') && (
+                                <>
+                                  <div className="px-0.5">
+                                    {/* edit post  */}
+                                    <OverlayTrigger
+                                      placement="top"
+                                      delay={{ show: 250, hide: 400 }}
+                                      overlay={renderTooltipEditPost}
+                                    >
+                                      <i
+                                        className="fa-regular fa-pen-to-square text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-green-500"
+                                        onClick={() => {
+                                          if (currentUser.role === 'tpo_admin') navigate(`../tpo/post-job/${job._id}`)
+                                          else if (currentUser.role === 'management_admin') navigate(`../management/post-job/${job._id}`)
+                                        }}
+                                        onMouseEnter={(e) => {
+                                          e.target.classList.add('fa-solid');
+                                          e.target.classList.remove('fa-regular');
+                                        }}
+                                        onMouseLeave={(e) => {
+                                          e.target.classList.add('fa-regular');
+                                          e.target.classList.remove('fa-solid');
+                                        }}
+                                      />
+                                    </OverlayTrigger>
+                                  </div>
+                                  <div className="px-0.5">
+                                    {/* delete post  */}
+                                    <OverlayTrigger
+                                      placement="top"
+                                      delay={{ show: 250, hide: 400 }}
+                                      overlay={renderTooltipDeletePost}
+                                    >
+                                      <i
+                                        className="fa-regular fa-trash-can text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-red-500"
+                                        onClick={() => handleDeletePost(job?._id, companies[job?.company], job?.jobTitle)}
+                                        onMouseEnter={(e) => {
+                                          e.target.classList.add('fa-solid');
+                                          e.target.classList.remove('fa-regular');
+                                        }}
+                                        onMouseLeave={(e) => {
+                                          e.target.classList.add('fa-regular');
+                                          e.target.classList.remove('fa-solid');
+                                        }}
+                                      />
+                                    </OverlayTrigger>
+                                  </div>
+                                </>
+                              )
+                            }
                           </div>
-                          {
-                            (currentUser.role === 'tpo_admin' || currentUser.role === 'management_admin') && (
-                              <>
-                                <div className="px-0.5">
-                                  {/* edit post  */}
-                                  <OverlayTrigger
-                                    placement="top"
-                                    delay={{ show: 250, hide: 400 }}
-                                    overlay={renderTooltipEditPost}
-                                  >
-                                    <i
-                                      className="fa-regular fa-pen-to-square text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-green-500"
-                                      onClick={() => {
-                                        if (currentUser.role === 'tpo_admin') navigate(`../tpo/post-job/${job._id}`)
-                                        else if (currentUser.role === 'management_admin') navigate(`../management/post-job/${job._id}`)
-                                      }}
-                                      onMouseEnter={(e) => {
-                                        e.target.classList.add('fa-solid');
-                                        e.target.classList.remove('fa-regular');
-                                      }}
-                                      onMouseLeave={(e) => {
-                                        e.target.classList.add('fa-regular');
-                                        e.target.classList.remove('fa-solid');
-                                      }}
-                                    />
-                                  </OverlayTrigger>
-                                </div>
-                                <div className="px-0.5">
-                                  {/* delete post  */}
-                                  <OverlayTrigger
-                                    placement="top"
-                                    delay={{ show: 250, hide: 400 }}
-                                    overlay={renderTooltipDeletePost}
-                                  >
-                                    <i
-                                      className="fa-regular fa-trash-can text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-red-500"
-                                      onClick={() => handleDeletePost(job?._id, companies[job?.company], job?.jobTitle)}
-                                      onMouseEnter={(e) => {
-                                        e.target.classList.add('fa-solid');
-                                        e.target.classList.remove('fa-regular');
-                                      }}
-                                      onMouseLeave={(e) => {
-                                        e.target.classList.add('fa-regular');
-                                        e.target.classList.remove('fa-solid');
-                                      }}
-                                    />
-                                  </OverlayTrigger>
-                                </div>
-                              </>
-                            )
-                          }
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                        </td>
+                      </tr>
+                    )
+                  })
                 ) : (
                   <tr>
                     <td colSpan="7">No Jobs found</td>

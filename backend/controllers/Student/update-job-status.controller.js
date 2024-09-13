@@ -29,7 +29,7 @@ const UpdateJobStatus = async (req, res) => {
 
     await student.save();
     await job.save();
-    res.json({ msg: "Job Status Updated Successfully!" });
+    return res.json({ msg: "Job Status Updated Successfully!" });
   } catch (error) {
     console.log("update-job-status.controller.js => ", error);
     return res.status(500).json({ msg: "Internal Server Error!" });

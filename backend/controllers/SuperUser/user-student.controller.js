@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 
 const studentUsers = async (req, res) => {
   const studentUsers = await User.find({ role: "student" });
-  res.json({ studentUsers })
+  return res.json({ studentUsers })
 }
 
 const studentAddUsers = async (req, res) => {
@@ -29,10 +29,10 @@ const studentAddUsers = async (req, res) => {
     });
 
     await newUser.save();
-    res.json({ msg: "User Created!" });
+    return res.json({ msg: "User Created!" });
   } catch (error) {
     console.log("user-student.controller => ", error);
-    res.status(500).json({ msg: 'Server error' });
+    return res.status(500).json({ msg: 'Server error' });
   }
 }
 
@@ -42,9 +42,9 @@ const studentDeleteUsers = async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
     // delete user and releted data
     await user.deleteOne();
-    res.json({ msg: "User Deleted Successfully!" });
+    return res.json({ msg: "User Deleted Successfully!" });
   } catch (error) {
-    res.status(500).json({ msg: 'Server error' });
+    return res.status(500).json({ msg: 'Server error' });
   }
 }
 
@@ -59,10 +59,10 @@ const studentApprove = async (req, res) => {
 
     user.studentProfile.isApproved = true;
     await user.save();
-    res.json({ msg: "Student Successfully Approved!" });
+    return res.json({ msg: "Student Successfully Approved!" });
   } catch (error) {
     console.error('Error approving student user:', error);
-    res.status(500).json({ msg: 'Server error' });
+    return res.status(500).json({ msg: 'Server error' });
   }
 }
 

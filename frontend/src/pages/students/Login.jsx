@@ -39,7 +39,7 @@ function Login() {
       localStorage.setItem('token', response.data.token);
       navigate('../student/dashboard');
     } catch (error) {
-      if (error.response.data.msg) {
+      if (error?.response?.data?.msg) {
         setToastMessage(error.response.data.msg);
         setShowToast(true);
       }

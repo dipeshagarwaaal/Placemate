@@ -12,6 +12,7 @@ function AddCompany() {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   const { companyId } = useParams();
 
@@ -34,6 +35,8 @@ function AddCompany() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!data?.companyName || !data?.companyDescription || !data?.companyDifficulty || !data?.companyLocation || !data?.companyWebsite)
+      return setError("All Fields Required!");
     setShowModal(true);
   }
 
@@ -82,7 +85,10 @@ function AddCompany() {
   }, [companyId])
 
 
-  const handleDataChange = (e) => setData({ ...data, [e.target.name]: e.target.value })
+  const handleDataChange = (e) => {
+    setError('');
+    setData({ ...data, [e.target.name]: e.target.value })
+  }
 
 
   return (
@@ -107,45 +113,61 @@ function AddCompany() {
               <div className="my-8 text-base backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6">
                 <div className="flex flex-col gap-2">
                   <div className="grid grid-flow-col gap-2">
-                    <FloatingLabel controlId="floatingCompanyName" label="Company Name">
+                    <FloatingLabel controlId="floatingCompanyName" label={
+                      <>
+                        <span>Company Name <span className='text-red-500'>*</span></span>
+                      </>
+                    }>
                       <Form.Control
                         type="text"
                         placeholder="Company Name"
                         name='companyName'
                         value={data?.companyName || ''}
                         onChange={handleDataChange}
-                        required
+
                       />
                     </FloatingLabel>
-                    <FloatingLabel controlId="floatingCompanyLocation" label="Company Location">
+                    <FloatingLabel controlId="floatingCompanyLocation" label={
+                      <>
+                        <span>Company Location <span className='text-red-500'>*</span></span>
+                      </>
+                    }>
                       <Form.Control
                         type="text"
                         placeholder="Company Location"
                         name='companyLocation'
                         value={data?.companyLocation || ''}
                         onChange={handleDataChange}
-                        required
+
                       />
                     </FloatingLabel>
                   </div>
-                  <FloatingLabel controlId="floatingCompanyWebsite" label="Company Website">
+                  <FloatingLabel controlId="floatingCompanyWebsite" label={
+                    <>
+                      <span>Company Website <span className='text-red-500'>*</span></span>
+                    </>
+                  }>
                     <Form.Control
                       type="link"
                       placeholder="Company Website"
                       name='companyWebsite'
                       value={data?.companyWebsite || ''}
                       onChange={handleDataChange}
-                      required
+
                     />
                   </FloatingLabel>
-                  <FloatingLabel controlId="floatingSelectDifficulty" label="Difficulty Level">
+                  <FloatingLabel controlId="floatingSelectDifficulty" label={
+                    <>
+                      <span>Difficulty Level <span className='text-red-500'>*</span></span>
+                    </>
+                  }>
                     <Form.Select
                       aria-label="Floating label select difficulty"
                       className='cursor-pointer'
                       name='companyDifficulty'
                       value={data?.companyDifficulty || ''}
                       onChange={handleDataChange}
-                      required
+
                     >
                       <option disabled value='' className='text-gray-400'>Enter Difficulty Level</option>
                       <option value="Easy">Easy</option>
@@ -153,7 +175,11 @@ function AddCompany() {
                       <option value="Hard">Hard</option>
                     </Form.Select>
                   </FloatingLabel>
-                  <FloatingLabel controlId="floatingcompanyDescription" label="Company Description">
+                  <FloatingLabel controlId="floatingcompanyDescription" label={
+                    <>
+                      <span>Company Description <span className='text-red-500'>*</span></span>
+                    </>
+                  }>
                     <Form.Control
                       as="textarea"
                       placeholder="Company Description"
@@ -161,10 +187,16 @@ function AddCompany() {
                       style={{ height: '100px', maxHeight: "450px" }}
                       value={data?.companyDescription || ''}
                       onChange={handleDataChange}
-                      required
+
                     />
                   </FloatingLabel>
                 </div>
+                {
+                  error &&
+                  <div className="flex pt-2">
+                    <span className='text-red-500'>{error}</span>
+                  </div>
+                }
               </div>
               <div className="flex flex-col justify-center items-center gap-2">
                 <Button variant="primary" type='submit' size='lg'>Add Company</Button>

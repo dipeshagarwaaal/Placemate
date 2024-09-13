@@ -22,7 +22,7 @@ const Login = async (req, res) => {
     user.token = token;
     await user.save();
 
-    res.json({ token });
+    return res.json({ token });
   } catch (error) {
     console.log("admin.login.js => ", error);
     return res.status(500).json({ msg: "Internal Server Error!" });

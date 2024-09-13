@@ -33,6 +33,11 @@ function PostJob() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!data?.company || !data?.jobTitle || !data?.salary || !data?.applicationDeadline || !data?.jobDescription || !data?.eligibility || !data?.howToApply) {
+      setToastMessage("All Fields Required!");
+      setShowToast(true);
+      return;
+    }
     // console.log(data)
     setShowModal(true);
   }
@@ -152,7 +157,11 @@ function PostJob() {
                 <div className="my-8 text-base backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6">
                   <div className="grid grid-cols-1 gap-2">
                     {/* company details  */}
-                    <FloatingLabel controlId="floatingSelectDifficulty" label="Select Company Name">
+                    <FloatingLabel controlId="floatingSelectDifficulty" label={
+                      <>
+                        <span>Select Company Name <span className='text-red-500'>*</span></span>
+                      </>
+                    }>
                       <Form.Select
                         aria-label="Floating label select difficulty"
                         className='cursor-pointer'
@@ -164,7 +173,7 @@ function PostJob() {
                             company: e.target.value
                           });
                         }}
-                        required
+                        
                       >
                         <option disabled value='' className='text-gray-400'>Select Company Name</option>
                         {
@@ -181,18 +190,26 @@ function PostJob() {
                   <div className="">
                     {/* job details  */}
                     <div className="grid grid-flow-col gap-2">
-                      <FloatingLabel controlId="floatingJobTitle" label="Job Title">
+                      <FloatingLabel controlId="floatingJobTitle" label={
+                        <>
+                          <span>Job Title <span className='text-red-500'>*</span></span>
+                        </>
+                      }>
                         <Form.Control
                           type="text"
                           placeholder="Job Title"
                           name='jobTitle'
                           value={data?.jobTitle || ''}
                           onChange={handleDataChange}
-                          required
+                          
                         />
                       </FloatingLabel>
 
-                      <FloatingLabel controlId="floatingSalary" label="Salary (In LPA)">
+                      <FloatingLabel controlId="floatingSalary" label={
+                        <>
+                          <span>Salary (In LPA) <span className='text-red-500'>*</span></span>
+                        </>
+                      }>
                         <Form.Control
                           type="text"
                           placeholder="Salary"
@@ -204,18 +221,22 @@ function PostJob() {
                               handleDataChange(e);
                             }
                           }}
-                          required
+                          
                         />
                       </FloatingLabel>
 
-                      <FloatingLabel controlId="floatingDeadlineDate" label="Deadline Date">
+                      <FloatingLabel controlId="floatingDeadlineDate" label={
+                        <>
+                          <span>Deadline Date <span className='text-red-500'>*</span></span>
+                        </>
+                      }>
                         <Form.Control
                           type="date"
                           placeholder="Deadline Date"
                           name='applicationDeadline'
                           value={formatDate(data?.applicationDeadline) || ''}
                           onChange={handleDataChange}
-                          required
+                          
                         />
                       </FloatingLabel>
                     </div>
@@ -223,7 +244,7 @@ function PostJob() {
                     {/* text editor  */}
                     <div className="py-6">
                       <label className=''>
-                        Enter Job Description
+                        Enter Job Description <span className="text-red-500">*</span>
                       </label>
                       <JoditEditor
                         ref={editor}
@@ -239,7 +260,7 @@ function PostJob() {
                     </div>
                     <div className="py-6">
                       <label className=''>
-                        Enter Eligibility
+                        Enter Eligibility <span className="text-red-500">*</span>
                       </label>
                       <JoditEditor
                         ref={editor}
@@ -255,7 +276,7 @@ function PostJob() {
                     </div>
                     <div className="py-6">
                       <label className=''>
-                        Enter Process To Apply
+                        Enter Process To Apply <span className="text-red-500">*</span>
                       </label>
                       <JoditEditor
                         ref={editor}

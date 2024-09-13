@@ -1,9 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { BASE_URL } from '../config/config';
 
 function ViewNotice() {
+  const navigate = useNavigate();
   const noticeId = useParams();
   const [notice, setNotice] = useState({});
 
@@ -20,6 +21,7 @@ function ViewNotice() {
 
   useEffect(() => {
     fetchNotice();
+    if (notice === null) navigate('/404');
   }, [noticeId]);
 
   return (

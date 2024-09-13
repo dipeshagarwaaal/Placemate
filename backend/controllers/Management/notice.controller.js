@@ -12,20 +12,20 @@ const SendNotice = async (req, res) => {
     const sender = new mongoose.Types.ObjectId(req.body.sender);
 
     await Notice.create({ sender, sender_role, receiver_role, title, message });
-    res.json({ msg: "Notice Sended Successfully!" });
+    return res.json({ msg: "Notice Sended Successfully!" });
   } catch (error) {
     console.log('error in notice.controller.js => ', error);
-    res.json({ msg: "Internal Server Error!" });
+    return res.json({ msg: "Internal Server Error!" });
   }
 }
 
 const GetAllNotice = async (req, res) => {
   try {
     const notices = await Notice.find();
-    res.json(notices);
+    return res.json(notices);
   } catch (error) {
     console.log('error in notice.controller.js => ', error);
-    res.json({ msg: "Internal Server Error!" });
+    return res.json({ msg: "Internal Server Error!" });
   }
 }
 
@@ -34,10 +34,10 @@ const GetNotice = async (req, res) => {
     // console.log(req.query.noticeId)
     const notice = await Notice.findById(req.query.noticeId);
     // console.log(notice)
-    res.json(notice);
+    return res.json(notice);
   } catch (error) {
     console.log('error in notice.controller.js => ', error);
-    res.json({ msg: "Internal Server Error!" });
+    return res.json({ msg: "Internal Server Error!" });
   }
 }
 
@@ -45,10 +45,10 @@ const DeleteNotice = async (req, res) => {
   try {
     if (!req.query.noticeId) return res.json({ msg: "Error while deleting notice!" });
     await Notice.findByIdAndDelete(req?.query?.noticeId);
-    res.json({ msg: "Notice Deleted Successfully!" });
+    return res.json({ msg: "Notice Deleted Successfully!" });
   } catch (error) {
     console.log('error in notice.controller.js => ', error);
-    res.json({ msg: "Internal Server Error!" });
+    return res.json({ msg: "Internal Server Error!" });
   }
 }
 

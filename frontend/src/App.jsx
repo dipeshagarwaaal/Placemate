@@ -5,20 +5,21 @@ import LandingPage from "./pages/LandingPage";
 
 // Student Pages 
 import Login from "./pages/Students/Login.jsx";
-import Signup from "./pages/students/Signup";
-import StudentHome from './pages/students/Home.jsx';
+import Signup from "./pages/Students/Signup";
+import HomeStudent from './pages/Students/Home.jsx';
 import UpdatePlacementProfile from "./components/Students/UpdatePlacementProfile.jsx";
 import UpdateJobStatus from "./components/Students/UpdateJobStatus.jsx";
 import AddInternship from "./components/Students/AddInternship.jsx";
 import MyAppliedJobs from "./components/Students/MyApplied.jsx";
 // TPO pages
 import LoginTPO from "./pages/TPO/Login.jsx";
-import StudentsTPO from "./components/TPO/Students.jsx";
+import HomeTPO from './pages/TPO/Home.jsx';
 import StudentAccYearTPO from "./components/TPO/StudentYearAndBranchView.jsx";
 import PostJobTPO from "./components/TPO/PostJob.jsx";
 import AddNewUser from "./components/Management/AddNewUser.jsx";
 import AddCompany from "./components/TPO/AddCompany.jsx";
 // Management pages
+import HomeManagement from './pages/Management/Home.jsx';
 import LoginManagement from "./pages/Management/Login.jsx";
 import ListAllTPO from "./components/Management/ListAllTPO.jsx";
 // super user
@@ -121,7 +122,7 @@ function App() {
             <Route path="/student/complete-profile/:userId" element={<UserDetails />} />
 
             <Route element={<Layout header="Dashboard" />}>
-              <Route path="/student/dashboard" element={<StudentHome />} />
+              <Route path="/student/dashboard" element={<HomeStudent />} />
             </Route>
             <Route element={<Layout header="Account Details" />}>
               <Route path="/student/account" element={<Account />} />
@@ -172,7 +173,7 @@ function App() {
           <Route element={<UserProvider><ProtectedRoute allowedRoles={['tpo_admin']} /></UserProvider>}>
             <Route path="/tpo/complete-profile/:userId" element={<UserDetails />} />
             <Route element={<Layout header="Dashboard" />}>
-              <Route path="/tpo/dashboard" element={<StudentHome />} />
+              <Route path="/tpo/dashboard" element={<HomeTPO />} />
             </Route>
             <Route element={<Layout header="Account Details" />}>
               <Route path="/tpo/account" element={<Account />} />
@@ -236,7 +237,7 @@ function App() {
             <Route path="/management/complete-profile/:userId" element={<UserDetails />} />
 
             <Route element={<Layout header="Dashboard" />}>
-              <Route path="/management/dashboard" element={<StudentHome />} />
+              <Route path="/management/dashboard" element={<HomeManagement />} />
             </Route>
             <Route element={<Layout header="Account Details" />}>
               <Route path="/management/account" element={<Account />} />

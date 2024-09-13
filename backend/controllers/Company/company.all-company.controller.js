@@ -23,10 +23,10 @@ const AddCompany = async (req, res) => {
 
     await newcmp.save();
 
-    res.status(201).json({ msg: "Company Created Successfully!", });
+    return res.status(201).json({ msg: "Company Created Successfully!", });
   } catch (error) {
     console.log("company.all-company.controller.js = AddCompany => ", error);
-    res.status(500).json({ msg: 'Server Error' });
+    return res.status(500).json({ msg: 'Server Error' });
   }
 }
 
@@ -35,11 +35,11 @@ const CompanyDetail = async (req, res) => {
   try {
     if (req.query.companyId) {
       const company = await CompanySchema.findById(req.query.companyId);
-      res.json({ company });
+      return res.json({ company });
     }
   } catch (error) {
     console.log("company.all-company.controller.js = CompanyDetail => ", error);
-    res.status(500).json({ msg: 'Server Error' });
+    return res.status(500).json({ msg: 'Server Error' });
   }
 }
 
@@ -47,10 +47,10 @@ const AllCompanyDetail = async (req, res) => {
   try {
     const companys = await CompanySchema.find();
     // console.log(companys)
-    res.json({ companys });
+    return res.json({ companys });
   } catch (error) {
     console.log("company.all-company.controller.js = AllCompanyDetail => ", error);
-    res.status(500).json({ msg: 'Server Error' });
+    return res.status(500).json({ msg: 'Server Error' });
   }
 }
 
@@ -60,10 +60,10 @@ const DeleteCompany = async (req, res) => {
     const company = await CompanySchema.findById(req.body.companyId);
     // company and related jobs removed
     await company.deleteOne();
-    res.json({ msg: "Company Deleted Successfully!" });
+    return res.json({ msg: "Company Deleted Successfully!" });
   } catch (error) {
     console.log("company.all-company.controller.js = DeleteCompany => ", error);
-    res.status(500).json({ msg: 'Server Error' });
+    return res.status(500).json({ msg: 'Server Error' });
   }
 }
 

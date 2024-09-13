@@ -13,7 +13,7 @@ const GetInternships = async (req, res) => {
 
     // console.log(internship);
 
-    res.json({ internships: student?.studentProfile?.internships, internship: internship });
+    return res.json({ internships: student?.studentProfile?.internships, internship: internship });
   } catch (error) {
     console.log("internship.controller.js => ", error);
     return res.status(500).json({ msg: "Internal Server Error!" });
@@ -42,7 +42,7 @@ const UpdateInternship = async (req, res) => {
     } = req.body.internship;
 
 
-    if (!companyName || !internshipDuration || !startDate || !endDate || !type) return res.json({ msg: "Star marked are mandatory to fill!" });
+    if (!companyName || !internshipDuration || !startDate || !type) return res.json({ msg: "Star marked are mandatory to fill!" });
 
     // new internship to push
     const newInternship = { type, companyName, companyAddress, companyWebsite, internshipDuration, startDate, endDate, monthlyStipend, description, };

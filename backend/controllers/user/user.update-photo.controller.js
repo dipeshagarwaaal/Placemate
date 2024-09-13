@@ -15,10 +15,10 @@ const UpdatePhoto = async (req, res) => {
     user.profile = "/" + file.fieldname + "/" + file.filename;
     await user.save();
 
-    res.status(201).json({ msg: "Profile Picture Updated Successfully!", file: user.profile });
+    return res.status(201).json({ msg: "Profile Picture Updated Successfully!", file: user.profile });
   } catch (error) {
     console.error('Error saving to database:', error);
-    res.status(500).send('Server error');
+    return res.status(500).send('Server error');
   }
 }
 

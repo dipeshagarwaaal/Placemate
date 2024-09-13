@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import TablePlaceholder from './TablePlaceholder';
+import { BASE_URL } from '../config/config';
 
 function AddUserTable({
   users,

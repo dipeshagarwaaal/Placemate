@@ -1,6 +1,6 @@
 const UserDetail = async (req, res) => {
   // console.log(req.user)
-  res.json({
+  return res.json({
     id: `${req.user.id}`,
     // common data
     first_name: `${req.user.first_name}`,

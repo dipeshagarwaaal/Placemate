@@ -22,10 +22,10 @@ const UploadOfferLetter = async (req, res) => {
 
     await job.save();
 
-    res.json({ msg: 'Offer Letter Uploaded Successfully!' });
+    return res.json({ msg: 'Offer Letter Uploaded Successfully!' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ msg: 'Server error', error: error });
+    return res.status(500).json({ msg: 'Server error', error: error });
   }
 }
 
@@ -50,10 +50,10 @@ const DeleteOfferLetter = async (req, res) => {
     // Save the job document
     await job.save();
 
-    res.json({ msg: 'Offer Letter Deleted Successfully!' });
+    return res.json({ msg: 'Offer Letter Deleted Successfully!' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ msg: 'Server error', error: error });
+    return res.status(500).json({ msg: 'Server error', error: error });
   }
 }
 

@@ -7,8 +7,7 @@ const UpdateProfile = async (req, res) => {
   try {
     const user = await User.findById(req.body._id || req.body.id);
 
-    if (!user)
-      return res.status(400).json({ msg: "User Doesn't Exist!" });
+    if (!user) return res.status(400).json({ msg: "User Doesn't Exist!" });
 
     // checking if email which is to update is already there or not 
     if (req.body.email !== user.email) {
@@ -80,17 +79,16 @@ const UpdateProfile = async (req, res) => {
     }
 
     // check if request came from user except superuser
-    if (req.body.role !== 'superuser') {
-      // set isProfileCompleted true
-      user.isProfileCompleted = true;
-    }
+    if (req.body.role !== 'superuser') user.isProfileCompleted = true;
+
 
     // Save the updated user data
     await user.save();
 
-    res.json({ msg: "Data Updated Successfully!" });
+    return res.json({ msg: "Data Updated Successfully!" });
   } catch (error) {
     console.log("user.update-profile.controller ==> ", error)
+    return res.json({ msg: "Internal Server Error!" });
   }
 }
 

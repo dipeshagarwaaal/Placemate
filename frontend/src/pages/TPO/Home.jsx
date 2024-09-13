@@ -1,8 +1,8 @@
 import React from 'react';
 import NoticeBox from '../../components/NoticeBox';
-import NotificationBox from '../../components/Students/NotificationBox';
+import NotificationBox from '../../components/NotificationBox';
 
-// student 
+// tpo 
 function Home() {
   return (
     <>

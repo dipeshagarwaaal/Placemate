@@ -43,12 +43,12 @@ const PostJob = async (req, res) => {
         company
       });
       await newJob.save();
-      res.status(201).json({ msg: 'Job posted successfully' });
+      return res.status(201).json({ msg: 'Job posted successfully' });
     }
 
   } catch (error) {
     console.log("tpo.post-job.controller.js => ", error);
-    res.status(500).json({ msg: 'Server error', error: error });
+    return res.status(500).json({ msg: 'Server error', error: error });
   }
 }
 

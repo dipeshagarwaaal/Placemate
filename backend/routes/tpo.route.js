@@ -20,15 +20,19 @@ router.post('/login', Login);
 // post job listing data
 router.post('/post-job', authenticateToken, PostJob);
 
+// all jobs 
 router.get('/jobs', AllJobs);
 
+// delete job 
 router.post('/delete-job', DeleteJob);
 
-// view job 
+// view a job 
 router.get('/job/:jobId', authenticateToken, JobData);
 
+// job with its applicants 
 router.get('/job/applicants/:jobId', authenticateToken, JobWithApplicants)
 
+// student jobs applied 
 router.get('/myjob/:studentId', authenticateToken, StudentJobsApplied)
 
 

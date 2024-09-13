@@ -82,7 +82,14 @@ function AddInternship() {
     return date.toISOString().split('T')[0]; // Returns YYYY-MM-DD
   };
 
-  const handleSubmit = () => setShowModal(true);
+  const handleSubmit = () => {
+    if (!internship?.companyName || !internship?.internshipDuration || !internship?.startDate || !internship?.type) {
+      setToastMessage('Star Marked Required!');
+      setShowToast(true);
+      return;
+    }
+    setShowModal(true);
+  }
 
   const confirmSubmit = async () => {
     try {
@@ -195,11 +202,7 @@ function AddInternship() {
                     onChange={handleDataChange}
                   />
                 </FloatingLabel>
-                <FloatingLabel controlId="floatingEndDate" label={
-                  <>
-                    <span>Internship End Date <span style={{ color: 'red' }}>*</span></span>
-                  </>
-                }>
+                <FloatingLabel controlId="floatingEndDate" label="End Date">
                   <Form.Control
                     type="date"
                     placeholder="Internship End Date"

@@ -100,7 +100,11 @@ function AddNewUser() {
           <Form onSubmit={handleModalSubmit} className='flex flex-col justify-center items-center'>
             <div className="grid grid-cols-2 gap-x-3 gap-y-6">
               <div className="">
-                <FloatingLabel label="Name">
+                <FloatingLabel label={
+                  <>
+                    <span>Name <span className='text-red-500'>*</span></span>
+                  </>
+                }>
                   <Form.Control
                     type="text"
                     autoComplete="name"
@@ -113,7 +117,11 @@ function AddNewUser() {
                 <span className='text-red-500'>{error?.first_name}</span>
               </div>
               <div className="">
-                <FloatingLabel label="Email">
+                <FloatingLabel label={
+                  <>
+                    <span>Email <span className='text-red-500'>*</span></span>
+                  </>
+                }>
                   <Form.Control
                     type="email"
                     autoComplete="email"
@@ -126,7 +134,11 @@ function AddNewUser() {
                 <span className='text-red-500'>{error?.email}</span>
               </div>
               <div className="">
-                <FloatingLabel label="Number">
+                <FloatingLabel label={
+                  <>
+                    <span>Number <span className='text-red-500'>*</span></span>
+                  </>
+                }>
                   <Form.Control
                     type="number"
                     autoComplete="number"
@@ -144,7 +156,11 @@ function AddNewUser() {
                 <span className='text-red-500'>{error?.number}</span>
               </div>
               <div className="">
-                <FloatingLabel label="Initial Password">
+                <FloatingLabel label={
+                  <>
+                    <span>Initial Password <span className='text-red-500'>*</span></span>
+                  </>
+                }>
                   <Form.Control
                     type="password"
                     autoComplete="password"

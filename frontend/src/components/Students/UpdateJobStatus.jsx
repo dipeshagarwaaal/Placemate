@@ -78,7 +78,6 @@ function UpdateJobStatus() {
         }
       )
       setData(response.data);
-      console.log(response.data)
     } catch (error) {
       if (error.response) {
         if (error?.response.data?.msg) setToastMessage(error.response.data.msg)
@@ -114,6 +113,11 @@ function UpdateJobStatus() {
   }
 
   const handleSubmit = async () => {
+    if (applicant?.status === 'hired' && !applicant?.package) {
+      setToastMessage("Package Offered Required!");
+      setShowToast(true);
+      return;
+    }
     try {
       // console.log(applicant);
       const response = await axios.post(`${BASE_URL}/student/update-status/${jobId}/${currentUser.id}`, { applicant });
@@ -182,7 +186,7 @@ function UpdateJobStatus() {
   // delete offer letter 
   const confirmDelete = async () => {
     try {
-      const response = await axios.post(`${BASE_URL  }/student/delete-offer-letter/${jobId}/${currentUser.id}`, { applicant });
+      const response = await axios.post(`${BASE_URL}/student/delete-offer-letter/${jobId}/${currentUser.id}`, { applicant });
       // console.log(response.data);
       if (response?.data?.msg) {
         setToastMessage(response?.data?.msg);
@@ -421,7 +425,11 @@ function UpdateJobStatus() {
                             isHired === true && (
                               <div className="col-span-2">
                                 {/* selection date */}
-                                <FloatingLabel controlId="floatingPackage" label="Enter Package Offered">
+                                <FloatingLabel controlId="floatingPackage" label={
+                                  <>
+                                    <span>Enter Package Offered <span className='text-red-500'>*</span></span>
+                                  </>
+                                }>
                                   <Form.Control
                                     type="number"
                                     step={0.01}

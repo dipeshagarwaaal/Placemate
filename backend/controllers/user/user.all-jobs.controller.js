@@ -5,10 +5,10 @@ const JobSchema = require("../../models/job.model");
 const AllJobs = async (req, res) => {
   try {
     const jobs = await JobSchema.find();
-    res.json({ data: jobs });
+    return res.json({ data: jobs });
   } catch (error) {
     console.log("user.all-jobs.controller.js => ", error);
-    res.status(500).json({ msg: 'Server Error' });
+    return res.status(500).json({ msg: 'Server Error' });
   }
 }
 
@@ -20,11 +20,11 @@ const DeleteJob = async (req, res) => {
 
       // before this middleware pre will run to delete student's appliedJobs
       await job.deleteOne();
-      res.status(200).json({ msg: 'Job deleted successfully!' });
+      return res.status(200).json({ msg: 'Job deleted successfully!' });
     }
   } catch (error) {
     console.log("user.all-jobs.controller.js => ", error);
-    res.status(500).json({ msg: 'Server Error' });
+    return res.status(500).json({ msg: 'Server Error' });
   }
 }
 
@@ -34,7 +34,7 @@ const JobData = async (req, res) => {
     // pass if tpo is creating new post
     if (req.params.jobId !== 'undefined') {
       const job = await JobSchema.findById(req.params.jobId);
-      res.status(200).json(job);
+      return res.status(200).json(job);
     }
   } catch (error) {
     // checking if userId is exist or not
@@ -42,7 +42,7 @@ const JobData = async (req, res) => {
       return res.status(404).json({ msg: 'job data not found' });
     }
     console.log("user.all-jobs.controller.js => ", error);
-    res.status(500).json({ msg: 'Server Error' });
+    return res.status(500).json({ msg: 'Server Error' });
   }
 }
 
@@ -68,10 +68,10 @@ const JobWithApplicants = async (req, res) => {
       appliedAt: applicant.appliedAt,
     }));
 
-    res.status(200).json({ applicantsList });
+    return res.status(200).json({ applicantsList });
   } catch (error) {
     console.log("Error fetching job with applicants => ", error);
-    res.status(500).json({ msg: 'Server Error' });
+    return res.status(500).json({ msg: 'Server Error' });
   }
 };
 
@@ -99,10 +99,10 @@ const StudentJobsApplied = async (req, res) => {
       };
     });
 
-    res.status(200).json(result);
+    return res.status(200).json(result);
   } catch (error) {
     console.error("Error fetching student applied jobs => ", error);
-    res.status(500).json({ msg: 'Server error' });
+    return res.status(500).json({ msg: 'Server error' });
   }
 };
 

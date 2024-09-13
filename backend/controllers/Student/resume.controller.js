@@ -21,10 +21,10 @@ const UploadResume = async (req, res) => {
     };
     await user.save();
 
-    res.status(200).json({ msg: 'Resume uploaded successfully!' });
+    return res.status(200).json({ msg: 'Resume uploaded successfully!' });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ msg: 'Server error', error: error });
+    return res.status(500).json({ msg: 'Server error', error: error });
   }
 }
 

@@ -18,9 +18,10 @@ const tpoAddUsers = async (req, res) => {
 
     const newUser = new User({ first_name: req.body.first_name, email: req.body.email, number: req.body.number, password: hashPassword, role: "tpo_admin" });
     await newUser.save();
-    res.json({ msg: "User Created!" });
+    return res.json({ msg: "User Created!" });
   } catch (error) {
     console.log("user-tpo.controller => ", error);
+    return res.json({ msg: "Internal Server Error!" });
   }
 }
 
@@ -28,9 +29,9 @@ const tpoDeleteUsers = async (req, res) => {
   // const user = await Users.find({email: req.body.email});
   const ress = await User.deleteOne({ email: req.body.email });
   if (ress.acknowledged) {
-    res.json({ msg: "User Deleted Successfully!" });
+    return res.json({ msg: "User Deleted Successfully!" });
   } else {
-    res.json({ msg: "Error While Deleting User!" });
+    return res.json({ msg: "Error While Deleting User!" });
   }
 }
 

@@ -19,6 +19,7 @@ const UserData = require('../controllers/user/user.show-data.js');
 // details of users student
 router.get('/detail', authenticateToken, UserDetail);
 
+// all user in lenght 
 router.get('/all-users', AllUsersLen);
 
 router.get('/:userId', authenticateToken, UserData);

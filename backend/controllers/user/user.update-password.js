@@ -6,10 +6,7 @@ const UpdatePassword = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
 
-    if (!user) {
-      res.send("User Not Found!");
-      return
-    }
+    if (!user) return res.send("User Not Found!");
 
     const isMatch = await bcrypt.compare(oldpass, user.password);
 
@@ -17,14 +14,14 @@ const UpdatePassword = async (req, res) => {
       const hashPassword = await bcrypt.hash(newpass, 10);
       user.password = hashPassword;
       await user.save();
-      res.send("Password Updated Successfully!");
-    } else {
-      res.send("Password Did Not Matched!");
-      return;
-    }
+
+      return res.send("Password Updated Successfully!");
+
+    } else return res.send("Password Did Not Matched!");
+
   } catch (error) {
     console.log("UpdatePassword.js => ", error)
-    res.status(500).send('Server error');
+    return res.status(500).send('Server error');
   }
 }
 

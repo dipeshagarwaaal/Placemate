@@ -24,7 +24,7 @@ const { UpdateJobStatus } = require('../controllers/Student/update-job-status.co
 
 const { GetInternships, UpdateInternship, DeleteInternship } = require('../controllers/Student/internship.controller.js');
 
-const { StudentDataYearBranchWise } = require('../controllers/Student/student-data-for-admin.controller.js');
+const { StudentDataYearBranchWise, NotifyStudentStatus } = require('../controllers/Student/student-data-for-admin.controller.js');
 
 // signup post request for student
 router.post('/signup', Signup);
@@ -57,7 +57,12 @@ router.post('/update-internship', UpdateInternship);
 // delete internship of a student
 router.post('/delete-internship', DeleteInternship);
 
+
+
 // for tpo and management only
+// student arrays
 router.get('/all-students-data-year-and-branch', authenticateToken, StudentDataYearBranchWise)
+// student who is on interview or hired
+router.get('/notify-interview-hired', authenticateToken, NotifyStudentStatus)
 
 module.exports = router;
