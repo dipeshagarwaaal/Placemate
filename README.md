@@ -62,7 +62,7 @@ The **College Placement Management System** is a web application designed to str
 │   │   └──  profileImgs
 │   │         └── default
 │   ├── routes
-│   ├── utils
+│   ├── utility
 │   ├── .env (NOTE: YOU NEED TO CREATE THIS FILE)
 │   ├── .gitignore
 │   ├── index.js
