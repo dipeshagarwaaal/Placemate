@@ -10,12 +10,13 @@
 - [Contributors](#contributors)
 
 ## Introduction
-The **College Placement Management System** is a web application designed to streamline the placement process in educational institutions. This system provides distinct roles for students, TPO (Training and Placement Officer) admin, and management admin, ensuring a smooth and efficient workflow.
+The **College Placement Management System** is a web application designed to streamline the placement process in educational institutions. This system provides distinct roles for students, TPO (Training and Placement Officer) admin, management admin, and super admin, ensuring a smooth and efficient workflow.
 
 ## Features
 - **Student Portal**: Students can view available job opportunities, apply for placements, and track their application status.
 - **TPO Admin Portal**: TPO admins can manage job postings, schedule interviews, and track student progress.
 - **Management Admin Portal**: Management can oversee the entire placement process, view reports, and analyze data.
+- **Super Admin Portal**: The super admin can manage system settings, user accounts, and oversee the management of TPO and management users.
 
 ## Tech Stack
 - **Frontend**: Vite + React.js, Tailwind CSS, Bootstrap
@@ -34,6 +35,7 @@ The **College Placement Management System** is a web application designed to str
 │   │   ├── components
 |   |   |   ├──LandingPages
 |   |   |   └──students
+│   │   ├── config
 │   │   ├── context
 │   │   ├── hooks
 │   │   ├── pages
@@ -55,14 +57,17 @@ The **College Placement Management System** is a web application designed to str
 │   ├── middleware
 │   ├── models
 │   ├── public
+│   │   └──  offerLetter
+│   │   └──  resumes
 │   │   └──  profileImgs
 │   │         └── default
 │   ├── routes
-│   ├── .env(NOTE: YOU NEED TO CREATE THIS FILE)
+│   ├── utils
+│   ├── .env (NOTE: YOU NEED TO CREATE THIS FILE)
 │   ├── .gitignore
 │   ├── index.js
 │   ├── package.json
-│   └── package-lock.js
+│   └── package-lock.json
 └── README.md
 ```
 
@@ -70,6 +75,7 @@ The **College Placement Management System** is a web application designed to str
 - **Students**: Can view and apply for job opportunities, update profiles, and track their application status.
 - **TPO Admin**: Manages job postings, student applications, and interviews.
 - **Management Admin**: Oversees the placement process, views reports, and analyzes placement data.
+- **Super Admin**: Manages the overall system, creates new admin users (TPO and Management), and manages system-level settings.
 
 ## Installation
 
@@ -115,7 +121,7 @@ cd college-placement-management-system
    ```bash
    npm run dev
    ```
-
+   
 ## Contributors
 - **Member 1**: [Moin MN](https://www.linkedin.com/in/moinnaik/)
 - **Member 2**: Rafat Muskan Shaikh
