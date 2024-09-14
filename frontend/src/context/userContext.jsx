@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { BASE_URL } from '../config/config'
 
 // Create a context for user authentication
 const UserContext = createContext();
@@ -18,7 +19,7 @@ export const UserProvider = ({ children }) => {
     const fetchUserDetails = async () => {
       try {
         // Example: Replace with your API URL
-        const response = await axios.get("http://localhost:4518/user/detail", {
+        const response = await axios.get(`${BASE_URL}/user/detail`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}` // Assuming token is stored in localStorage
           }
@@ -34,7 +35,7 @@ export const UserProvider = ({ children }) => {
             localStorage.removeItem('token');
             const dataToPass = {
               showToastPass: true,
-              toastMessagePass: error.response.data.msg 
+              toastMessagePass: error.response.data.msg
             }
             navigate('../', { state: dataToPass });
           }
