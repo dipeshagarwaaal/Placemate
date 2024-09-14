@@ -306,6 +306,13 @@ function ViewJobPost() {
                                                     </Link>
                                                   )
                                                 }
+                                                {
+                                                  currentUser.role === 'superuser' && (
+                                                    <Link to={`/admin/user/${app.id}`} target='_blanck' className='text-blue-500 no-underline hover:text-blue-700'>
+                                                      {app.name}
+                                                    </Link>
+                                                  )
+                                                }
                                               </td>
                                               <td>{app.email}</td>
                                               <td>{(app?.currentRound?.charAt(0)?.toUpperCase() + app?.currentRound?.slice(1)) || '-'}</td>

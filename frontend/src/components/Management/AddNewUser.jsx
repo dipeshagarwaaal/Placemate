@@ -5,8 +5,14 @@ import axios from 'axios';
 import Toast from '../Toast';
 import ModalBox from '../Modal';
 import { BASE_URL } from '../../config/config';
+import { useLocation } from 'react-router-dom';
 
 function AddNewUser() {
+  const location = useLocation();
+  // filter management or tpo or student to add
+  const userToAdd = location.pathname.split('/').filter(link => link !== '' && link !== 'admin' && link !== 'management')[0].split('-').filter(link => link !== 'add' && link !== 'admin')[0];
+
+
   const [data, setData] = useState({
     first_name: "",
     email: "",
@@ -45,7 +51,46 @@ function AddNewUser() {
     setShowModal(true);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmitManagement = async () => {
+    try {
+      const response = await axios.post(`${BASE_URL}/management/add-management`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          }
+        }
+      );
+      if (response?.data) {
+        if (response?.data?.msg === "User Created!") {
+          if (data?.sendMail === true) {
+            // Redirect to mail client with a defined subject and body
+            const subject = encodeURIComponent("Welcome to the team!");
+            const body = encodeURIComponent(`Hi ${data.first_name},\n\nWelcome to our team as a Management. We're excited to work with you!\nNote:\nYour ID: ${data.email}\nPassword: ${data.password}\n\nMake sure you change password as soon as possible!!!\n\nBest regards,\nAdmin Team`);
+
+            // Create a temporary anchor element
+            const mailtoLink = document.createElement('a');
+            mailtoLink.href = `mailto:${data.email}?subject=${subject}&body=${body}`;
+            mailtoLink.target = '_blank'; // Open in new tab
+
+            // Append to body and click the link programmatically
+            document.body.appendChild(mailtoLink);
+            mailtoLink.click();
+
+            // Clean up by removing the temporary element
+            document.body.removeChild(mailtoLink);
+          }
+        }
+        setToastMessage(response?.data?.msg);
+        setShowToast(true);
+      }
+    } catch (error) {
+      console.log("handleSubmit => AddManagement.jsx ==> ", error);
+    }
+    setShowModal(false);
+  }
+
+  const handleSubmitTPO = async () => {
     try {
       const response = await axios.post(`${BASE_URL}/management/addtpo`,
         data,
@@ -80,6 +125,45 @@ function AddNewUser() {
       }
     } catch (error) {
       console.log("handleSubmit => AddTPO.jsx ==> ", error);
+    }
+    setShowModal(false);
+  }
+
+  const handleSubmitStudent = async () => {
+    try {
+      const response = await axios.post(`${BASE_URL}/management/add-student`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          }
+        }
+      );
+      if (response?.data) {
+        if (response?.data?.msg === "User Created!") {
+          if (data?.sendMail === true) {
+            // Redirect to mail client with a defined subject and body
+            const subject = encodeURIComponent("Welcome to the Our College Placement Portal!");
+            const body = encodeURIComponent(`Hi ${data.first_name},\n\nWelcome to our college plcamenet portal. Happy hiring!\nNote:\nYour ID: ${data.email}\nPassword: ${data.password}\n\nMake sure you change password as soon as possible!!!\n\nBest regards,\nManagement Team`);
+
+            // Create a temporary anchor element
+            const mailtoLink = document.createElement('a');
+            mailtoLink.href = `mailto:${data.email}?subject=${subject}&body=${body}`;
+            mailtoLink.target = '_blank'; // Open in new tab
+
+            // Append to body and click the link programmatically
+            document.body.appendChild(mailtoLink);
+            mailtoLink.click();
+
+            // Clean up by removing the temporary element
+            document.body.removeChild(mailtoLink);
+          }
+        }
+        setToastMessage(response?.data?.msg);
+        setShowToast(true);
+      }
+    } catch (error) {
+      console.log("handleSubmit => AddStudent.jsx ==> ", error);
     }
     setShowModal(false);
   }
@@ -195,7 +279,15 @@ function AddNewUser() {
         header={"Confirmation"}
         body={`Do you want to create new user ${data.sendMail === true ? ` and send email to ${data?.email} about creation of user!` : ``}?`}
         btn={"Create"}
-        confirmAction={handleSubmit}
+        confirmAction={
+          userToAdd === 'management'
+            ? handleSubmitManagement
+            : userToAdd === 'tpo'
+              ? handleSubmitTPO
+              : userToAdd === 'student'
+                ? handleSubmitStudent
+                : ''
+        }
       />
     </>
   );

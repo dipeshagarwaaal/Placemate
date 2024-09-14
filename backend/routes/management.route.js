@@ -13,7 +13,7 @@ const UsersTPO = require('../controllers/Management/tpo-users.controller');
 // management DeleteTPO controller
 const DeleteTPO = require('../controllers/Management/delete-tpo.controller');
 // management AddTPO controller
-const AddTPO = require('../controllers/Management/add-tpo.controller');
+const { AddTPO, AddManagement, AddStudent } = require('../controllers/Management/add-user.controller');
 
 // all notice related here
 const { SendNotice, GetAllNotice, DeleteNotice, GetNotice } = require('../controllers/Management/notice.controller');
@@ -27,7 +27,10 @@ router.get('/tpo-users', authenticateToken, UsersTPO);
 
 router.post('/deletetpo', authenticateToken, DeleteTPO);
 
+// add management, tpo and student
 router.post('/addtpo', authenticateToken, AddTPO);
+router.post('/add-management', authenticateToken, AddManagement);
+router.post('/add-student', authenticateToken, AddStudent);
 
 // notices all route here 
 router.post('/send-notice', authenticateToken, SendNotice);

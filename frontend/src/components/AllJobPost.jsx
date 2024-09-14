@@ -197,7 +197,6 @@ function AllJobPost() {
               <tbody>
                 {jobs?.length > 0 ? (
                   jobs?.map((job, index) => {
-
                     const isMatched = job?.applicants?.find(student => student.studentId == currentUser.id)
                     return (
                       <tr
@@ -227,7 +226,6 @@ function AllJobPost() {
                         <td>
                           {/* for hover label effect  */}
                           <div className="flex justify-around items-center">
-
                             <div className="px-0.5">
                               {/* view post  */}
                               <OverlayTrigger
@@ -240,13 +238,14 @@ function AllJobPost() {
                                   onClick={() => {
                                     if (currentUser.role === 'tpo_admin') navigate(`../tpo/job/${job?._id}`)
                                     else if (currentUser.role === 'management_admin') navigate(`../management/job/${job?._id}`)
+                                    else if (currentUser.role === 'superuser') navigate(`../admin/job/${job?._id}`)
                                     else if (currentUser.role === 'student') navigate(`../student/job/${job?._id}`)
                                   }}
                                 />
                               </OverlayTrigger>
                             </div>
                             {
-                              (currentUser.role === 'tpo_admin' || currentUser.role === 'management_admin') && (
+                              currentUser.role !== 'student' && (
                                 <>
                                   <div className="px-0.5">
                                     {/* edit post  */}
@@ -260,6 +259,7 @@ function AllJobPost() {
                                         onClick={() => {
                                           if (currentUser.role === 'tpo_admin') navigate(`../tpo/post-job/${job._id}`)
                                           else if (currentUser.role === 'management_admin') navigate(`../management/post-job/${job._id}`)
+                                          else if (currentUser.role === 'superuser') navigate(`../admin/post-job/${job._id}`)
                                         }}
                                         onMouseEnter={(e) => {
                                           e.target.classList.add('fa-solid');

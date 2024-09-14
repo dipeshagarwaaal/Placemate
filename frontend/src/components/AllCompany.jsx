@@ -139,7 +139,6 @@ function AllCompany() {
     fetchCompanys();
     fetchJobs();
   }, []);
-  console.log(jobs)
 
 
   return (

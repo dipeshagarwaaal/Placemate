@@ -152,13 +152,13 @@ const Sidebar = ({ isSidebarVisible }) => {
                 </Link>
               )
             }
-            {
+            {/* {
               loadData.role === 'superuser' && (
                 <Link to={`../admin/account`} className="flex items-center rounded-t-md no-underline text-black p-3 hover:bg-blue-300">
                   <FaCog className="mr-2" /> <span>Account Details</span>
                 </Link>
               )
-            }
+            } */}
             <button onClick={handleLogout} className="flex items-center rounded-t-md w-full p-3 text-red-700 hover:bg-blue-300">
               <FaSignOutAlt className="mr-2" /> Logout
             </button>

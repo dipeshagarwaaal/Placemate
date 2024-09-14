@@ -23,7 +23,7 @@ function AddStudent() {
     try {
       const response = await axios.get(`${BASE_URL}/admin/student-users`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`, 
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         }
       });
 
@@ -58,7 +58,7 @@ function AddStudent() {
     setShowModal(true);
   }
 
-  const confirmDelete = async (email) => {
+  const confirmDelete = async () => {
     try {
       const response = await axios.post(`${BASE_URL}/admin/student-delete-user`,
         { email: userToDelete },
@@ -68,7 +68,7 @@ function AddStudent() {
           }
         }
       );
-      setShowModal(false);
+      
       if (response.data) {
         setToastMessage(response.data.msg);
         setShowToast(true);
@@ -76,7 +76,10 @@ function AddStudent() {
       }
     } catch (error) {
       console.log("student => confirmDelete ==> ", error);
+      setToastMessage(error?.response?.data?.msg);
+      setShowToast(true);
     }
+    setShowModal(false);
   }
 
   const closeModal = () => {

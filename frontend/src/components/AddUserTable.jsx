@@ -184,12 +184,12 @@ function AddUserTable({
                                     className="fa-regular fa-trash-can text-2xl cursor-pointer hover:text-red-500"
                                     onClick={() => handleDeleteUser(user.email)}
                                     onMouseEnter={(e) => {
-                                      e.target.classList.remove('fa-solid');
-                                      e.target.classList.add('fa-regular');
+                                      e.target.classList.add('fa-solid');
+                                      e.target.classList.remove('fa-regular');
                                     }}
                                     onMouseLeave={(e) => {
-                                      e.target.classList.remove('fa-regular');
-                                      e.target.classList.add('fa-solid');
+                                      e.target.classList.add('fa-regular');
+                                      e.target.classList.remove('fa-solid');
                                     }}
                                   />
                                 </OverlayTrigger >

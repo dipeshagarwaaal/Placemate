@@ -117,8 +117,8 @@ UserSchema.pre('deleteOne', { document: true, query: false }, async function (ne
   try {
     const userId = this._id; // Get the current user's ID
 
-    const Job = mongoose.model('jobSchema');
-    const Notice = mongoose.model('NoticeSchema');
+    const Notice = mongoose.model('Notice');
+    const Job = mongoose.model('Job');
 
     // Remove the studentId from any jobs where the user is listed as an applicant
     await Job.updateMany(
