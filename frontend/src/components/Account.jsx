@@ -102,20 +102,29 @@ function Account() {
     error: "",
   });
 
-  const handlePassChange = (e) => setPassData({ ...passData, [e.target.name]: e.target.value })
+  function validatePassword(password) {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return regex.test(password);
+  }
+
+  const handlePassChange = (e) => {
+    setPassData({ ...passData, [e.target.name]: e.target.value })
+  }
 
   // password update
-  const handlePassUpdate = (e) => {
+  const handlePassUpdate = async (e) => {
     e.preventDefault();
 
     if (!passData.oldpass || !passData.newpass || !passData.newcfmpass) return setPassData({ ...passData, error: "All Field Requied!" });
 
+    if (!validatePassword(passData?.newpass)) return setPassData({ ...passData, error: 'Password Must Contains: Minimum 8 Char with atleast 1 Special Char, 1 Number, 1 Uppercase, 1 Lowercase' })
+
     // if newpass and newcfmpass is matching or not
-    if (passData.newpass != passData.newcfmpass) return setPassData({ ...passData, error: "new password and confirm new password didn't matched" });
+    if (passData.newpass != passData.newcfmpass) return setPassData({ ...passData, error: "New Password & Confirm New Password Didn't Matched" });
 
     try {
       const token = localStorage.getItem('token');
-      const response = axios.post(`${BASE_URL}/user/change-password`,
+      const response = await axios.post(`${BASE_URL}/user/change-password`,
         passData,
         {
           headers: {
@@ -123,19 +132,16 @@ function Account() {
           }
         }
       );
-      response.then((res) => setPassData({ ...passData, error: res.data }));
+      if (response?.data) {
+        setToastMessage(response?.data);
+        setShowToast(true);
+      }
     } catch (error) {
       console.log("Account.jsx updatepass =>", error);
       setPassData({ ...passData, error: error.message });
     }
   }
-  // for password update toasts
-  useEffect(() => {
-    if (passData.error) {
-      setToastMessage(passData.error);
-      setShowToast(true);
-    }
-  }, [passData.error]);
+
 
   // for formating date of birth
   const formatDate = (isoString) => {
@@ -376,6 +382,13 @@ function Account() {
                         />
                       </FloatingLabel>
                     </div>
+                    {
+                      passData?.error && (
+                        <div className="">
+                          <span className='text-red-500'>{passData?.error}</span>
+                        </div>
+                      )
+                    }
                     <button
                       type="submit"
                       className="flex items-center my-2 px-3 py-2 bg-blue-500 text-white rounded"

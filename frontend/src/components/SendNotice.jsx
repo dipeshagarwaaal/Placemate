@@ -75,6 +75,7 @@ function SendNotice() {
 
   useEffect(() => {
     if (currentUser?.role && currentUser?.id) setData({ ...data, sender: currentUser?.id, sender_role: currentUser?.role })
+    setLoading(false);
   }, [currentUser])
 
   return (
@@ -90,96 +91,98 @@ function SendNotice() {
       />
 
 
-
-      <div className="">
-        <div className="my-8 backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6">
-          <div className="grid grid-cols-2 gap-2">
-            {
-              currentUser?.role === 'management_admin' && (
-                <>
-
-                  <FloatingLabel controlId="floatingSendTo" label={
-                    <>
-                      <span>Receiver Role <span style={{ color: 'red' }}>*</span></span>
-                    </>
-                  }>
-                    <Form.Select
-                      aria-label="Floating label select send to"
-                      className='cursor-pointer'
-                      name='receiver_role'
-                      value={data?.receiver_role || "undefined"}
-                      onChange={handleDataChange}
+      {
+        loading ? (
+          <div className="flex justify-center h-72 items-center">
+            <i className="fa-solid fa-spinner fa-spin text-3xl" />
+          </div>
+        ) : (
+          <>
+            <div className="">
+              <div className="my-8 backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6">
+                <div className="grid grid-cols-2 gap-2">
+                  {currentUser?.role === 'management_admin' && (
+                    <FloatingLabel
+                      controlId="floatingSendTo"
+                      label={<span>Receiver Role <span style={{ color: 'red' }}>*</span></span>}
                     >
-                      <option disabled value="undefined" className='text-gray-400'>Select Receiver Role...</option>
-                      <option value="student">Student</option>
-                      <option value="tpo_admin">TPO</option>
-                    </Form.Select>
-                  </FloatingLabel>
-                </>
-              )
-            }
-            <FloatingLabel
-              controlId="floatingTitle"
-              label={
-                <>
-                  <span>Title <span style={{ color: 'red' }}>*</span></span>
-                </>
-              }
-              className={`${currentUser?.role === 'tpo_admin' && 'col-span-2'}`}
-            >
-              <Form.Control
-                type="text"
-                placeholder="Title"
-                name='title'
-                value={data?.title || ""}
-                onChange={handleDataChange}
-              />
-            </FloatingLabel >
-            <div className="col-span-2">
-              <FloatingLabel controlId="floatingMessage" label={
-                <>
-                  <span>Message <span style={{ color: 'red' }}>*</span></span>
-                </>
-              }>
-                <Form.Control
-                  as="textarea"
-                  placeholder="Title"
-                  name='message'
-                  style={{ maxHeight: "250px", height: "200px" }}
-                  value={data?.message || ""}
-                  onChange={handleDataChange}
-                />
-              </FloatingLabel >
+                      <Form.Select
+                        aria-label="Floating label select send to"
+                        className="cursor-pointer"
+                        name="receiver_role"
+                        value={data?.receiver_role || "undefined"}
+                        onChange={handleDataChange}
+                      >
+                        <option disabled value="undefined" className="text-gray-400">
+                          Select Receiver Role...
+                        </option>
+                        <option value="student">Student</option>
+                        <option value="tpo_admin">TPO</option>
+                      </Form.Select>
+                    </FloatingLabel>
+                  )}
+
+                  <FloatingLabel
+                    controlId="floatingTitle"
+                    label={<span>Title <span style={{ color: 'red' }}>*</span></span>}
+                    className={currentUser?.role === 'tpo_admin' ? 'col-span-2' : ''}
+                  >
+                    <Form.Control
+                      type="text"
+                      placeholder="Title"
+                      name='title'
+                      value={data?.title || ""}
+                      onChange={handleDataChange}
+                    />
+                  </FloatingLabel >
+                  <div className="col-span-2">
+                    <FloatingLabel controlId="floatingMessage" label={
+                      <>
+                        <span>Message <span style={{ color: 'red' }}>*</span></span>
+                      </>
+                    }>
+                      <Form.Control
+                        as="textarea"
+                        placeholder="Title"
+                        name='message'
+                        style={{ maxHeight: "250px", height: "200px" }}
+                        value={data?.message || ""}
+                        onChange={handleDataChange}
+                      />
+                    </FloatingLabel >
+                  </div>
+                </div>
+                <div className="mt-2">
+                  <span className='text-center text-red-500'>
+                    {error && error}
+                  </span>
+                </div>
+              </div>
+              <div className="flex flex-col justify-center items-center gap-2">
+                <Button
+                  variant="primary"
+                  type='submit'
+                  size='lg'
+                  onClick={handleSubmit}
+                  onMouseEnter={(e) => {
+                    e.target.querySelector('i').classList.remove('fa-regular');
+                    e.target.querySelector('i').classList.add('fa-solid');
+                    e.target.querySelector('i').classList.add('fa-bounce');
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.querySelector('i').classList.remove('fa-solid');
+                    e.target.querySelector('i').classList.remove('fa-bounce');
+                    e.target.querySelector('i').classList.add('fa-regular');
+                  }}
+                >
+                  <i className="fa-regular fa-paper-plane mr-2" />
+                  Send
+                </Button>
+              </div>
             </div>
-          </div>
-          <div className="mt-2">
-            <span className='text-center text-red-500'>
-              {error && error}
-            </span>
-          </div>
-        </div>
-        <div className="flex flex-col justify-center items-center gap-2">
-          <Button
-            variant="primary"
-            type='submit'
-            size='lg'
-            onClick={handleSubmit}
-            onMouseEnter={(e) => {
-              e.target.querySelector('i').classList.remove('fa-regular');
-              e.target.querySelector('i').classList.add('fa-solid');
-              e.target.querySelector('i').classList.add('fa-bounce');
-            }}
-            onMouseLeave={(e) => {
-              e.target.querySelector('i').classList.remove('fa-solid');
-              e.target.querySelector('i').classList.remove('fa-bounce');
-              e.target.querySelector('i').classList.add('fa-regular');
-            }}
-          >
-            <i className="fa-regular fa-paper-plane mr-2" />
-            Send
-          </Button>
-        </div>
-      </div>
+          </>
+        )
+      }
 
 
       {/* ModalBox Component for Delete Confirmation */}

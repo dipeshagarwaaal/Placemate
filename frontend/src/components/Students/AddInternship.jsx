@@ -38,7 +38,7 @@ function AddInternship() {
           }
         });
         setCurrentUserData({ id: response.data.id });
-        setLoading(false);
+        if (!internshipId) setLoading(false);
       } catch (error) {
         console.log("addinternship.jsx => ", error);
       }
@@ -66,6 +66,8 @@ function AddInternship() {
         setToastMessage("Error while updating internship please try again later!");
       }
       setShowToast(true);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -118,9 +120,10 @@ function AddInternship() {
     setShowModal(false);
   }
 
+
   useEffect(() => {
     fetchInternshipData();
-  }, [loading]);
+  }, [currentUserData?.id]);
 
   return (
     <>

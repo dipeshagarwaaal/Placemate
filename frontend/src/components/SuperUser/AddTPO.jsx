@@ -59,7 +59,7 @@ function AddTPO() {
     setShowModal(true);
   }
 
-  const confirmDelete = async (email) => {
+  const confirmDelete = async () => {
     try {
       const response = await axios.post(`${BASE_URL}/admin/tpo-delete-user`,
         { email: userToDelete },

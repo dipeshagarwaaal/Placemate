@@ -10,6 +10,8 @@ function LoginManagement() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [error, setError] = useState({});
+
   // if login user visit redirect to home page
   useEffect(() => {
     if (isAuthenticated()) {
@@ -30,10 +32,16 @@ function LoginManagement() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name === 'email') return setError({ ...error, email: '' });
+    if (e.target.name === 'password') return setError({ ...error, password: '' });
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData?.email && !formData?.password) return setError({ email: 'Email Required!', password: 'Password Required!' })
+    if (!formData?.email) return setError({ email: 'Email Required!' })
+    if (!formData?.password) return setError({ password: 'Password Required!' })
+
     try {
       const response = await axios.post(`${BASE_URL}/management/login`, formData);
       localStorage.setItem('token', response.data.token);
@@ -72,13 +80,25 @@ function LoginManagement() {
             <img className="mb-4 rounded-xl shadow" src={`${Logo}`} alt="Logo Image" width="150" height="150" />
             <h1 className="h3 mb-3 font-weight-normal">Management Log In</h1>
           </div>
-          <label htmlFor="inputEmail" className="sr-only">Email address</label>
-          <input type="email" id="inputEmail" className="form-control ml-1" placeholder="Email address" required autoFocus="" fdprocessedid="gwlj3s" autoComplete='email' name='email' value={email} onChange={handleChange} />
+          <div className="w-full">
+            <label htmlFor="inputEmail" className="sr-only">Email address</label>
+            <input type="email" id="inputEmail" className="form-control ml-1" placeholder="Email address" autoFocus="" fdprocessedid="gwlj3s" autoComplete='email' name='email' value={email} onChange={handleChange} />
+            {/* error for email  */}
+            {<div className='text-red-500 ml-2 text-left'>
+              {error?.email}
+            </div>}
+          </div>
 
-          <div className="flex justify-center items-center w-full">
-            <label htmlFor="inputPassword" className="sr-only">Password</label>
-            <input type={`${isEyeOpen ? "text" : "password"}`} id="inputPassword" className="form-control" placeholder="Password" required fdprocessedid="9sysne" autoComplete='current-password' name='password' value={password} onChange={handleChange} />
-            <i className={`${isEyeOpen ? "fa-solid fa-eye" : "fa-regular fa-eye-slash"} -ml-6 cursor-pointer`} onClick={handleEye}></i>
+          <div className="w-full">
+            <div className="flex justify-center items-center w-full">
+              <label htmlFor="inputPassword" className="sr-only">Password</label>
+              <input type={`${isEyeOpen ? "text" : "password"}`} id="inputPassword" className="form-control" placeholder="Password" fdprocessedid="9sysne" autoComplete='current-password' name='password' value={password} onChange={handleChange} />
+              <i className={`${isEyeOpen ? "fa-solid fa-eye" : "fa-regular fa-eye-slash"} -ml-6 cursor-pointer`} onClick={handleEye}></i>
+            </div>
+            {/* error for password  */}
+            {<div className='text-red-500 ml-2 text-left'>
+              {error?.password}
+            </div>}
           </div>
 
           <div className="flex justify-center items-center flex-col">

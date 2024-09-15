@@ -69,13 +69,14 @@ function AllJobPost() {
       const response = await axios.get(`${BASE_URL}/tpo/jobs`);
       setJobs(response.data.data)
       fetchCompanies(response.data.data);
-      setLoading(false);
     } catch (error) {
       console.log("Error fetching jobs ", error);
       if (error?.response?.data?.msg) {
         setToastMessage(error.response.data.msg);
         setShowToast(true);
       }
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -247,49 +248,39 @@ function AllJobPost() {
                             {
                               currentUser.role !== 'student' && (
                                 <>
+                                  {/* Edit post */}
                                   <div className="px-0.5">
-                                    {/* edit post  */}
                                     <OverlayTrigger
                                       placement="top"
                                       delay={{ show: 250, hide: 400 }}
                                       overlay={renderTooltipEditPost}
                                     >
                                       <i
-                                        className="fa-regular fa-pen-to-square text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-green-500"
+                                        className="fa-regular fa-pen-to-square text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-green-500 hover:fa-solid"
                                         onClick={() => {
-                                          if (currentUser.role === 'tpo_admin') navigate(`../tpo/post-job/${job._id}`)
-                                          else if (currentUser.role === 'management_admin') navigate(`../management/post-job/${job._id}`)
-                                          else if (currentUser.role === 'superuser') navigate(`../admin/post-job/${job._id}`)
-                                        }}
-                                        onMouseEnter={(e) => {
-                                          e.target.classList.add('fa-solid');
-                                          e.target.classList.remove('fa-regular');
-                                        }}
-                                        onMouseLeave={(e) => {
-                                          e.target.classList.add('fa-regular');
-                                          e.target.classList.remove('fa-solid');
+                                          const rolePaths = {
+                                            'tpo_admin': `../tpo/post-job/${job._id}`,
+                                            'management_admin': `../management/post-job/${job._id}`,
+                                            'superuser': `../admin/post-job/${job._id}`,
+                                          };
+                                          navigate(rolePaths[currentUser.role] || '#');
                                         }}
                                       />
                                     </OverlayTrigger>
                                   </div>
+
+                                  {/* Delete post */}
                                   <div className="px-0.5">
-                                    {/* delete post  */}
                                     <OverlayTrigger
                                       placement="top"
                                       delay={{ show: 250, hide: 400 }}
                                       overlay={renderTooltipDeletePost}
                                     >
                                       <i
-                                        className="fa-regular fa-trash-can text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-red-500"
-                                        onClick={() => handleDeletePost(job?._id, companies[job?.company], job?.jobTitle)}
-                                        onMouseEnter={(e) => {
-                                          e.target.classList.add('fa-solid');
-                                          e.target.classList.remove('fa-regular');
-                                        }}
-                                        onMouseLeave={(e) => {
-                                          e.target.classList.add('fa-regular');
-                                          e.target.classList.remove('fa-solid');
-                                        }}
+                                        className="fa-regular fa-trash-can text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-red-500 hover:fa-solid"
+                                        onClick={() =>
+                                          handleDeletePost(job?._id, companies[job?.company], job?.jobTitle)
+                                        }
                                       />
                                     </OverlayTrigger>
                                   </div>

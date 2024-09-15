@@ -29,10 +29,6 @@ function AddCompany() {
     setShowModal(false);
   };
 
-  useEffect(() => {
-    setLoading(false)
-  }, []);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!data?.companyName || !data?.companyDescription || !data?.companyDifficulty || !data?.companyLocation || !data?.companyWebsite)
@@ -75,14 +71,17 @@ function AddCompany() {
       setData(response.data.company);
     } catch (error) {
       console.log("AddCompany error while fetching => ", error);
+    } finally {
+      setLoading(false);
     }
   }
 
+  useEffect(() => { if (companyId) fetchCompanyData() }, [companyId])
+
+
   useEffect(() => {
-    if (companyId) {
-      fetchCompanyData();
-    }
-  }, [companyId])
+    if (!companyId) setLoading(false);
+  }, [])
 
 
   const handleDataChange = (e) => {

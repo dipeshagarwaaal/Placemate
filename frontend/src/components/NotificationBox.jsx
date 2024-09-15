@@ -40,7 +40,6 @@ function NotificationBox() {
         }
       });
       const students = response.data.studentsWithJobDetails;
-      console.log(students)
 
       // Filtering students with 'interview' or 'hired' status
       const filteredJobs = students.map(student => {

@@ -293,22 +293,22 @@ function ViewJobPost() {
                                               <td>{index + 1}</td>
                                               <td>
                                                 {
-                                                  currentUser.role === 'tpo_admin' && (
-                                                    <Link to={`/tpo/user/${app.id}`} target='_blanck' className='text-blue-500 no-underline hover:text-blue-700'>
-                                                      {app.name}
-                                                    </Link>
-                                                  )
-                                                }
-                                                {
-                                                  currentUser.role === 'management_admin' && (
-                                                    <Link to={`/management/user/${app.id}`} target='_blanck' className='text-blue-500 no-underline hover:text-blue-700'>
-                                                      {app.name}
-                                                    </Link>
-                                                  )
-                                                }
-                                                {
-                                                  currentUser.role === 'superuser' && (
-                                                    <Link to={`/admin/user/${app.id}`} target='_blanck' className='text-blue-500 no-underline hover:text-blue-700'>
+                                                  (currentUser.role === 'tpo_admin' ||
+                                                    currentUser.role === 'management_admin' ||
+                                                    currentUser.role === 'superuser') && (
+                                                    <Link
+                                                      to={
+                                                        currentUser.role === 'tpo_admin'
+                                                          ? `/tpo/user/${app.id}`
+                                                          : currentUser.role === 'management_admin'
+                                                            ? `/management/user/${app.id}`
+                                                            : currentUser.role === 'superuser'
+                                                              ? `/admin/user/${app.id}`
+                                                              : '#'
+                                                      }
+                                                      target='_blank'
+                                                      className='text-blue-500 no-underline hover:text-blue-700'
+                                                    >
                                                       {app.name}
                                                     </Link>
                                                   )
@@ -324,7 +324,7 @@ function ViewJobPost() {
                                       </>
                                     ) : (
                                       <tr>
-                                        <td colSpan={5}>No Student Yet Applied!</td>
+                                        <td colSpan={6}>No Student Yet Applied!</td>
                                       </tr>
                                     )
                                   }

@@ -7,6 +7,7 @@ import { RiArrowDownSFill, RiArrowUpSFill, RiPlayListAddLine } from "react-icons
 import { PiStudentDuotone } from "react-icons/pi";
 import { FaClipboardCheck, FaIndustry, FaEnvelopeOpenText } from "react-icons/fa";
 import { LiaIndustrySolid } from "react-icons/lia";
+import { FaUserSecret } from "react-icons/fa";
 
 export const SidebarData = [
   {
@@ -15,67 +16,67 @@ export const SidebarData = [
     icon: <AiFillHome />
   },
   {
-    title: "TPO",
-    icon: <FaUsers />,
-    iconClosed: <RiArrowDownSFill />,
-    iconOpened: <RiArrowUpSFill />,
-    subNav: [
-      {
-        title: "List All",
-        path: "/admin/tpo",
-        icon: <GrUserManager />,
-        cName: "sub-nav",
-      },
-      {
-        title: "Add New",
-        path: "/admin/add-tpo-admin",
-        icon: <GrUserWorker />,
-        cName: "sub-nav",
-      },
-    ],
-  },
-  {
     title: "Management",
-    icon: <FaUsers />,
+    icon: <FaUserSecret />,
     iconClosed: <RiArrowDownSFill />,
     iconOpened: <RiArrowUpSFill />,
     subNav: [
       {
         title: "List All",
         path: "/admin/management",
-        icon: <GrUserManager />,
+        icon: <FaListUl />,
         cName: "sub-nav",
       },
       {
         title: "Add New",
         path: "/admin/add-management-admin",
-        icon: <GrUserWorker />,
+        icon: <RiPlayListAddLine />,
+        cName: "sub-nav",
+      },
+    ],
+  },
+  {
+    title: "TPO",
+    icon: <GrUserWorker />,
+    iconClosed: <RiArrowDownSFill />,
+    iconOpened: <RiArrowUpSFill />,
+    subNav: [
+      {
+        title: "List All",
+        path: "/admin/tpo",
+        icon: <FaListUl />,
+        cName: "sub-nav",
+      },
+      {
+        title: "Add New",
+        path: "/admin/add-tpo-admin",
+        icon: <RiPlayListAddLine />,
         cName: "sub-nav",
       },
     ],
   },
   {
     title: "Student",
-    icon: <FaUsers />,
+    icon: <PiStudentDuotone />,
     iconClosed: <RiArrowDownSFill />,
     iconOpened: <RiArrowUpSFill />,
     subNav: [
       {
         title: "List All",
         path: "/admin/student",
-        icon: <GrUserManager />,
+        icon: <FaListUl />,
         cName: "sub-nav",
       },
       {
         title: "Approve",
         path: "/admin/approve-student",
-        icon: <FaCheckSquare />,
+        icon: <FaClipboardCheck />,
         cName: "sub-nav",
       },
       {
         title: "Add New",
         path: "/admin/add-student",
-        icon: <GrUserWorker />,
+        icon: <RiPlayListAddLine />,
         cName: "sub-nav",
       },
     ],

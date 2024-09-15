@@ -58,6 +58,10 @@ function AddUserTable({
     </Tooltip>
   );
 
+  const nameLink = () => {
+
+  }
+
 
   return (
     <>
@@ -87,40 +91,23 @@ function AddUserTable({
                     <tr key={user?.email}>
                       <td>{index + 1}</td>
                       <td>
-
-                        {
-                          // for super user 
-                          // checking if user is superuser && checking if page is of approve student user 
-                          currentUser.role === "superuser" && (
-                            <Link to={`/admin/user/${user?._id}`} className='text-blue-500 no-underline hover:text-blue-700'>
-                              {user?.first_name + " "}
-                              {user?.last_name !== undefined && user?.last_name}
-                            </Link>
-                          )
-                        }
-                        {
-                          // for management user
-                          currentUser.role === "management_admin" && (
-                            <Link to={`/management/user/${user?._id}`} className='text-blue-500 no-underline hover:text-blue-700'>
-                              {user?.first_name + " "}
-                              {user?.last_name !== undefined && user?.last_name}
-                            </Link>
-                          )
-                        }
-                        {
-                          // for tpo user
-                          currentUser.role === "tpo_admin" && (
-                            <Link to={`/tpo/user/${user?._id}`} className='text-blue-500 no-underline hover:text-blue-700'>
-                              {user?.first_name + " "}
-                              {user?.last_name !== undefined && user?.last_name}
-                            </Link>
-                          )
-                        }
-
-                        {/* // :
-                      // user.first_name +
-                      // " " +
-                      // user.last_name */}
+                        {user && (
+                          <Link
+                            to={
+                              currentUser.role === "superuser"
+                                ? `/admin/user/${user?._id}`
+                                : currentUser.role === "management_admin"
+                                  ? `/management/user/${user?._id}`
+                                  : currentUser.role === "tpo_admin"
+                                    ? `/tpo/user/${user?._id}`
+                                    : "#"
+                            }
+                            className="text-blue-500 no-underline hover:text-blue-700"
+                          >
+                            {user?.first_name + " "}
+                            {user?.last_name && user?.last_name}
+                          </Link>
+                        )}
                       </td>
                       <td>
                         <Link to={`mailto:${user.email}`} className='no-underline'>

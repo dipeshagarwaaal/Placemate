@@ -98,6 +98,8 @@ function PostJob() {
         if (error?.response?.data?.msg === "job data not found") navigate('../404');
       }
       console.log("Error while fetching details => ", error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -110,7 +112,6 @@ function PostJob() {
         }
       });
       setCompanys(response.data.companys);
-      setLoading(false);
     } catch (error) {
       console.log("Error fetching jobs ", error);
       if (error?.response?.data?.msg) {
@@ -124,7 +125,7 @@ function PostJob() {
     // calling fetchJobDetail
     fetchJobDetail();
     fetchCompanys();
-    setLoading(false);
+    if (!jobId) setLoading(false);
   }, []);
 
   // for formating date of birth
@@ -173,7 +174,7 @@ function PostJob() {
                             company: e.target.value
                           });
                         }}
-                        
+
                       >
                         <option disabled value='' className='text-gray-400'>Select Company Name</option>
                         {
@@ -201,7 +202,7 @@ function PostJob() {
                           name='jobTitle'
                           value={data?.jobTitle || ''}
                           onChange={handleDataChange}
-                          
+
                         />
                       </FloatingLabel>
 
@@ -221,7 +222,7 @@ function PostJob() {
                               handleDataChange(e);
                             }
                           }}
-                          
+
                         />
                       </FloatingLabel>
 
@@ -236,7 +237,7 @@ function PostJob() {
                           name='applicationDeadline'
                           value={formatDate(data?.applicationDeadline) || ''}
                           onChange={handleDataChange}
-                          
+
                         />
                       </FloatingLabel>
                     </div>
