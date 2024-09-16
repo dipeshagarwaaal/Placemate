@@ -12,6 +12,7 @@ import { BASE_URL } from '../../config/config';
 
 
 function UpdatePlacementProfile() {
+  document.title = 'CPMS | Placement Profile';
   const navigate = useNavigate();
 
   // userData to store user data get from userId

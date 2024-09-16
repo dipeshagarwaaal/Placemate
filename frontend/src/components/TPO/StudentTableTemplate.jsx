@@ -64,14 +64,8 @@ const StudentTable = ({ branchName, studentData }) => {
                       <td>{student?.studentProfile?.rollNumber}</td>
                       <td>
                         {
-                          currentUser.role === 'tpo_admin' &&
-                          <Link to={`/tpo/user/${student?._id}`} className='no-underline text-blue-500 hover:text-blue-700'>
-                            {student?.first_name + " " + student?.middle_name + " " + student?.last_name}
-                          </Link>
-                        }
-                        {
-                          currentUser.role === 'management_admin' &&
-                          <Link to={`/management/user/${student?._id}`} className='no-underline text-blue-500 hover:text-blue-700'>
+                          (currentUser.role === 'tpo_admin' || currentUser.role === 'management_admin') &&
+                          <Link to={`/${currentUser.role === 'tpo_admin' ? 'tpo' : 'management'}/user/${student?._id}`} className='no-underline text-blue-500 hover:text-blue-700'>
                             {student?.first_name + " " + student?.middle_name + " " + student?.last_name}
                           </Link>
                         }

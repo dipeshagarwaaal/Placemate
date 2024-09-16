@@ -8,6 +8,8 @@ import { BASE_URL } from '../../config/config';
 import { useLocation } from 'react-router-dom';
 
 function AddNewUser() {
+  document.title = 'CPMS | Add new user';
+
   const location = useLocation();
   // filter management or tpo or student to add
   const userToAdd = location.pathname.split('/').filter(link => link !== '' && link !== 'admin' && link !== 'management')[0].split('-').filter(link => link !== 'add' && link !== 'admin')[0];

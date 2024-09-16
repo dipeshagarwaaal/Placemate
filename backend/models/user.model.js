@@ -38,10 +38,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
       }
     },
-    UIN: {
-      type: String, unique: true,
-      sparse: true, trim: true
-    },
+    UIN: { type: String, unique: true, sparse: true, trim: true },
     department: { type: String, enum: ['Computer', 'Civil', 'ECS', 'AIDS', 'Mechanical'] },
     year: { type: Number, enum: [1, 2, 3, 4] },
     addmissionYear: { type: Number },
@@ -100,15 +97,13 @@ const UserSchema = new mongoose.Schema({
   },
 
   // TPO Admin specific fields
-  tpoProfile: {
-    position: { type: String, trim: true },
-    // more for tpo
-  },
+  // more for tpo
+  tpoProfile: { position: { type: String, trim: true }, },
+
   // Management Admin specific fields
-  managementProfile: {
-    position: { type: String, trim: true },
-    // more for management
-  }
+  // more for management
+  managementProfile: { position: { type: String, trim: true }, }
+
 });
 
 

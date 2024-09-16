@@ -14,7 +14,7 @@ function NotificationBox() {
     const fetchCurrentUser = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${BASE_URL}/student/detail`, {
+        const response = await axios.get(`${BASE_URL}/user/detail`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           }
@@ -35,7 +35,7 @@ function NotificationBox() {
   const fetchJobs = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/tpo/jobs`);
-      console.log(response.data.data)
+      // console.log(response.data.data)
       // retriving lastest post
       setJobs(response.data.data.sort((a, b) => new Date(b.postedAt) - new Date(a.postedAt)).slice(0, 10));
     } catch (error) {

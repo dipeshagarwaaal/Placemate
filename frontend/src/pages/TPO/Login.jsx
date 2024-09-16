@@ -4,13 +4,15 @@ import axios from 'axios';
 import Logo from '../../assets/CPMS.png';
 import Toast from '../../components/Toast';
 import isAuthenticated from '../../utility/auth.utility';
+import { Button } from 'react-bootstrap';
 import { BASE_URL } from '../../config/config';
 
 function LoginTPO() {
+  document.title = 'CPMS | TPO Login';
   const navigate = useNavigate();
-  const location = useLocation();
 
   const [error, setError] = useState({});
+  const [isLoading, setLoading] = useState(false);
 
   // if login user visit redirect to home page
   useEffect(() => {
@@ -43,16 +45,19 @@ function LoginTPO() {
     if (!formData?.email) return setError({ email: 'Email Required!' })
     if (!formData?.password) return setError({ password: 'Password Required!' })
 
+    setLoading(true);
+
     try {
       const response = await axios.post(`${BASE_URL}/tpo/login`, formData);
       localStorage.setItem('token', response.data.token);
-      navigate('../student/dashboard');
+      navigate('/tpo/dashboard');
     } catch (error) {
       if (error.response.data.msg) {
         setToastMessage(error.response.data.msg);
         setShowToast(true);
       }
-      console.log("Error in Student login.jsx => ", error);
+      console.log("Error in TPO login.jsx => ", error);
+      setLoading(false);
     }
   }
 
@@ -102,7 +107,13 @@ function LoginTPO() {
           </div>
 
           <div className="flex justify-center items-center flex-col">
-            <button className="btn btn-lg btn-primary btn-block" type="submit" fdprocessedid="a45f8">Log in</button>
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Loading...' : 'Log In'}
+            </Button>
           </div>
           <span className='text-center'>Log In as Management?
             <span className='text-blue-500 font-bold cursor-pointer px-1' onClick={() => navigate('../management/login')}>

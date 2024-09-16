@@ -3,10 +3,11 @@ import Accordion from 'react-bootstrap/Accordion';
 import axios from 'axios';
 import StudentTable from './StudentTableTemplate';
 import { BASE_URL } from '../../config/config';
-import { Placeholder } from 'react-bootstrap';
 import AccordionPlaceholder from '../AccordionPlaceholder';
 
 function StudentYearAndBranchView() {
+  document.title = 'CPMS | All Students';
+
   const [loading, setLoading] = useState(true);
 
   const [firstYearComputer, setFirstYearComputer] = useState([]);

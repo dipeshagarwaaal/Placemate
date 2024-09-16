@@ -7,6 +7,8 @@ import { BASE_URL } from '../../config/config';
 
 
 function Management() {
+  document.title = 'CPMS | Management Users';
+
   // Management users store here
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);

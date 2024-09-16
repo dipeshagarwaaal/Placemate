@@ -4,10 +4,15 @@ import axios from 'axios';
 import Logo from '../../assets/CPMS.png';
 import isAuthenticated from '../../utility/auth.utility';
 import Toast from '../../components/Toast';
+import { Button } from 'react-bootstrap';
 import { BASE_URL } from '../../config/config';
 
 function LoginSuperUser() {
+  document.title = 'CPMS | Admin Login';
   const navigate = useNavigate();
+
+  const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState({});
 
   // if login user visit redirect to home page
   useEffect(() => {
@@ -29,10 +34,19 @@ function LoginSuperUser() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name === 'email') return setError({ ...error, email: '' })
+    if (e.target.name === 'password') return setError({ ...error, password: '' })
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData?.email && !formData?.password) return setError({ email: "Email Required!", password: "Password Required!" });
+    if (!formData?.email) return setError({ email: "Email Required!" });
+    if (!formData?.password) return setError({ password: "Password Required!" });
+
+    setLoading(true);
+
     try {
       const response = await axios.post(`${BASE_URL}/admin/login`, formData);
       localStorage.setItem('token', response.data.token);
@@ -43,6 +57,7 @@ function LoginSuperUser() {
         setShowToast(true);
       }
       console.log("Error in admin login.jsx => ", error);
+      setLoading(false);
     }
   }
 
@@ -69,40 +84,60 @@ function LoginSuperUser() {
             <img className="mb-4 rounded-xl shadow" src={`${Logo}`} alt="Logo Image" width="150" height="150" />
             <h1 className="h3 mb-3 font-weight-normal text-white">Super User Log In</h1>
           </div>
-          <label htmlFor="inputEmail" className="sr-only">Email address</label>
-          <input
-            type="email"
-            id="inputEmail"
-            className="form-control ml-1"
-            placeholder="Email address"
-            autoFocus=""
-            fdprocessedid="gwlj3s"
-            autoComplete='email'
-            name='email'
-            value={email}
-            onChange={handleChange}
-            required
-          />
-
-          <div className="flex justify-center items-center w-full">
-            <label htmlFor="inputPassword" className="sr-only">Password</label>
+          <div className="w-full">
+            <label htmlFor="inputEmail" className="sr-only">Email address</label>
             <input
-              type={`${isEyeOpen ? "text" : "password"}`}
-              id="inputPassword"
-              className="form-control"
-              placeholder="Password"
-              fdprocessedid="9sysne"
-              autoComplete='current-password'
-              name='password'
-              value={password}
+              type="email"
+              id="inputEmail"
+              className="form-control ml-1"
+              placeholder="Email address"
+              autoFocus=""
+              fdprocessedid="gwlj3s"
+              autoComplete='email'
+              name='email'
+              value={email}
               onChange={handleChange}
-              required
             />
-            <i className={`${isEyeOpen ? "fa-solid fa-eye" : "fa-regular fa-eye-slash"} -ml-6 cursor-pointer`} onClick={handleEye}></i>
+            {
+              error?.email &&
+              <div className="ml-2">
+                <span className='text-red-500'>{error?.email}</span>
+              </div>
+            }
+          </div>
+
+          <div className="w-full">
+            <div className="flex justify-center items-center w-full">
+              <label htmlFor="inputPassword" className="sr-only">Password</label>
+              <input
+                type={`${isEyeOpen ? "text" : "password"}`}
+                id="inputPassword"
+                className="form-control"
+                placeholder="Password"
+                fdprocessedid="9sysne"
+                autoComplete='current-password'
+                name='password'
+                value={password}
+                onChange={handleChange}
+              />
+              <i className={`${isEyeOpen ? "fa-solid fa-eye" : "fa-regular fa-eye-slash"} -ml-6 cursor-pointer`} onClick={handleEye}></i>
+            </div>
+            {
+              error?.password &&
+              <div className="ml-2">
+                <span className='text-red-500'>{error?.password}</span>
+              </div>
+            }
           </div>
 
           <div className="flex justify-center items-center flex-col">
-            <button className="btn btn-lg btn-dark btn-block" type="submit" fdprocessedid="a45f8">Log in</button>
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Loading...' : 'Log In'}
+            </Button>
           </div>
           <p className="text-muted text-center">© College Placement Management System 2024 - 25</p>
         </form>

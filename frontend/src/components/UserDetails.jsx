@@ -10,21 +10,23 @@ import Toast from './Toast';
 import { BASE_URL } from '../config/config';
 
 function UserDetails() {
+  document.title = 'CPMS | Complete Profile';
   const navigate = useNavigate();
   const location = useLocation();
-
+  
+  
   // userId but its userId
   const { userId } = useParams();
-
+  
   // userData to store user data get from userId
   const [userData, setUserData] = useState(null);
-
+  
   const [loading, setLoading] = useState(true);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
 
   const [currentUserData, setCurrentUserData] = useState('');
-
+  
   // checking request is of complete-profile 
   const completeProfileReq = location.pathname.split('/').includes("complete-profile");
 
@@ -40,7 +42,7 @@ function UserDetails() {
       setCurrentUserData(response.data);
       // console.log(currentUserData);
       // console.log("resss", response.data);
-
+      
       // check authenticate user is requesting or not
       if (completeProfileReq) {
         if (!(userId === response.data.id)) navigate('../404')
@@ -62,6 +64,7 @@ function UserDetails() {
 
   useEffect(() => {
     fetchCurrentUserData();
+    
   }, [loading]);
 
 

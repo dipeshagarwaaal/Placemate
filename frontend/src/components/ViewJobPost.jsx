@@ -10,6 +10,7 @@ import { BASE_URL } from '../config/config';
 
 
 function ViewJobPost() {
+  document.title = 'CPMS | View Job Post';
   const { jobId } = useParams();
 
   const [data, setData] = useState({});
@@ -79,7 +80,6 @@ function ViewJobPost() {
         }
       )
       setData(response.data);
-      setLoading(false)
     } catch (error) {
       if (error.response) {
         if (error?.response.data?.msg) setToastMessage(error.response.data.msg)
@@ -168,6 +168,7 @@ function ViewJobPost() {
       } catch (error) {
         console.error("Error during fetching and applying job:", error);
       }
+      setLoading(false);
     };
 
     fetchData();

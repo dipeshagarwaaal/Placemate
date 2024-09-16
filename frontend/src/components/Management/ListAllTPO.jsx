@@ -6,6 +6,7 @@ import AddUserTable from '../AddUserTable';
 import { BASE_URL } from '../../config/config';
 
 function AddTPO() {
+  document.title = 'CPMS | TPO Users';
   // tpo users store here
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -42,7 +43,6 @@ function AddTPO() {
 
   useEffect(() => {
     fetchUserDetails();
-    setLoading(false);
   }, []);
 
   const [formOpen, setFormOpen] = useState(false);

@@ -4,9 +4,9 @@ import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 
 // Student Pages 
-import Login from "./pages/Students/Login.jsx";
-import Signup from "./pages/Students/Signup";
-import HomeStudent from './pages/Students/Home.jsx';
+import Login from "./pages/students/Login.jsx";
+import Signup from "./pages/students/Signup.jsx";
+import HomeStudent from './pages/students/Home.jsx';
 import UpdatePlacementProfile from "./components/Students/UpdatePlacementProfile.jsx";
 import UpdateJobStatus from "./components/Students/UpdateJobStatus.jsx";
 import AddInternship from "./components/Students/AddInternship.jsx";
@@ -25,7 +25,6 @@ import ListAllTPO from "./components/Management/ListAllTPO.jsx";
 // super user
 import LoginSuperUser from "./components/SuperUser/Login.jsx";
 import ManagementSuperUser from "./components/SuperUser/AddManagement.jsx";
-import TPOSuperUser from "./components/SuperUser/AddTPO.jsx";
 import StudentSuperUser from "./components/SuperUser/AddStudent.jsx";
 import HomeSuperUser from "./components/SuperUser/Home.jsx";
 import ApproveStudent from "./components/ApproveStudent.jsx";
@@ -317,7 +316,7 @@ function App() {
               <Route path="/admin/management" element={<ManagementSuperUser />} />
             </Route>
             <Route element={<Layout header="TPO Users" />}>
-              <Route path="/admin/tpo" element={<TPOSuperUser />} />
+              <Route path="/admin/tpo" element={<ListAllTPO />} />
             </Route>
             <Route element={<Layout header="Student Users" />}>
               <Route path="/admin/student" element={<StudentSuperUser />} />

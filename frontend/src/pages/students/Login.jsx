@@ -4,11 +4,15 @@ import axios from 'axios';
 import Logo from '../../assets/CPMS.png';
 import Toast from '../../components/Toast';
 import isAuthenticated from '../../utility/auth.utility';
+import { Button } from 'react-bootstrap';
 import { BASE_URL } from '../../config/config';
 
 function Login() {
+  document.title = 'CPMS | Student Login';
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [isLoading, setLoading] = useState(false);
 
   const [error, setError] = useState({});
 
@@ -42,6 +46,7 @@ function Login() {
     if (!formData?.email) return setError({ email: 'Email Required!' })
     if (!formData?.password) return setError({ password: 'Password Required!' })
 
+    setLoading(true);
 
     try {
       const response = await axios.post(`${BASE_URL}/student/login`, formData);
@@ -53,6 +58,7 @@ function Login() {
         setShowToast(true);
       }
       console.log("Error in Student login.jsx => ", error);
+      setLoading(false);
     }
   }
 
@@ -114,7 +120,13 @@ function Login() {
           </div>
 
           <div className="flex justify-center items-center flex-col">
-            <button className="btn btn-lg btn-primary btn-block" type="submit" fdprocessedid="a45f8">Log in</button>
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Loading...' : 'Log In'}
+            </Button>
           </div>
           <span className='text-center'>Don't have an account?
             <span className='text-blue-500 font-bold cursor-pointer px-1' onClick={() => navigate('../student/signup')}>

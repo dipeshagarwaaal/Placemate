@@ -11,35 +11,26 @@ import TablePlaceholder from './TablePlaceholder';
 import { BASE_URL } from '../config/config';
 
 function AllJobPost() {
+  document.title = 'CPMS | Job Listings';
   const navigate = useNavigate();
   const location = useLocation();
 
   const [loading, setLoading] = useState(true);
   const [jobs, setJobs] = useState([]);
   const [companies, setCompanies] = useState({});
+  const [currentUser, setCurrentUser] = useState(null);  // Set to null initially
 
-  // useState for toast display
+  // Toast and Modal states
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
-
-  // useState for Modal display
   const [showModal, setShowModal] = useState(false);
   const [dataToParasModal, setDataToParasModal] = useState(null);
   const [modalBody, setModalBody] = useState({
     cmpName: '',
     jbTitle: ''
   });
-  // const [modalBtn, setModalBtn] = useState('');
 
-  // useState for load data
-  const [currentUser, setCurrentUser] = useState({
-    id: '',
-    name: 'Not Found',
-    email: 'Not Found',
-  });
-
-
-  // checking for authentication
+  // Checking for authentication and fetching user details
   useEffect(() => {
     const token = localStorage.getItem('token');
     axios.get(`${BASE_URL}/user/detail`, {
@@ -53,21 +44,19 @@ function AllJobPost() {
           email: res.data.email,
           role: res.data.role,
         });
+        fetchJobs();  // Fetch jobs only after the user info is loaded
       })
       .catch(err => {
-        console.log("AddUserTable.jsx => ", err);
-        setToastMessage(err);
+        console.log("Error in fetching user details => ", err);
+        setToastMessage(err.message || 'Error loading user data');
         setShowToast(true);
       });
-
-    // calling function fetch jobs
-    fetchJobs();
   }, []);
 
   const fetchJobs = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/tpo/jobs`);
-      setJobs(response.data.data)
+      setJobs(response.data.data);
       fetchCompanies(response.data.data);
     } catch (error) {
       console.log("Error fetching jobs ", error);
@@ -75,39 +64,8 @@ function AllJobPost() {
         setToastMessage(error.response.data.msg);
         setShowToast(true);
       }
-    } finally {
-      setLoading(false);
     }
-  }
-
-  const handleDeletePost = (jobId, cmpName, jbTitle) => {
-    setDataToParasModal(jobId);
-    setModalBody({
-      cmpName: cmpName,
-      jbTitle: jbTitle
-    });
-    setShowModal(true);
-  }
-
-  const confirmDelete = async (jobId) => {
-    try {
-      const response = await axios.post(`${BASE_URL}/tpo/delete-job`, { jobId });
-
-      setShowModal(false);
-      fetchJobs();
-      if (response?.data?.msg) {
-        setToastMessage(response?.data?.msg);
-        setShowToast(true);
-      }
-      // setLoading(false);
-    } catch (error) {
-      if (error?.response?.data?.msg) {
-        setToastMessage(error?.response?.data?.msg);
-        setShowToast(true);
-      }
-      console.log("Error deleting job ", error);
-    }
-  }
+  };
 
   const fetchCompanies = async (jobs) => {
     const companyNames = {};
@@ -122,47 +80,52 @@ function AllJobPost() {
       }
     }
     setCompanies(companyNames);
+    setLoading(false);
   };
 
+  const handleDeletePost = (jobId, cmpName, jbTitle) => {
+    setDataToParasModal(jobId);
+    setModalBody({
+      cmpName: cmpName,
+      jbTitle: jbTitle
+    });
+    setShowModal(true);
+  };
 
-
-  const renderTooltipDeletePost = (props) => (
-    <Tooltip id="button-tooltip" {...props}>
-      Delete Post
-    </Tooltip>
-  );
-
-  const renderTooltipEditPost = (props) => (
-    <Tooltip id="button-tooltip" {...props}>
-      Edit Post
-    </Tooltip>
-  );
-
-  const renderTooltipViewPost = (props) => (
-    <Tooltip id="button-tooltip" {...props}>
-      View Post
-    </Tooltip>
-  );
+  const confirmDelete = async (jobId) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/tpo/delete-job`, { jobId });
+      setShowModal(false);
+      fetchJobs();
+      if (response?.data?.msg) {
+        setToastMessage(response?.data?.msg);
+        setShowToast(true);
+      }
+    } catch (error) {
+      if (error?.response?.data?.msg) {
+        setToastMessage(error?.response?.data?.msg);
+        setShowToast(true);
+      }
+      console.log("Error deleting job ", error);
+    }
+  };
 
   const closeModal = () => {
     setShowModal(false);
     setDataToParasModal(null);
   };
 
-
   const { showToastPass, toastMessagePass } = location.state || { showToastPass: false, toastMessagePass: '' };
-
 
   useEffect(() => {
     if (showToastPass) {
       setToastMessage(toastMessagePass);
       setShowToast(showToastPass);
-      // Clear the state after the toast is shown
       navigate('.', { replace: true, state: {} });
     }
+    if (!jobs) setLoading(false);
   }, []);
 
-  // console.log(jobs.data);
   return (
     <>
       {/* Toast Component */}
@@ -176,12 +139,8 @@ function AllJobPost() {
 
       <div className=''>
         {
-          loading ? (
-            // fake table loading animation 
-            <div>
-              <TablePlaceholder />
-              {/* <i className="fa-solid fa-spinner fa-spin text-3xl" /> */}
-            </div>
+          loading || !currentUser ? (
+            <TablePlaceholder />
           ) : (
             <Table striped bordered hover className='bg-white my-6 rounded-lg shadow w-full'>
               <thead>
@@ -198,7 +157,7 @@ function AllJobPost() {
               <tbody>
                 {jobs?.length > 0 ? (
                   jobs?.map((job, index) => {
-                    const isMatched = job?.applicants?.find(student => student.studentId == currentUser.id)
+                    const isMatched = job?.applicants?.find(student => student.studentId == currentUser.id);
                     return (
                       <tr
                         key={job?._id}
@@ -212,35 +171,29 @@ function AllJobPost() {
                             </Placeholder>}
                           </b>
                         </td>
+                        <td>{job?.jobTitle}</td>
+                        <td>{job?.salary}</td>
+                        <td>{new Date(job?.applicationDeadline).toLocaleDateString('en-In')}</td>
+                        <td>{job?.applicants?.length}</td>
                         <td>
-                          {job?.jobTitle}
-                        </td>
-                        <td>
-                          {job?.salary}
-                        </td>
-                        <td>
-                          {new Date(job?.applicationDeadline).toLocaleDateString('en-In')}
-                        </td>
-                        <td>
-                          {job?.applicants?.length}
-                        </td>
-                        <td>
-                          {/* for hover label effect  */}
                           <div className="flex justify-around items-center">
                             <div className="px-0.5">
-                              {/* view post  */}
+                              {/* View Post */}
                               <OverlayTrigger
                                 placement="top"
                                 delay={{ show: 250, hide: 400 }}
-                                overlay={renderTooltipViewPost}
+                                overlay={<Tooltip>View Post</Tooltip>}
                               >
                                 <i
                                   className="fa-solid fa-circle-info text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-blue-500"
                                   onClick={() => {
-                                    if (currentUser.role === 'tpo_admin') navigate(`../tpo/job/${job?._id}`)
-                                    else if (currentUser.role === 'management_admin') navigate(`../management/job/${job?._id}`)
-                                    else if (currentUser.role === 'superuser') navigate(`../admin/job/${job?._id}`)
-                                    else if (currentUser.role === 'student') navigate(`../student/job/${job?._id}`)
+                                    const rolePaths = {
+                                      'tpo_admin': `../tpo/job/${job._id}`,
+                                      'management_admin': `../management/job/${job._id}`,
+                                      'superuser': `../admin/job/${job._id}`,
+                                      'student': `../student/job/${job._id}`,
+                                    };
+                                    navigate(rolePaths[currentUser.role]);
                                   }}
                                 />
                               </OverlayTrigger>
@@ -248,12 +201,12 @@ function AllJobPost() {
                             {
                               currentUser.role !== 'student' && (
                                 <>
-                                  {/* Edit post */}
+                                  {/* Edit Post */}
                                   <div className="px-0.5">
                                     <OverlayTrigger
                                       placement="top"
                                       delay={{ show: 250, hide: 400 }}
-                                      overlay={renderTooltipEditPost}
+                                      overlay={<Tooltip>Edit Post</Tooltip>}
                                     >
                                       <i
                                         className="fa-regular fa-pen-to-square text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-green-500 hover:fa-solid"
@@ -263,24 +216,22 @@ function AllJobPost() {
                                             'management_admin': `../management/post-job/${job._id}`,
                                             'superuser': `../admin/post-job/${job._id}`,
                                           };
-                                          navigate(rolePaths[currentUser.role] || '#');
+                                          navigate(rolePaths[currentUser.role]);
                                         }}
                                       />
                                     </OverlayTrigger>
                                   </div>
 
-                                  {/* Delete post */}
+                                  {/* Delete Post */}
                                   <div className="px-0.5">
                                     <OverlayTrigger
                                       placement="top"
                                       delay={{ show: 250, hide: 400 }}
-                                      overlay={renderTooltipDeletePost}
+                                      overlay={<Tooltip>Delete Post</Tooltip>}
                                     >
                                       <i
                                         className="fa-regular fa-trash-can text-2xl cursor-pointer transition-colors duration-200 ease-in-out hover:text-red-500 hover:fa-solid"
-                                        onClick={() =>
-                                          handleDeletePost(job?._id, companies[job?.company], job?.jobTitle)
-                                        }
+                                        onClick={() => handleDeletePost(job?._id, companies[job?.company], job?.jobTitle)}
                                       />
                                     </OverlayTrigger>
                                   </div>
@@ -290,31 +241,39 @@ function AllJobPost() {
                           </div>
                         </td>
                       </tr>
-                    )
+                    );
                   })
                 ) : (
                   <tr>
-                    <td colSpan="7">No Jobs found</td>
+                    <td colSpan="7" className="text-center">
+                      No Job Posts Found!
+                    </td>
                   </tr>
                 )}
               </tbody>
             </Table>
           )
         }
-      </div >
+      </div>
 
-
-      {/* ModalBox Component for Delete Confirmation */}
+      {/* Modal Box for Confirm Delete */}
       <ModalBox
         show={showModal}
-        close={closeModal}
-        header={"Confirmation"}
-        body={`Do you want to delete post of ${modalBody.cmpName} for ${modalBody.jbTitle}`}
-        btn={"Delete"}
-        confirmAction={() => confirmDelete(dataToParasModal)}
+        modalHeader={`Confirm Delete ${modalBody?.cmpName}`}
+        modalBody={<>
+          Are you sure you want to delete this post of <b>{modalBody?.jbTitle}</b> from {modalBody?.cmpName}?
+        </>}
+        modalActions={<>
+          <button className='btn btn-secondary' onClick={closeModal}>
+            Cancel
+          </button>
+          <button className='btn btn-danger' onClick={() => confirmDelete(dataToParasModal)}>
+            Delete
+          </button>
+        </>}
       />
     </>
-  )
+  );
 }
 
-export default AllJobPost
+export default AllJobPost;

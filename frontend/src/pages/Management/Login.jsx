@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Logo from '../../assets/CPMS.png';
 import Toast from '../../components/Toast';
 import isAuthenticated from '../../utility/auth.utility';
+import { Button } from 'react-bootstrap';
 import { BASE_URL } from '../../config/config';
 
 function LoginManagement() {
+  document.title = 'CPMS | Management Login';
+
   const navigate = useNavigate();
-  const location = useLocation();
+  const [isLoading, setLoading] = useState(false);
 
   const [error, setError] = useState({});
 
@@ -38,20 +41,24 @@ function LoginManagement() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+
     if (!formData?.email && !formData?.password) return setError({ email: 'Email Required!', password: 'Password Required!' })
     if (!formData?.email) return setError({ email: 'Email Required!' })
     if (!formData?.password) return setError({ password: 'Password Required!' })
 
+    setLoading(true);
     try {
       const response = await axios.post(`${BASE_URL}/management/login`, formData);
       localStorage.setItem('token', response.data.token);
-      navigate('../management/dashboard');
+      navigate('/management/dashboard');
     } catch (error) {
       if (error.response.data.msg) {
         setToastMessage(error.response.data.msg);
         setShowToast(true);
       }
-      console.log("Error in Student login.jsx => ", error);
+      console.log("Error in Management login.jsx => ", error);
+      setLoading(false);
     }
   }
 
@@ -102,7 +109,13 @@ function LoginManagement() {
           </div>
 
           <div className="flex justify-center items-center flex-col">
-            <button className="btn btn-lg btn-primary btn-block" type="submit" fdprocessedid="a45f8">Log in</button>
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Loading...' : 'Log In'}
+            </Button>
           </div>
           <span className='text-center'>Log In as TPO?
             <span className='text-blue-500 font-bold cursor-pointer px-1' onClick={() => navigate('../tpo/login')}>

@@ -7,6 +7,7 @@ import isAuthenticated from '../../utility/auth.utility';
 import { BASE_URL } from '../../config/config';
 
 function Signup() {
+  document.title = 'CPMS | Student Sign Up';
   const navigate = useNavigate();
 
   // if login user visit redirect to home page

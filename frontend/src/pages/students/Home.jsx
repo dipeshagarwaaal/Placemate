@@ -4,6 +4,8 @@ import NotificationBox from '../../components/Students/NotificationBox';
 
 // student 
 function Home() {
+  document.title = 'CPMS | Student Dashboard';
+
   return (
     <>
       <div className="grid grid-cols-2 gap-2">
