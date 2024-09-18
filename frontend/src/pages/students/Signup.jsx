@@ -111,7 +111,7 @@ function Signup() {
       <div className="flex justify-center items-center py-2 min-h-screen bg-gradient-to-r from-red-400 from-10% via-pink-300 via-40% to-purple-300 to-100% ">
         <form className="form-signin flex justify-center items-center flex-col gap-3 backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-8 w-1/3 max-lg:w-2/3 max-md:w-3/4 max-[400px]:w-4/5" onSubmit={handleSubmit}>
           <div className='flex justify-center items-center flex-col'>
-            <img className="mb-4 rounded-xl shadow" src={`${Logo}`} alt="Logo Image" width="150" height="150" />
+            <img className="mb-4 rounded-xl shadow w-30 h-28 lg:w-40 lg:h-40" src={`${Logo}`} alt="Logo Image" />
             <h1 className="h3 mb-3 font-weight-normal">Sign Up as a Student</h1>
           </div>
           <div className="w-full">
@@ -164,12 +164,17 @@ function Signup() {
           </div>
 
           <div className="flex justify-center items-center flex-col">
-            <button className="btn btn-lg btn-primary btn-block" type="submit" fdprocessedid="a45f8">Sign Up</button>
+            <button
+              className="btn btn-primary btn-block"
+              type="submit"
+            >
+              Sign Up
+            </button>
           </div>
           <span className='text-center'>Already having account?
             <span className='text-blue-500 font-bold cursor-pointer px-1' onClick={() => navigate('../student/login')}>Login</span>
           </span>
-          <p className="text-muted text-center">© College Placement Management System 2024 - 25</p>
+          <p className="text-muted text-center text-gray-400">© College Placement Management System 2024 - 25</p>
         </form>
       </div>
     </>

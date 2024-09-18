@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+import { React, useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route, Outlet, useLocation, useNavigate } from "react-router-dom";
 // Landing Page 
 import LandingPage from "./pages/LandingPage";
 
@@ -43,6 +43,7 @@ import AllCompany from "./components/AllCompany.jsx";
 import ViewAllInternship from "./components/ViewAllInternship.jsx";
 import SendNotice from "./components/SendNotice.jsx";
 import ViewlAllNotice from "./pages/ViewlAllNotice.jsx";
+import ViewNotice from "./components/ViewNotice.jsx";
 
 // Page not found 
 import PageNotFound from "./pages/PageNotFound.jsx";
@@ -53,16 +54,32 @@ import './style/index.css';
 
 import { UserProvider } from "./context/userContext.jsx";
 import ProtectedRoute from "./components/protectedRoute.jsx";
-import { useState, useEffect } from "react";
-import ViewNotice from "./components/ViewNotice.jsx";
 
 
 function Layout({ header }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   // Get sidebar state from localStorage or default to false
-  const isSidebarOpenFromStorage = localStorage.getItem('isSidebarOpen') === 'true' || true;
+  const isSidebarOpenFromStorage = localStorage.getItem('isSidebarOpen') === 'true';
+
+  useEffect(() => {
+    const checkScreenWidth = () => {
+      const mediaQuery = window.matchMedia('(max-width: 950px)').matches;
+      if (mediaQuery) {
+        localStorage.setItem('isSidebarOpen', false); // Adjust this to update the state in your context or component
+        setSidebarVisible(false);
+      }
+    };
+    // Listen for location changes
+    checkScreenWidth(); // Check immediately when component mounts
+    return () => window.removeEventListener('resize', checkScreenWidth);
+  }, [location.pathname, navigate]);
+
 
   // State to control sidebar visibility
   const [isSidebarVisible, setSidebarVisible] = useState(isSidebarOpenFromStorage);
+
 
   // Toggle sidebar visibility and update localStorage
   const toggleSidebar = () => {
@@ -73,9 +90,7 @@ function Layout({ header }) {
 
   useEffect(() => {
     // Ensure localStorage has a default value on initial load
-    if (localStorage.getItem('isSidebarOpen') === null) {
-      localStorage.setItem('isSidebarOpen', 'false');
-    }
+    if (localStorage.getItem('isSidebarOpen') === null) localStorage.setItem('isSidebarOpen', 'false');
   }, []);
 
   return (
@@ -84,7 +99,7 @@ function Layout({ header }) {
         <Navbar isSidebarVisible={isSidebarVisible} toggleSidebar={toggleSidebar} />
         <div className="flex flex-grow">
           <Sidebar isSidebarVisible={isSidebarVisible} />
-          <div className={`content flex-grow p-4 transition-all duration-300 ${isSidebarVisible ? 'ml-64' : 'ml-0'}`}>
+          <div className={`content flex-grow p-4 transition-all duration-300 ${isSidebarVisible ? 'md:ml-64' : 'ml-0'}`}>
             <BreadcrumbExp header={header} />
             <Outlet />
           </div>
@@ -112,7 +127,6 @@ function App() {
           <Route path="/management/login" element={<LoginManagement />} />
           {/* admin login */}
           <Route path="/admin" element={<LoginSuperUser />} />
-
 
 
           {/* All student routes  */}
@@ -249,9 +263,6 @@ function App() {
             <Route element={<Layout header="Create New TPO Admin" />}>
               <Route path="/management/add-tpo-admin" element={<AddNewUser />} />
             </Route>
-            <Route element={<Layout header="Approve Students" />}>
-              <Route path="/management/approve-student" element={<ApproveStudent />} />
-            </Route>
             <Route element={<Layout header="Approve Student User" />}>
               <Route path="/management/approve-student" element={<ApproveStudent />} />
             </Route>
@@ -369,7 +380,6 @@ function App() {
             </Route>
 
           </Route>
-
 
           {/* 404 page not found route */}
           <Route path="*" element={<PageNotFound />} />

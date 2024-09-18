@@ -137,7 +137,7 @@ function ViewJobPost() {
   }
 
   const fetchApplicant = async () => {
-    if (!jobId) return
+    if (!jobId || currentUser?.role === 'student') return;
     await axios.get(`${BASE_URL}/tpo/job/applicants/${jobId}`, {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -194,10 +194,10 @@ function ViewJobPost() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-2 gap-2 my-6">
+            <div className="grid grid-cols-2 gap-2 my-6 text-base max-sm:text-sm max-sm:grid-cols-1">
               <div className="flex flex-col grid-flow-row-dense gap-2">
 
-                <div className="text-base">
+                <div className="">
                   {/* Company Details  */}
                   <Accordion defaultActiveKey={['0']} alwaysOpen className='shadow rounded'>
                     <Accordion.Item eventKey="0">
@@ -267,7 +267,7 @@ function ViewJobPost() {
                   currentUser.role !== "student" && (
                     <>
                       {/* pending */}
-                      <div className="text-base">
+                      <div className="">
                         {/* Applicants applied */}
                         <Accordion defaultActiveKey={['3']} alwaysOpen className='shadow rounded'>
                           <Accordion.Item eventKey="3">
@@ -342,7 +342,7 @@ function ViewJobPost() {
               </div>
 
 
-              <div className="text-base">
+              <div className="">
                 {/* Job details  */}
                 <Accordion defaultActiveKey={['1']} alwaysOpen className='shadow rounded'>
                   <Accordion.Item eventKey="1">
@@ -395,12 +395,16 @@ function ViewJobPost() {
                           </span>
                         </div>
                         {/* how to apply  */}
-                        <div className="flex flex-col backdrop-blur-md bg-white/30 border border-white/20 rounded-lg px-2 shadow-sm shadow-red-400">
-                          <span className='text-xl text-blue-500 py-2 border-b-2'>
-                            How to Apply?
-                          </span>
-                          <span className='py-3' dangerouslySetInnerHTML={{ __html: data?.howToApply }} />
-                        </div>
+                        {
+                          (applied === true || currentUser?.role !== 'student') && (
+                            <div className="flex flex-col backdrop-blur-md bg-white/30 border border-white/20 rounded-lg px-2 shadow-sm shadow-red-400">
+                              <span className='text-xl text-blue-500 py-2 border-b-2'>
+                                How to Apply?
+                              </span>
+                              <span className='py-3' dangerouslySetInnerHTML={{ __html: data?.howToApply }} />
+                            </div>
+                          )
+                        }
                         {
                           currentUser.role === 'student' && (
                             <div className="flex justify-center">

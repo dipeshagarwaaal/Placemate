@@ -225,12 +225,11 @@ function UpdateJobStatus() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-2 gap-2 my-6">
-              <div className="flex flex-col grid-flow-row-dense gap-2">
-
-                <div className="text-base">
+            <div className="grid grid-cols-2 gap-2 my-6 text-base max-sm:grid-cols-1 max-sm:text-sm">
+              <div className="flex flex-col gap-2">
+                <div className="">
                   {/* Basic Details  */}
-                  <Accordion defaultActiveKey={['0']} alwaysOpen className='shadow rounded'>
+                  <Accordion defaultActiveKey={['0']} alwaysOpen className='shadow rounded w-full max-sm:w-fit'>
                     <Accordion.Item eventKey="0">
                       <Accordion.Header>Basic Details</Accordion.Header>
                       <Accordion.Body>
@@ -294,16 +293,14 @@ function UpdateJobStatus() {
                   </Accordion>
                 </div>
               </div>
-
-
-              <div className="text-base">
+              <div className="">
                 {/* Job details  */}
-                <Accordion defaultActiveKey={['1']} alwaysOpen className='shadow rounded'>
+                <Accordion defaultActiveKey={['1']} alwaysOpen className='shadow rounded w-full max-sm:w-fit'>
                   <Accordion.Item eventKey="1">
                     <Accordion.Header>Job Details</Accordion.Header>
                     <Accordion.Body>
                       <div className="">
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
                           {/* current round  */}
                           <FloatingLabel controlId="floatingSelectCurrentRound" label="Current Round">
                             <Form.Select

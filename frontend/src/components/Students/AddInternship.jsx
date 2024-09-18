@@ -145,7 +145,7 @@ function AddInternship() {
         ) : (
           <>
             <div className="my-8 backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6">
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2 max-sm:grid-cols-1">
                 <FloatingLabel controlId="floatingCompanyName" label={
                   <>
                     <span>Company Name <span style={{ color: 'red' }}>*</span></span>
@@ -245,7 +245,7 @@ function AddInternship() {
                     onChange={handleDataChange}
                   />
                 </FloatingLabel>
-                <div className="col-span-2">
+                <div className="col-span-2 max-sm:col-span-1">
                   <FloatingLabel controlId="floatingDescription" label="Internship Description">
                     <Form.Control
                       as="textarea"
@@ -257,8 +257,8 @@ function AddInternship() {
                     />
                   </FloatingLabel>
                 </div>
-              </div >
-            </div >
+              </div>
+            </div>
             <div className="flex flex-col justify-center items-center gap-2">
               <Button variant="primary" type='submit' size='lg' onClick={handleSubmit}>
                 Update

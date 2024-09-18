@@ -156,7 +156,7 @@ function PostJob() {
           <>
             <div className="">
               <form onSubmit={handleSubmit}>
-                <div className="my-8 text-base backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6">
+                <div className="my-8 text-base backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6 max-sm:text-sm max-md:p-3">
                   <div className="grid grid-cols-1 gap-2">
                     {/* company details  */}
                     <FloatingLabel controlId="floatingSelectDifficulty" label={
@@ -188,10 +188,10 @@ function PostJob() {
                   </div>
                 </div>
 
-                <div className="my-8 text-base backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6">
-                  <div className="">
+                <div className="my-8 text-base backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6 max-sm:text-sm max-md:p-3">
+                  <div className="flex flex-col">
                     {/* job details  */}
-                    <div className="grid grid-flow-col gap-2">
+                    <div className="grid grid-cols-3 gap-2 max-md:grid-cols-1">
                       <FloatingLabel controlId="floatingJobTitle" label={
                         <>
                           <span>Job Title <span className='text-red-500'>*</span></span>

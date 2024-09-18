@@ -82,7 +82,7 @@ function LoginTPO() {
       <div className="flex justify-center items-center h-screen bg-gradient-to-r from-red-400 from-10% via-yellow-300 via-40% to-orange-500 to-100%">
         <form className="form-signin flex justify-center items-center flex-col gap-3 backdrop-blur-md bg-white/30 border border-white/20 rounded-lg p-8 shadow shadow-red-400 w-1/3 max-lg:w-2/3 max-md:w-3/4 max-[400px]:w-4/5" onSubmit={handleSubmit}>
           <div className='flex justify-center items-center flex-col'>
-            <img className="mb-4 rounded-xl shadow" src={`${Logo}`} alt="Logo Image" width="150" height="150" />
+            <img className="mb-4 rounded-xl shadow w-30 h-28 lg:w-40 lg:h-40" src={`${Logo}`} alt="Logo Image" />
             <h1 className="h3 mb-3 font-weight-normal">TPO Log In</h1>
           </div>
           <div className="w-full">
@@ -120,7 +120,7 @@ function LoginTPO() {
               Click Here
             </span>
           </span>
-          <p className="text-muted text-center">© College Placement Management System 2024 - 25</p>
+          <p className="text-muted text-center text-gray-400">© College Placement Management System 2024 - 25</p>
         </form>
       </div>
     </>

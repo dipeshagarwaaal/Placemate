@@ -169,8 +169,8 @@ function Account() {
               position="bottom-end"
             />
 
-            <div className="text-wrap">
-              <div className="container grid grid-cols-3 gap-3 mx-auto p-4">
+            <div className="max-sm:text-sm text-base">
+              <div className="container grid grid-cols-3 gap-3 p-4 max-lg:grid-cols-2 max-sm:grid-cols-1">
 
                 {/* basic details */}
                 <div className="col-span-2 bg-white p-6 rounded-lg shadow-md w-full">
@@ -276,7 +276,7 @@ function Account() {
                 </div>
 
                 {/* address box */}
-                <div className="bg-white p-6 rounded-lg shadow-md w-full">
+                <div className="bg-white p-6 rounded-lg shadow-md w-full max-sm:col-span-2">
                   <Form onSubmit={handleBasicDetailSubmit}>
                     <div className="grid gap-2 ">
                       <FloatingLabel className='w-full' controlId="floatingTextareaAddress" label="Address">
@@ -335,7 +335,7 @@ function Account() {
                 </div>
 
                 {/* photo box */}
-                <div className="bg-white p-6 rounded-lg shadow-md w-full">
+                <div className="bg-white p-6 rounded-lg shadow-md w-full max-sm:col-span-2">
                   <div className="">
                     <Form className='flex flex-col justify-center items-center gap-3 text-center'>
                       <img src={BASE_URL + data.profile} alt="Profile Img" width="150" height="150" className='rounded-full' />
@@ -348,7 +348,7 @@ function Account() {
                 </div>
 
                 {/* password box */}
-                <div className="bg-white p-6 rounded-lg shadow-md w-full">
+                <div className="bg-white p-6 rounded-lg shadow-md w-full col-span-2">
                   <Form onSubmit={handlePassUpdate}>
                     <div className="grid gap-2 ">
                       <FloatingLabel label="Current Password">

@@ -153,7 +153,7 @@ function AddInternship() {
               // fake table loading animation 
               <TablePlaceholder />
             ) : (
-              <Table striped bordered hover className='bg-white my-6 rounded-lg shadow w-full'>
+              <Table striped bordered hover className='bg-white my-6 rounded-lg shadow w-full text-base max-lg:text-sm max-md:my-3'>
                 <thead>
                   <tr>
                     <th style={{ width: '6%' }}>Sr. No.</th>
@@ -199,7 +199,7 @@ function AddInternship() {
                         </td>
                         <td>
                           {/* for hover label effect  */}
-                          <div className="flex justify-around items-center">
+                          <div className="flex justify-around items-center max-lg:flex-col max-lg:gap-1">
                             <div className="px-0.5">
                               {/* edit internship  */}
                               <OverlayTrigger

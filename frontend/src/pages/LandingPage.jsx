@@ -38,10 +38,13 @@ function LandingPage() {
         position="bottom-end"
       />
 
-      <LandingNavbar />
-      <LandingHeroPage />
-      <LandingAbout />
-      <LandFooter />
+      <div className="flex flex-col flex-wrap">
+        <LandingNavbar />
+        <LandingHeroPage />
+        <LandingAbout />
+        <LandFooter />
+      </div>
+
     </>
   )
 }

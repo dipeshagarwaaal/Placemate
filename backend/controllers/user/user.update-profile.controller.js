@@ -19,10 +19,9 @@ const UpdateProfile = async (req, res) => {
 
 
     if (req.body.studentProfile.UIN !== undefined) {
-      if (await User.findOne({ studentProfile: { UIN: req.body.studentProfile.UIN } }) !== null)
+      if (await User.findOne({ 'studentProfile.UIN': req.body.studentProfile.UIN }) !== null)
         return res.status(400).json({ msg: "UIN is Already Exist, Please Enter Correct UIN!" });
     }
-
 
     if (req.body.first_name) user.first_name = req.body.first_name;
     if (req.body.middle_name) user.middle_name = req.body.middle_name;

@@ -107,7 +107,7 @@ function SendNotice() {
       ) : (
         <>
           <div className="">
-            <div className="my-8 backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6">
+            <div className="my-8 backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6 max-sm:text-sm max-sm:p-3">
               <div className="grid grid-cols-2 gap-2">
 
                 {/* Receiver Role (Only for Management Admin) */}

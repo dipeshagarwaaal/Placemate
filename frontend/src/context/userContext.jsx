@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from '../config/config'
+import Loading from "../components/Loading";
 
 // Create a context for user authentication
 const UserContext = createContext();
@@ -57,9 +58,10 @@ export const UserProvider = ({ children }) => {
     <>
       {
         loading ? (
-          <div className="flex justify-center h-72 items-center">
-            <i className="fa-solid fa-spinner fa-spin text-3xl" />
-          </div>
+          // <div className="flex justify-center h-72 items-center">
+          //   <i className="fa-solid fa-spinner fa-spin text-3xl" />
+          // </div>
+          <Loading />
         ) : (
           <UserContext.Provider value={value}>
             {children}

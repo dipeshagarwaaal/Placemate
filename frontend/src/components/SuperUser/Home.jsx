@@ -30,33 +30,33 @@ function Home() {
       {
         loading ? (
           <div className="flex justify-center h-72 items-center">
-            <i className="fa-solid fa-spinner fa-spin text-3xl" />
+            <i className="fa-solid fa-spinner fa-spin text-3xl max-sm:text-2xl" />
           </div>
         ) : (
           <div className="mt-10">
             <div className="  flex flex-col gap-20 justify-center items-center flex-wrap">
               <div className="  w-full px-10 flex flex-wrap justify-evenly items-center gap-4">
                 <Link className='text-black no-underline' to='../admin/management'>
-                  <div className="bg-slate-300/30 shadow h-44 w-60 text-center flex flex-col justify-evenly items-center rounded-md cursor-pointer border-2 border-gray-600 transition-all ease-in-out hover:bg-slate-400/30">
-                    <span className='text-3xl'>Management Admin</span>
-                    <span className='text-3xl'>{countUsers.managementUsers}</span>
+                  <div className="bg-slate-300/30 shadow h-44 w-60 text-center flex flex-col justify-evenly items-center rounded-md cursor-pointer border-2 border-gray-600 transition-all ease-in-out hover:bg-slate-400/30  max-sm:h-32 max-sm:w-44">
+                    <span className='text-3xl max-sm:text-2xl'>Management Admin</span>
+                    <span className='text-3xl max-sm:text-2xl'>{countUsers.managementUsers}</span>
                   </div>
                 </Link>
                 <Link className='text-black no-underline' to='../admin/tpo'>
-                  <div className="bg-slate-300/30 shadow h-44 w-60 text-center flex flex-col justify-evenly items-center rounded-md cursor-pointer border-2 border-gray-600 transition-all ease-in-out hover:bg-slate-400/30">
-                    <span className='text-3xl'>TPO Admin</span>
-                    <span className='text-3xl'>{countUsers.tpoUsers}</span>
+                  <div className="bg-slate-300/30 shadow h-44 w-60 text-center flex flex-col justify-evenly items-center rounded-md cursor-pointer border-2 border-gray-600 transition-all ease-in-out hover:bg-slate-400/30  max-sm:h-32 max-sm:w-44">
+                    <span className='text-3xl max-sm:text-2xl'>TPO Admin</span>
+                    <span className='text-3xl max-sm:text-2xl'>{countUsers.tpoUsers}</span>
                   </div>
                 </Link>
                 <Link className='text-black no-underline' to='../admin/student'>
-                  <div className="bg-slate-300/30 shadow h-44 w-60 text-center flex flex-col justify-evenly items-center rounded-md cursor-pointer border-2 border-gray-600 transition-all ease-in-out hover:bg-slate-400/30">
-                    <span className='text-3xl'>Student User</span>
-                    <span className='text-3xl'>{countUsers.studentUsers}</span>
+                  <div className="bg-slate-300/30 shadow h-44 w-60 text-center flex flex-col justify-evenly items-center rounded-md cursor-pointer border-2 border-gray-600 transition-all ease-in-out hover:bg-slate-400/30  max-sm:h-32 max-sm:w-44">
+                    <span className='text-3xl max-sm:text-2xl'>Student User</span>
+                    <span className='text-3xl max-sm:text-2xl'>{countUsers.studentUsers}</span>
                   </div>
                 </Link>
-                <div className="bg-slate-300/30 shadow h-44 w-60 text-center flex flex-col justify-evenly items-center rounded-md cursor-pointer border-2 border-gray-600 transition-all ease-in-out hover:bg-slate-400/30">
-                  <span className='text-3xl'>Superuser</span>
-                  <span className='text-3xl'>{countUsers.superUsers}</span>
+                <div className="bg-slate-300/30 shadow h-44 w-60 text-center flex flex-col justify-evenly items-center rounded-md cursor-pointer border-2 border-gray-600 transition-all ease-in-out hover:bg-slate-400/30  max-sm:h-32 max-sm:w-44">
+                  <span className='text-3xl max-sm:text-2xl'>Superuser</span>
+                  <span className='text-3xl max-sm:text-2xl'>{countUsers.superUsers}</span>
                 </div>
               </div>
               {
@@ -64,12 +64,12 @@ function Home() {
                 (
                   <div className="bg-red-500 rounded">
                     <Link className='text-black no-underline' to='../admin/approve-student'>
-                      <div className="bg-slate-300/30 shadow h-44 w-80 text-center flex flex-col justify-evenly items-center rounded-md cursor-pointer border-2 border-gray-600 transition-all ease-in-out hover:bg-slate-400/30">
-                        <span className='text-3xl'>
+                      <div className="bg-slate-300/30 shadow h-44 w-80 text-center flex flex-col justify-evenly items-center rounded-md cursor-pointer border-2 border-gray-600 transition-all ease-in-out hover:bg-slate-400/30 max-sm:h-32 max-sm:w-56">
+                        <span className='text-3xl max-sm:text-2xl'>
                           Student Approval Pending
                           <Badge bg="secondary" pill className='mx-2'>Action Needed</Badge>
                         </span>
-                        <span className='text-3xl'>{countUsers.studentApprovalPendingUsers}</span>
+                        <span className='text-3xl max-sm:text-2xl'>{countUsers.studentApprovalPendingUsers}</span>
                       </div>
                     </Link>
                   </div>

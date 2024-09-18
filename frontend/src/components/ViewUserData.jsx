@@ -134,10 +134,10 @@ function ViewUserData() {
               position="bottom-end"
             />
 
-            <div className="my-8 grid grid-cols-2 gap-4 text-base">
-              <div className="backdrop-blur-md bg-white/30 border border-gray-200 rounded-lg shadow p-6 h-fit">
-                <h3 className="text-2xl font-semibold text-gray-800 mb-4">Personal Details</h3>
-                <div className="grid grid-cols-2">
+            <div className="my-8 grid grid-cols-2 gap-4 text-base max-sm:text-sm max-md:grid-cols-1">
+              <div className="backdrop-blur-md bg-white/30 border border-gray-200 rounded-lg shadow p-6 h-fit max-md:p-3">
+                <h3 className="text-2xl max-md:text-xl font-semibold text-gray-800 mb-4">Personal Details</h3>
+                <div className="grid grid-cols-2 max-md:grid-cols-1">
                   {/* Personal Info */}
                   <div className="space-y-4">
                     <div>
@@ -212,21 +212,21 @@ function ViewUserData() {
                     }
                   </div>
 
-                  <div className="flex flex-col justify-start items-end">
+                  <div className="flex flex-col justify-start items-end max-md:items-center max-md:mt-1">
                     {/* Profile Picture */}
                     <Col xs={6} md={9} className=" flex justify-end rounded">
                       <Image src={BASE_URL + userData?.profile} thumbnail />
                     </Col>
                     {
                       (userData?.studentProfile?.resume?.filepath !== "undefined" && userData?.role === 'student') && (
-                        <div className="py-2 px-2">
+                        <div className="py-2 px-2  max-sm:text-sm">
                           <span className='bg-blue-500 py-1 pr-2 rounded cursor-pointer hover:bg-blue-700'>
                             <a href={BASE_URL + userData?.studentProfile?.resume?.filepath} target='_blanck' className='no-underline text-white'>
                               <i className="fa-regular fa-eye px-2" />
                               View Resume
                             </a>
                           </span>
-                          <p className='text-sm text-gray-500 mt-1'>{userData?.studentProfile?.resume?.filename}</p>
+                          <p className='text-sm max-sm:text-xs text-gray-500 mt-1'>{userData?.studentProfile?.resume?.filename}</p>
                         </div>
                       )
                     }
@@ -239,9 +239,9 @@ function ViewUserData() {
                 userData?.role === "student" && (
                   <>
                     {/* placement status  */}
-                    <div className={`backdrop-blur-md bg-white/30 border border-gray-200 rounded-lg shadow p-6 h-fit ${placement?.isPlaced === true ? 'bg-green-200' : 'bg-red-200'}`}>
+                    <div className={`backdrop-blur-md bg-white/30 border border-gray-200 rounded-lg shadow p-6 h-fit ${placement?.isPlaced === true ? 'bg-green-200' : 'bg-red-200'} max-md:p-3`}>
                       <div className=''>
-                        <h3 className="text-2xl font-semibold text-gray-800 mb-4">Placement Status</h3>
+                        <h3 className="text-2xl max-md:text-xl font-semibold text-gray-800 mb-4">Placement Status</h3>
                         <div className="grid gap-1">
                           {/* placement status  */}
                           <div className="grid">
@@ -386,9 +386,9 @@ function ViewUserData() {
                 // if user profile completed and role is of student only 
                 (userData?.isProfileCompleted === true && userData?.role === 'student') && (
                   <>
-                    <div className="backdrop-blur-md bg-white/30 border border-gray-200 rounded-lg shadow p-6">
+                    <div className="backdrop-blur-md bg-white/30 border border-gray-200 rounded-lg shadow p-6 max-md:p-3">
                       <div className=''>
-                        <h3 className="text-2xl font-semibold text-gray-800 mb-4">College Information</h3>
+                        <h3 className="text-2xl max-md:text-xl font-semibold text-gray-800 mb-4">College Information</h3>
 
                         <div className="grid gap-1">
                           {/* College Information */}
@@ -469,8 +469,8 @@ function ViewUserData() {
                                 <>
                                   <div className="flex flex-col gap-3">
                                     <div className="font-bold">SGPA:</div>
-                                    <div className="flex gap-6 justify-center items-start">
-                                      <div className="space-y-6">
+                                    <div className="flex gap-6 justify-center items-start max-sm:flex-col max-sm:gap-3">
+                                      <div className="space-y-6 max-sm:space-y-3">
                                         {
                                           userData?.studentProfile?.SGPA?.sem1 && (
                                             <div className='border-2 px-2 rounded transition-all duration-200 cursor-pointer hover:scale-125 hover:bg-green-200'>
@@ -513,7 +513,7 @@ function ViewUserData() {
                                           )
                                         }
                                       </div>
-                                      <div className="space-y-6">
+                                      <div className="space-y-6 max-sm:space-y-3">
                                         {
                                           userData?.studentProfile?.SGPA?.sem5 && (
                                             <div className='border-2 px-2 rounded transition-transform duration-200 cursor-pointer hover:scale-125 hover:bg-green-200'>
@@ -572,9 +572,9 @@ function ViewUserData() {
               {
                 (userData?.studentProfile?.pastQualification && userData?.role === 'student') && (
                   <>
-                    <div className="backdrop-blur-md bg-white/30 border border-gray-200 rounded-lg shadow p-6 h-fit">
+                    <div className="backdrop-blur-md bg-white/30 border border-gray-200 rounded-lg shadow p-6 h-fit max-md:p-3">
                       <div className=''>
-                        <h3 className="text-2xl font-semibold text-gray-800 mb-4">Past Qualification</h3>
+                        <h3 className="text-2xl max-md:text-xl font-semibold text-gray-800 mb-4">Past Qualification</h3>
                         <div className="grid gap-4">
                           {/* past Qualification ssc */}
                           {
@@ -722,10 +722,10 @@ function ViewUserData() {
               {/* Internship details  */}
               {
                 (userData?.studentProfile?.internships && userData.studentProfile.internships.length !== 0) && (
-                  <div className="col-span-2 backdrop-blur-md bg-white/30 border border-gray-200 rounded-lg shadow p-6 h-fit">
+                  <div className="col-span-2 backdrop-blur-md bg-white/30 border border-gray-200 rounded-lg shadow p-6 h-fit max-md:p-3 max-md:col-span-1">
                     <div className=''>
                       <div className="flex justify-between">
-                        <h3 className="text-2xl font-semibold text-gray-800 mb-4">Internship Details</h3>
+                        <h3 className="text-2xl max-md:text-xl font-semibold text-gray-800 mb-4">Internship Details</h3>
                         <h5 className='text-xl font-semibold text-gray-800 mb-4'>
                           ({userData?.studentProfile?.internships?.length || 0})
                         </h5>

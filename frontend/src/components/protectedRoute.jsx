@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Navigate, Outlet, replace, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useUser } from "../context/userContext";
+import Loading from "./Loading";
 
 const ProtectedRoute = ({ allowedRoles }) => {
   const { user, loading } = useUser();
@@ -55,9 +56,10 @@ const ProtectedRoute = ({ allowedRoles }) => {
     <>
       {
         (loading || load) ? (
-          <div className="flex justify-center h-72 items-center">
-            <i className="fa-solid fa-spinner fa-spin text-3xl" />
-          </div>
+          // <div className="flex justify-center h-72 items-center">
+          //   <i className="fa-solid fa-spinner fa-spin text-3xl" />
+          // </div>
+          <Loading />
         ) : (
           <Outlet />
         )

@@ -27,9 +27,9 @@ function ViewNotice() {
 
   return (
     <>
-      <div className="my-4 mx-2 backdrop-blur-md bg-white/30 border border-white/20 rounded-lg py-2 px-3 shadow shadow-red-400">
+      <div className="my-4 mx-2 backdrop-blur-md bg-white/30 border border-white/20 rounded-lg py-2 px-3 shadow shadow-red-400 text-base max-sm:text-sm">
         <div className="flex flex-col gap-2 justify-between">
-          <span className='text-2xl my-3'>
+          <span className='text-2xl my-3 max-sm:my-1  max-sm:text-lg'>
             {notice?.title}
           </span>
           <span className='line-clamp-3'>

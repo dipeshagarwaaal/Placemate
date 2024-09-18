@@ -6,7 +6,7 @@ function PageNotFound() {
   document.title = 'CPMS | Page Not Found';
   return (
     <>
-      <div className="flex h-screen justify-center items-center px-3 py-2">
+      <div className="flex h-screen justify-center items-center px-3 py-2 max-sm:flex-col">
         <div className="">
           <img src={Img} alt="404 cry boy Image" className='w-3/4' />
         </div>
@@ -15,6 +15,7 @@ function PageNotFound() {
           <h2 className=''><span className='dancing text-red-500 text-5xl'>Oops!</span> Page Not found!</h2>
           <button type="button" className="btn btn-primary animate-bounce">
             <Link to='../student/login' className='text-white no-underline text-xl'>
+              <i className="fa-regular fa-hand-point-right mr-2" />
               Go to home
             </Link>
           </button>

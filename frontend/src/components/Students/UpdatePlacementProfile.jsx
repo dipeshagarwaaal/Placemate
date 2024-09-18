@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
@@ -13,7 +12,6 @@ import { BASE_URL } from '../../config/config';
 
 function UpdatePlacementProfile() {
   document.title = 'CPMS | Placement Profile';
-  const navigate = useNavigate();
 
   // userData to store user data get from userId
   const [userData, setUserData] = useState(null);
@@ -71,7 +69,7 @@ function UpdatePlacementProfile() {
 
     try {
       const token = localStorage.getItem('token');
-      console.log(userData)
+      
       const response = await axios.post(`${BASE_URL}/user/update-profile`,
         // for sending to backend is user is completing profile
         userData,
@@ -156,10 +154,10 @@ function UpdatePlacementProfile() {
 
             <div className=''>
               <form onSubmit={handleSubmit}>
-                <div className="grid grid-cols-2 gap-4 my-4">
+                <div className="grid grid-cols-2 gap-4 my-4 text-base max-sm:text-sm">
                   {/* basic info  */}
-                  <div className="grid backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6">
-                    <span className='text-2xl'>Basic Details</span>
+                  <div className="grid backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6 max-md:col-span-2">
+                    <span className='text-2xl max-sm:text-xl'>Basic Details</span>
                     <div className="flex flex-col justify-between py-2">
                       {/* Basic Info */}
                       <div className="flex justify-between">
@@ -225,8 +223,8 @@ function UpdatePlacementProfile() {
                   </div>
 
                   {/* college info  */}
-                  <div className="backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6">
-                    <span className='text-2xl'>College Information</span>
+                  <div className="backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6 max-md:col-span-2">
+                    <span className='text-2xl max-sm:text-xl'>College Information</span>
                     <div className="grid grid-cols-2">
                       {/* semester sgpa  */}
                       <div className="grid grid-cols-2 gap-2">
@@ -389,8 +387,8 @@ function UpdatePlacementProfile() {
 
                   {/* past qualification  */}
                   <div className="col-span-2 backdrop-blur-md bg-white/30 border border-white/20 rounded-lg shadow shadow-red-400 p-6">
-                    <span className='text-2xl'>Past Qualification</span>
-                    <div className="grid grid-cols-3">
+                    <span className='text-2xl max-sm:text-xl'>Past Qualification</span>
+                    <div className="grid grid-cols-3 max-sm:grid-cols-1">
                       <div className="px-2 py-3 flex flex-col gap-2">
                         <FloatingLabel controlId="floatingSelectSSC" label="SSC Board Name">
                           <Form.Select
@@ -577,7 +575,7 @@ function UpdatePlacementProfile() {
                             <option value="Other">Other</option>
                           </Form.Select>
                         </FloatingLabel>
-                        <FloatingLabel controlId="floatingDiplomaMarks" label="Diploma Percentage or CGPA">
+                        <FloatingLabel controlId="floatingDiplomaMarks" label="Diploma CGPA">
                           <Form.Control
                             type="number"
                             placeholder="Diploma Percentage"
@@ -627,8 +625,19 @@ function UpdatePlacementProfile() {
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-col justify-center items-center gap-2">
-                  <Button variant="primary" type='submit' size='lg'>Save</Button>
+                <div
+                  className="flex flex-col justify-center items-center gap-2"
+                  onMouseOver={(e) => {
+                    e.target.querySelector('Button i').classList.add('fa-beat');
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.querySelector('Button i').classList.remove('fa-beat');
+                  }}
+                >
+                  <Button variant="primary" type='submit' size='lg'>
+                    <i className="fa-regular fa-floppy-disk mr-2" />
+                    Save
+                  </Button>
                 </div>
               </form>
             </div>
