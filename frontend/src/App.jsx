@@ -119,7 +119,7 @@ function App() {
           {/* Public Route  */}
           <Route index element={<LandingPage />} />
           {/* Student Login, Sign Up  */}
-          <Route path="/student/logIn" element={<Login />} />
+          <Route path="/student/login" element={<Login />} />
           <Route path="/student/signup" element={<Signup />} />
           {/* TPO Login  */}
           <Route path="/tpo/login" element={<LoginTPO />} />

@@ -92,7 +92,7 @@ const Sidebar = ({ isSidebarVisible }) => {
       {/* Main Sidebar Logo and Name */}
       <div className="flex items-center px-4 py-6 gap-3 bg-blue-50">
         <img className="rounded-xl shadow-md" src={Logo} alt="Logo Image" width="75" height="75" />
-        <h1 className="text-xl font-bold text-white">
+        <h1 className="text-2xl font-bold text-white">
           {
             loadData.role === 'superuser' &&
             <Link to="/admin/dashboard" className="no-underline text-black">CPMS</Link>
