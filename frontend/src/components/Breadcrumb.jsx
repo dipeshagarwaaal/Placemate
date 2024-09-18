@@ -25,30 +25,30 @@ function BreadcrumbExp({ header }) {
       </div>
       <Breadcrumb bsPrefix='flex'>
         {/* Home link */}
-        <Breadcrumb.Item linkAs={Link} linkProps={{ to: userIs + "/dashboard", className: "px-1 no-underline" }}>
+        <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/' + userIs + "/dashboard", className: "px-1 no-underline" }}>
           Home
         </Breadcrumb.Item>
 
         {
-          pathnames.map((name, index) => {
-            let routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
-            const isLast = index === pathnames.length - 1;
-            routeTo = userIs + routeTo;
-            if(name === "tpo")
-              name = name.toUpperCase();
-            // console.log(name)
-            
-            return isLast ? (
-              <Breadcrumb.Item active key={name}>
-                &nbsp;  {/* addding space */}
-                {`${name.charAt(0).toUpperCase()}${name.slice(1)}`}
-              </Breadcrumb.Item>
-            ) : (
-              <Breadcrumb.Item linkAs={Link} linkProps={{ to: routeTo, className: "no-underline px-1" }} key={name}>
-                {name.charAt(0).toUpperCase() + name.slice(1)}
-              </Breadcrumb.Item>
-            );
-          })
+          // pathnames.map((name, index) => {
+          //   let routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
+          //   const isLast = index === pathnames.length - 1;
+          //   routeTo = userIs + routeTo;
+          //   if (name === "tpo")
+          //     name = name.toUpperCase();
+          //   // console.log(name)
+
+          //   return isLast ? (
+          //     <Breadcrumb.Item active key={name}>
+          //       &nbsp;  {/* addding space */}
+          //       {`${name.charAt(0).toUpperCase()}${name.slice(1)}`}
+          //     </Breadcrumb.Item>
+          //   ) : (
+          //     <Breadcrumb.Item linkAs={Link} linkProps={{ to: routeTo, className: "no-underline px-1" }} key={name}>
+          //       {name.charAt(0).toUpperCase() + name.slice(1)}
+          //     </Breadcrumb.Item>
+          //   );
+          // })
         }
       </Breadcrumb>
     </div>
