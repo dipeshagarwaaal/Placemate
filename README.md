@@ -1,40 +1,31 @@
-# College Placement Management System
 
-## Table of Contents
-- [Introduction](#introduction)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [User Roles](#user-roles)
-- [Installation](#installation)
-- [Contributors](#contributors)
+# Placemate: A Digital Platform For Campus Recruitment
+## Overview
+**Placemate** is a web-based platform designed to streamline the placement process in colleges and universities. It simplifies the interaction between students, placement officers (TPO), and management by providing a central portal for all activities related to campus recruitment, job applications, and placement tracking.
 
-## Introduction
-The **College Placement Management System** is a web application designed to streamline the placement process in educational institutions. This system provides distinct roles for students, TPO (Training and Placement Officer) admin, management admin, and super admin, ensuring a smooth and efficient workflow.
+## Key Features
+- **Student Dashboard**: Allows students to apply for job positions, view application status, and manage their profiles.
+- **TPO Admin Dashboard**: Enables TPOs to post job opportunities, schedule interviews, and manage student applications.
+- **Management Dashboard**: Offers management an overview of the placement process, report generation, and analytics on placement trends.
+- **Super Admin Dashboard**: Provides super admins with control over system-wide settings and user roles, including creating and managing TPO and management users.
 
-## Features
-- **Student Portal**: Students can view available job opportunities, apply for placements, and track their application status.
-- **TPO Admin Portal**: TPO admins can manage job postings, schedule interviews, and track student progress.
-- **Management Admin Portal**: Management can oversee the entire placement process, view reports, and analyze data.
-- **Super Admin Portal**: The super admin can manage system settings, user accounts, and oversee the management of TPO and management users.
-
-## Tech Stack
-- **Frontend**: Vite + React.js, Tailwind CSS, Bootstrap
+## Technologies Used
+- **Frontend**: React.js, Tailwind CSS, Vite
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB
 - **Authentication**: JSON Web Tokens (JWT)
-- **Styling**: Tailwind CSS, Bootstrap
+- **CSS Frameworks**: Tailwind CSS, Bootstrap for UI styling
 
 ## Project Structure
 ```plaintext
 ├── frontend
 │   ├── public
 │   ├── src
-|   |   ├── api
-|   |   ├── assets
+│   │   ├── api
+│   │   ├── assets
 │   │   ├── components
-|   |   |   ├──LandingPages
-|   |   |   └──students
+│   │   │   ├── LandingPages
+│   │   │   └── students
 │   │   ├── config
 │   │   ├── context
 │   │   ├── hooks
@@ -57,12 +48,11 @@ The **College Placement Management System** is a web application designed to str
 │   ├── middleware
 │   ├── models
 │   ├── public
-│   │   └──  offerLetter
-│   │   └──  resumes
-│   │   └──  profileImgs
-│   │         └── default
+│   │   ├── offerLetter
+│   │   ├── resumes
+│   │   └── profileImgs
 │   ├── routes
-│   ├── .env (NOTE: YOU NEED TO CREATE THIS FILE)
+│   ├── .env (Create this file)
 │   ├── .gitignore
 │   ├── index.js
 │   ├── package.json
@@ -71,58 +61,67 @@ The **College Placement Management System** is a web application designed to str
 ```
 
 ## User Roles
-- **Students**: Can view and apply for job opportunities, update profiles, and track their application status.
-- **TPO Admin**: Manages job postings, student applications, and interviews.
-- **Management Admin**: Oversees the placement process, views reports, and analyzes placement data.
-- **Super Admin**: Manages the overall system, creates new admin users (TPO and Management), and manages system-level settings.
+- **Students**: View and apply for job positions, track application status, and manage their profiles.
+- **TPO Admins**: Post new job openings, schedule interviews, and manage student applications.
+- **Management Admins**: Monitor the entire placement process, generate reports, and analyze data.
+- **Super Admins**: Have full control over the system, including user management and access control for TPO and management users.
 
-## Installation
+## Setup Instructions
 
 ### Prerequisites
-- Node.js and npm installed
-- MongoDB installed and running
+Before setting up, make sure you have the following installed on your machine:
+- Node.js (v14 or higher)
+- MongoDB (either locally or use a cloud service like MongoDB Atlas)
+- Git
 
 ### Clone the Repository
+Start by cloning the repository to your local machine:
 ```bash
-git clone https://github.com/moinmn/college-placement-management-system.git
-cd college-placement-management-system
+git clone https://github.com/dipeshagarwaaal/Placemate.git
+cd Placemate
 ```
 
 ### Backend Setup
-1. Navigate to the `backend` folder:
+1. Navigate to the backend directory:
    ```bash
    cd backend
    ```
-2. Install the necessary packages:
+2. Install the required backend dependencies:
    ```bash
    npm install
    ```
-3. Create a `.env` file for environment variables:
+3. Create a `.env` file and add your MongoDB connection URI and JWT secret key:
    ```env
-   MONGO_URI=your_mongodb_connection_string
-   JWT_SECRET=your_jwt_secret
+   MONGO_URI=your_mongo_connection_string
+   JWT_SECRET=your_jwt_secret_key
    ```
-4. Start the backend server:
+4. Run the backend server:
    ```bash
    npm start
    ```
 
 ### Frontend Setup
-1. Navigate to the `frontend` folder:
+1. Navigate to the frontend directory:
    ```bash
    cd frontend
    ```
-2. Install the necessary packages:
+2. Install the necessary frontend dependencies:
    ```bash
    npm install
    ```
-3. Start the frontend development server:
+3. Run the frontend server:
    ```bash
    npm run dev
    ```
-   
-## Contributors
-- **Member 1**: [Moin MN](https://www.linkedin.com/in/moinnaik/)
-- **Member 2**: Rafat Muskan Shaikh
-- **Member 3**: Saquib Patel
-- **Member 4**: Neeraj Kumar
+
+Once both frontend and backend servers are up and running, open your browser and visit `http://localhost:3000` to interact with the system.
+
+## Contributing
+Contributions are always welcome! If you'd like to enhance this project, feel free to fork the repository, make changes, and submit a pull request. For larger changes or new features, please open an issue first so we can discuss it.
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+This version reflects a slightly different structure and wording while still capturing all the necessary details for setting up the **Placemate** project. Let me know if you'd like to adjust any part further!
